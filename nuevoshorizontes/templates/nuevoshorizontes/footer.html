@@ -1,0 +1,21 @@
+{% load static %}
+<section class="footer" id="neubar2" style="background-color: #fff;">
+    <div class="box-container">
+        <div class="container">
+            <footer class="py-3 my-4">
+                <ul class="nav justify-content-center border-bottom pb-3 mb-3">
+                    <li class="nav-item"><a href="{% url 'home' %}" class="nav-link px-2"><img
+                                src="{% static  'nuevoshorizontes/img/icons_navbar/hogar.png' %}" alt="home"> Inicio</a></li>
+                    <li class="nav-item"><a href="{% url 'nosotros' %}" class="nav-link px-2"><img
+                                src="{% static  'nuevoshorizontes/img/icons_navbar/grupo.png' %}" alt="nosotros"> Nosotros</a></li>
+                    <li class="nav-item"><a href="{% url 'sedes' %}" class="nav-link px-2"><img
+                                src="{% static  'nuevoshorizontes/img/icons_navbar/sede.png' %}" alt="sede"> Sedes</a></li>
+                    <li class="nav-item"><a href="{% url 'noticias' %}" class="nav-link px-2"><img
+                                src="{% static  'nuevoshorizontes/img/icons_navbar/periodico.png' %}" alt="news"> Noticias</a></li>
+                </ul>
+                <p class="text-center text-body-secondary">&copy; {% now "Y" %} Escuela Nuevos Horizontes</p>
+                <!-- {% now "Y" %} Es para obtener el año actual.-->
+            </footer>
+        </div>
+    </div>
+</section>

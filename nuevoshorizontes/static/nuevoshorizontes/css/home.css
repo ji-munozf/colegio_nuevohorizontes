@@ -1,0 +1,154 @@
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    outline: none;
+    border: none;
+    text-decoration: none;
+    transition: .2s linear;
+}
+
+body {
+    font-family: "Sora", sans-serif;
+    line-height: 1.7;
+    color: var(--body);
+    background-color: #eee;
+    position: relative;
+    padding-bottom: 240px;
+    min-height: 100vh;
+}
+
+.hero {
+    background-image: url(../img/imagen_home.jpg);
+    background-position: center;
+    background-size: cover;
+    background-attachment: fixed;
+    position: relative;
+    z-index: 2;
+}
+
+.hero::after {
+    content: "";
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: rgba(21, 20, 55, 0.5);
+    z-index: -1;
+}
+
+.hero img {
+    padding-bottom: 10px;
+}
+
+.hero h1 {
+    font-size: 45px;
+}
+
+.hero p {
+    font-size: 18px;
+}
+
+section {
+    padding: 32px 9%;
+}
+
+.heading {
+    text-align: center;
+    font-size: 45px;
+    padding-top: 48px;
+    padding-bottom: 30px;
+    margin: 32px 0;
+    color: rgb(21, 20, 55);
+}
+
+.icons-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    background-color: rgb(21, 20, 55);
+}
+
+.icons-container .icons {
+    background: #fff;
+    border: 1.6px solid rgba(0, 0, 0, .1);
+    padding: 32px;
+    display: flex;
+    align-items: center;
+    flex: 1 1 560px;
+    border: none;
+    border-radius: 32px;
+}
+
+.icons-container .icons img {
+    height: 5rem;
+    margin-right: 32px;
+}
+
+.icons-container .icons h3 {
+    color: rgb(21, 20, 55);
+    padding-bottom: 8px;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.icons-container .icons span {
+    color: rgb(21, 20, 55);
+    font-size: 16px;
+}
+
+.parrafo .row{
+    display: flex;
+    align-items: center;
+    gap:2rem;
+    flex-wrap: wrap;
+}
+
+.parrafo h1 {
+    font-size: 40px;
+}
+
+.parrafo .row .content{
+    flex:1 1 40rem;
+}
+
+.parrafo .row .content p{
+    font-size: 22px;
+    color:rgb(36, 36, 36);
+    text-align: justify;
+}
+
+
+@media (max-width:768px) {
+
+    .heading {
+        font-size: 30px;
+    }
+
+    .parrafo .row .content p{
+        font-size: 18px;
+    }
+
+    .hero h1 {
+        font-size: 36px;
+    }
+
+    .hero p {
+        font-size: 16px;
+    }
+
+    .icons-container .icons h3{
+        font-size: 22px;
+    }
+    
+    .icons-container .icons span{
+        font-size: 18px;
+    }
+
+    .footer .box-container .box p {
+        text-align: center;
+    }
+}

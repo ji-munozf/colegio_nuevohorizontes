@@ -1,0 +1,16 @@
+#neubar {
+    box-shadow: 4px 6px 8px rgba(0, 0, 0, 0.4)
+  }
+
+.navbar-light .navbar-nav .nav-link {
+    color: rgb(21, 20, 55);
+}
+
+.navbar-light .navbar-nav .nav-link {
+    color: rgb(21, 20, 55);
+}
+
+.nav-item img {
+    padding-bottom: 5px;
+    width: 18px;
+}
