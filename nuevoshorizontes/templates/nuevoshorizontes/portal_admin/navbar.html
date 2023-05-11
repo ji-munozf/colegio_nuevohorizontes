@@ -1,0 +1,50 @@
+{% load static %}
+<nav class="navbar navbar-expand-lg fixed-top bg-light navbar-light" id="neubar">
+    <div class="container">
+        <a class="navbar-brand" href="index.html"><img id="MDB-logo" src="{% static 'nuevoshorizontes/img/logo.png' %}" alt="ENH Logo"
+                draggable="false" height="60" /></a>
+        <button class="navbar-toggler" style="border-color: black;" type="button" data-bs-toggle="collapse"
+            data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false"
+            aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon" style="border-color: black;"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav ms-auto align-items-center">
+                <li class="nav-item">
+                    <a class="nav-link mx-2" href="{% url 'home_admin' %}"><img src="{% static 'nuevoshorizontes/img/icons_admin/hogar.png' %}" alt="home">
+                        Inicio</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link mx-2" href="{% url 'usuarios_admin' %}"><img src="{% static 'nuevoshorizontes/img/icons_admin/acceso.png' %}"
+                            alt="usuarios">
+                        Usuarios</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link mx-2" href="{% url 'sedes_admin' %}"><img src="{% static 'nuevoshorizontes/img/icons_admin/sede.png' %}" alt="sede">
+                        Sedes</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link mx-2" href="{% url 'noticias_admin' %}"><img src="{% static 'nuevoshorizontes/img/icons_admin/periodico.png' %}" alt="">
+                        Noticias</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link mx-2" href="{% url 'cursos_admin' %}"><img src="{% static 'nuevoshorizontes/img/icons_admin/graduados.png' %}"
+                            alt="news">
+                        Cursos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link mx-2" href="{% url 'asignaturas_admin' %}"><img src="{% static 'nuevoshorizontes/img/icons_admin/libro.png' %}" alt="">
+                        Asignaturas</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link mx-2" href="{% url 'salas_admin' %}"><img src="{% static 'nuevoshorizontes/img/icons_admin/aula.png' %}" alt="">
+                        Salas y/o laboratorios</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link mx-2" href="#"><img src="{% static 'nuevoshorizontes/img/icons_admin/aula.png' %}" alt="">
+                        cerrar sesión</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>

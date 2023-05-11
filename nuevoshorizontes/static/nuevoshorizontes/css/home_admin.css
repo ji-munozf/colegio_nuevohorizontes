@@ -1,0 +1,35 @@
+body {
+    background: rgb(21, 20, 55);
+    background: linear-gradient(to right, #333186, #1a1944);
+}
+
+.heading {
+    text-align: center;
+    font-size: 45px;
+    padding-top: 48px;
+    padding-bottom: 30px;
+    margin: 32px 0;
+    color: #fff;
+}
+
+.botones {
+    padding-bottom: 30px;
+}
+
+.btn {
+    background-color: #fff;
+    border-color: #fff;
+    border-radius: 32px;
+    color: rgb(21, 20, 55);
+    font-weight: 600;
+}
+
+.btn a {
+    text-decoration: none;
+    color: rgb(21, 20, 55);
+}
+
+.btn:hover {
+    background-color: #d1d1d1;
+    border-color: #d1d1d1;
+}
