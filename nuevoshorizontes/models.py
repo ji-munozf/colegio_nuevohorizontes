@@ -21,15 +21,15 @@ class Tipo_Sala(models.Model):
     id_tipo_sala = models.IntegerField(primary_key=True)
     nombre_tipo_sala = models.CharField(max_length=12)
 
-class Sala(models.Model):
+class Sala(models.Model): 
     id_sala = models.IntegerField(primary_key=True)
     nombre_sala = models.CharField(max_length=6)
     sede_sala = models.ForeignKey(Sede, on_delete=models.CASCADE)
     tipo_sala = models.ForeignKey(Tipo_Sala, on_delete=models.CASCADE)
 
 class Docente(models.Model):
+    rut_docente = models.CharField(primary_key=True, max_length=12)
     id_docente = models.CharField(max_length=15)
-    rut_docente = models.CharField(max_length=10)
     nombre_docente = models.CharField(max_length=15)
     appaterno_docente = models.CharField(max_length=15)
     apmaterno_docente = models.CharField(max_length=15)
@@ -40,29 +40,29 @@ class Docente(models.Model):
     #password
 
 class Curso(models.Model):
-    id_curso = models.CharField(max_length=5, primary_key = True)
+    id_curso = models.CharField(max_length=5, primary_key=True)
     anno_curso = models.IntegerField()
     docente_curso = models.ForeignKey(Docente, on_delete=models.CASCADE)
 
 class Asignatura(models.Model):
-    id_asignatura = models.CharField(max_length=6, primary_key = True)
+    id_asignatura = models.CharField(max_length=6, primary_key=True)
     nombre_asignatura = models.CharField(max_length=12)
     curso_asignatura = models.ForeignKey(Curso, on_delete=models.CASCADE)
 
 class Horario(models.Model):
-    id_horario = models.IntegerField(primary_key = True)
+    id_horario = models.IntegerField(primary_key=True)
     dia_horario = models.CharField(max_length=9)
     curso_horario = models.ForeignKey(Curso, on_delete=models.CASCADE)
 
 class Bloque(models.Model):
-    id_bloque = models.IntegerField(primary_key = True)
+    id_bloque = models.IntegerField(primary_key=True)
     horario_bloque = models.ForeignKey(Horario, on_delete=models.CASCADE)
     asignatura_bloque = models.ForeignKey(Asignatura, on_delete=models.CASCADE)
     sala_bloque = models.ForeignKey(Sala, on_delete=models.CASCADE)
 
 class Apoderado(models.Model):
-    id_apoderado = models.CharField(max_length=15)
-    rut_apoderado = models.CharField(max_length=10)
+    rut_apoderado = models.CharField(primary_key=True, max_length=12)
+    id_apoderado = models.CharField(max_length=15)    
     nombre_apoderado = models.CharField(max_length=15)
     appaterno_apoderado = models.CharField(max_length=15)
     apmaterno_apoderado = models.CharField(max_length=15)
@@ -71,8 +71,8 @@ class Apoderado(models.Model):
     correo_apoderado = models.CharField(max_length=25)   
 
 class Alumno(models.Model):
+    rut_alumno = models.CharField(primary_key=True, max_length=12)
     id_alumno = models.CharField(max_length=15)
-    rut_alumno = models.CharField(max_length=10)
     nombre_alumno = models.CharField(max_length=15)
     appaterno_alumno = models.CharField(max_length=15)
     apmaterno_alumno = models.CharField(max_length=15)
