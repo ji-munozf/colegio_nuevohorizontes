@@ -5,7 +5,7 @@ class Region(models.Model):
     nombre_region = models.CharField(max_length=15)
 
     def __str__(self):
-        return self.id_region
+        return self.nombre_region
 
 class Comuna(models.Model):
     id_comuna = models.IntegerField(primary_key=True)
@@ -13,7 +13,7 @@ class Comuna(models.Model):
     region_comuna = models.ForeignKey(Region, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.id_comuna
+        return self.nombre_comuna
 
 class Sede(models.Model):
     id_sede = models.IntegerField(primary_key=True)
@@ -21,17 +21,16 @@ class Sede(models.Model):
     direccion_sede = models.CharField(max_length=25)
     telefono_sede = models.IntegerField()
     comuna_sede = models.ForeignKey(Comuna, on_delete=models.CASCADE)
-    region_sede = models.ForeignKey(Region, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.id_sede
+        return self.nombre_sede
 
 class Tipo_Sala(models.Model):
     id_tipo_sala = models.IntegerField(primary_key=True)
     nombre_tipo_sala = models.CharField(max_length=12)
 
     def __str__(self):
-        return self.id_tipo_sala
+        return self.nombre_tipo_sala
 
 class Sala(models.Model): 
     id_sala = models.IntegerField(primary_key=True)
@@ -40,7 +39,7 @@ class Sala(models.Model):
     tipo_sala = models.ForeignKey(Tipo_Sala, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.id_sala
+        return self.nombre_sala
 
 class Docente(models.Model):
     rut_docente = models.CharField(primary_key=True, max_length=12)
@@ -54,7 +53,7 @@ class Docente(models.Model):
     sede_docente = models.ForeignKey(Sede, on_delete=models.CASCADE)
     
     def __str__(self):
-        return self.rut_docente
+        return self.alumno_docente + " " + self.appaterno_docente + " " + self.apmaterno_docente + " RUT: " + self.rut_docente
 
 class Curso(models.Model):
     id_curso = models.CharField(max_length=5, primary_key=True)
@@ -79,7 +78,7 @@ class Horario(models.Model):
     curso_horario = models.ForeignKey(Curso, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.id_horario
+        return self.dia_horario
 
 class Bloque(models.Model):
     id_bloque = models.IntegerField(primary_key=True)
@@ -101,7 +100,7 @@ class Apoderado(models.Model):
     correo_apoderado = models.CharField(max_length=25) 
 
     def __str__(self):
-        return self.rut_apoderado  
+        return self.nombre_apoderado + " " + self.appaterno_apoderado + " " + self.apmaterno_apoderado  + " RUT: " + self.rut_apoderado
 
 class Alumno(models.Model):
     rut_alumno = models.CharField(primary_key=True, max_length=12)
@@ -117,7 +116,7 @@ class Alumno(models.Model):
     curso_alumno = models.ForeignKey(Curso, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.rut_alumno
+        return self.nombre_alumno + " " + self.appaterno_alumno + " " + self.apmaterno_alumno + " RUT: " + self.rut_alumno
 
 class Boleta(models.Model):
     id_boleta = models.IntegerField(primary_key=True)
@@ -130,7 +129,7 @@ class Tipo_Pago(models.Model):
     id_tipo_pago = models.IntegerField(primary_key=True)
     nombre_tipo_pago = models.CharField(max_length=10)
     def __str__(self):
-        return self.id_tipo_pago
+        return self.nombre_tipo_pago
 
 class Pago(models.Model):
     id_pago = models.IntegerField(primary_key=True)

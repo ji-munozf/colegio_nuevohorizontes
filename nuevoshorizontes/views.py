@@ -1,4 +1,6 @@
 from django.shortcuts import render
+from .models import Sede
+
 
 # Create your views here.
 
@@ -11,8 +13,10 @@ def nosotros(request):
     return render(request, 'nuevoshorizontes/nosotros.html')
 
 def sedes(request):
+    lista_sedes = Sede.objects.all()
     
-    return render(request, 'nuevoshorizontes/sedes.html')
+    return render(request, 'nuevoshorizontes/sedes.html',
+        {'lista_sedes': lista_sedes})
 
 def noticias(request):
     

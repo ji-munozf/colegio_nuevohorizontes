@@ -26,60 +26,30 @@
     <h1 class="heading" style="padding-top: 120px;"><img class="title-img mx-2"
             src="{% static 'nuevoshorizontes/img/icons_navbar/sede.png' %}" alt="nosotros" height="60">Sedes</h1>
 
-    <div class="container" style="width: 100%;">
-        <div class="row">
-            <div class="card mb-5">
-                <div class="row g-0">
-                    <div class="col-md-4">
-                        <img src="..." class="img-fluid rounded-start" alt="foto sede 1">
-                    </div>
-                    <div class="col-md-8">
-                        <div class="card-body">
-                            <h5 class="card-title">Nombre sede 1</h5>
-                            <p class="card-text">Calle: <br> Número: <br> Región: <br> Número de contacto:</p>
+    
+
+    {% for sede in lista_sedes %}
+   
+        <div class="container" style="width: 100%;">
+            
+             <div class="row">
+                <div class="card mb-5">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img src="..." class="img-fluid rounded-start" alt="foto sede 1">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title">{{sede.nombre_sede}}</h5>
+                                <p class="card-text">Calle: {{sede.direccion_sede}}<br> Comuna: {{sede.comuna_sede.nombre_comuna}}<br> Región: {{sede.comuna_sede.region_comuna.nombre_region}} <br> Número de contacto: {{sede.telefono_sede}}</p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-
-    <div class="container" style="width: 100%;">
-        <div class="row">
-            <div class="card mb-5">
-                <div class="row g-0">
-                    <div class="col-md-4">
-                        <img src="..." class="img-fluid rounded-start" alt="foto sede 2">
-                    </div>
-                    <div class="col-md-8">
-                        <div class="card-body">
-                            <h5 class="card-title">Nombre sede 2</h5>
-                            <p class="card-text">Calle: <br> Número: <br> Región: <br> Número de contacto:</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="container">
-        <div class="row">
-            <div class="card mb-1">
-                <div class="row g-0">
-                    <div class="col-md-4">
-                        <img src="..." class="img-fluid rounded-start" alt="foto sede 3">
-                    </div>
-                    <div class="col-md-8">
-                        <div class="card-body">
-                            <h5 class="card-title">Nombre sede 3</h5>
-                            <p class="card-text">Calle: <br> Número: <br> Región: <br> Número de contacto:</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
+      
+    {% endfor %}
 
     <h1 class="heading">Formulario de Postulación</h1>
 
