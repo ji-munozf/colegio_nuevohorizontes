@@ -13,9 +13,9 @@ urlpatterns = [
     path('salas_admin', salas_admin, name="salas_admin"),
     path('sedes_admin', sedes_admin, name="sedes_admin"),
     path('usuarios_admin', usuarios_admin, name="usuarios_admin"),
-    path('agregar_asignaturas', agregar_asignaturas, name="agregar_asignaturas"),
-    path('agregar_cursos', agregar_cursos, name="agregar_cursos"),
-    path('agregar_noticias', agregar_noticias, name="agregar_noticias"),
-    path('agregar_salas', agregar_salas, name="agregar_salas"),
-    path('agregar_sedes', agregar_sedes, name="agregar_sedes")
+    path('portal_admin/formularios/agregar_asignaturas', agregar_asignaturas, name="agregar_asignaturas"),
+    path('portal_admin/formularios/agregar_cursos', agregar_cursos, name="agregar_cursos"),
+    path('portal_admin/formularios/agregar_noticias', agregar_noticias, name="agregar_noticias"),
+    path('portal_admin/formularios/agregar_salas', agregar_salas, name="agregar_salas"),
+    path('portal_admin/formularios/agregar_sedes', agregar_sedes, name="agregar_sedes")
 ]

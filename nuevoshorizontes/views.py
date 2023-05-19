@@ -114,12 +114,12 @@ def agregar_salas(request):
         else:
             data["form"] = formulario
 
-    return render(request, 'nuevoshorizontes/portal_admin/formularios/agregar_salas.html')
+    return render(request, 'nuevoshorizontes/portal_admin/formularios/agregar_salas.html', data)
 
 def agregar_sedes(request):
 
     data = {
-        'form': SedeForm
+        'form': SedeForm()
     }
 
     if request.method == 'POST':
@@ -130,4 +130,4 @@ def agregar_sedes(request):
         else:
             data["form"] = formulario
 
-    return render(request, 'nuevoshorizontes/portal_admin/formularios/agregar_sedes.html')
+    return render(request, 'nuevoshorizontes/portal_admin/formularios/agregar_sedes.html', data)
