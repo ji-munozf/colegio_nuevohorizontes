@@ -1,0 +1,4 @@
+django
+pillow
+cx_Oracle
+crispy-bootstrap5

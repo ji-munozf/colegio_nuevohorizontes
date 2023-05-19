@@ -1,0 +1,23 @@
+-- Instalar requirement.txt
+En requirement se encuentran todos los pip instalados en el
+proyecto. Usar siguiente comando en el terminal:
+
+pip install -r requirements.txt 
+------------------------------------------------------------
+
+-- Crear superuser django
+User: nuevosHorizontesAdmin
+Pass: AdminNuevosHorizontes2023
+Correo: admin@nuevoshorizontes.cl
+---------------------------
+
+-- Creación usuario sql developer
+create user C##NOVO identified by NOVO2023;
+
+grant connect, resource to C##NOVO;
+
+alter user C##NOVO default tablespace users quota unlimited on users;
+----------------------------------------------------------
+
+-- Solo si sale error al instalar cx_Oracle:
+https://www.youtube.com/watch?v=nM2gJu5YsXU&t=261s

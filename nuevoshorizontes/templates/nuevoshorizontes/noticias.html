@@ -24,56 +24,37 @@
 
     {% include "nuevoshorizontes/navbar.html" %}
 
-    <h1 class="heading" style="padding-top: 120px;"><img class="title-img mx-2" src="{% static 'nuevoshorizontes/img/icons_navbar/periodico.png' %}"
-            alt="nosotros" height="60">Noticias</h1>
+    <h1 class="heading" style="padding-top: 120px;"><img class="title-img mx-2"
+            src="{% static 'nuevoshorizontes/img/icons_navbar/periodico.png' %}" alt="nosotros" height="60">Noticias
+    </h1>
 
     <section class="parrafo" id="parrafo">
         <div class="row">
             <div class="content">
-                <p>Noticias del: (mes actual) del (año).
+                <p>Noticias de: Mayo del 2023 <!--(mes actual) del (año).-->
                 </p>
             </div>
     </section>
+
+    {% for noticia in lista_noticias %}
 
     <section class="section-products">
         <div class="container">
             <div class="row">
                 <!-- Single Product -->
                 <div class="card" style="width: 30rem;">
-                    <img class="card-img-top" src="..." alt="foto noticia">
+                    <img class="card-img-top" src="{{ noticia.foto_noticia.url }}" alt="foto noticia">
                     <div class="card-body">
-                        <h5 class="card-title">Noticia 1</h5>
-                        <p class="card-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolorem incidunt
-                            quo nostrum temporibus culpa. Beatae doloremque quod, nobis ratione fugit reiciendis
-                            repellendus rem, sunt commodi veritatis ullam voluptates, ad architecto!</p>
-                        <p class="card-text"><small class="text-muted">Fecha noticia</small></p>
-                    </div>
-                </div>
-                <!-- Single Product -->
-                <div class="card" style="width: 30rem;">
-                    <img class="card-img-top" src="..." alt="foto noticia">
-                    <div class="card-body">
-                        <h5 class="card-title">Noticia 2</h5>
-                        <p class="card-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolorem incidunt
-                            quo nostrum temporibus culpa. Beatae doloremque quod, nobis ratione fugit reiciendis
-                            repellendus rem, sunt commodi veritatis ullam voluptates, ad architecto!</p>
-                        <p class="card-text"><small class="text-muted">Fecha noticia</small></p>
-                    </div>
-                </div>
-                <!-- Single Product -->
-                <div class="card" style="width: 30rem;">
-                    <img class="card-img-top" src="..." alt="foto noticia">
-                    <div class="card-body">
-                        <h5 class="card-title">Noticia 3</h5>
-                        <p class="card-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolorem incidunt
-                            quo nostrum temporibus culpa. Beatae doloremque quod, nobis ratione fugit reiciendis
-                            repellendus rem, sunt commodi veritatis ullam voluptates, ad architecto!</p>
-                        <p class="card-text"><small class="text-muted">Fecha noticia</small></p>
+                        <h5 class="card-title">{{ noticia.titulo }}</h5>
+                        <p class="card-text">{{ noticia.descripcion }}</p>
+                        <p class="card-text"><small class="text-muted">{{ noticia.fecha_publi | date:"d  F Y" }}</small></p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
+
+    {% endfor %}
 
     {% include "nuevoshorizontes/footer.html" %}
 
