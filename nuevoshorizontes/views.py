@@ -1,5 +1,6 @@
-from django.shortcuts import render
-from .models import Sede, Noticias
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .models import Sede, Noticias, Alumno, Docente, Apoderado, Administrador
 from .forms import *
 
 # Create your views here.
@@ -12,17 +13,71 @@ def nosotros(request):
     
     return render(request, 'nuevoshorizontes/nosotros.html')
 
+def portales(request):
+
+    return render(request, 'nuevoshorizontes/portales.html')
+
 def sedes(request):
     lista_sedes = Sede.objects.all()
     
-    return render(request, 'nuevoshorizontes/sedes.html',
-        {'lista_sedes': lista_sedes})
+    return render(request, 'nuevoshorizontes/sedes.html', {'lista_sedes': lista_sedes})
 
 def noticias(request):
     lista_noticias = Noticias.objects.all()
     
-    return render(request, 'nuevoshorizontes/noticias.html',
-        {'lista_noticias': lista_noticias})
+    return render(request, 'nuevoshorizontes/noticias.html', {'lista_noticias': lista_noticias})
+
+def login_alumno(request):
+    if request.method == 'POST':
+        try:
+            detalleAlumno = Alumno.objects.get(correo_alumno = request.POST['email'], password = request.POST['password'])
+            request.session['correo_alumno'] = detalleAlumno.correo_alumno
+            return redirect("home")
+        except Alumno.DoesNotExist as e:
+            messages.error(request, 'El correo electrónico o la contraseña no son correctos')
+
+    return render(request, 'nuevoshorizontes/login_portales/login_alumno.html')
+
+def login_docente(request):
+    if request.method == 'POST':
+        try:
+            detalleDocente = Docente.objects.get(correo_docente = request.POST['email'], password = request.POST['password'])
+            request.session['correo_docente'] = detalleDocente.correo_docente
+            return redirect("home")
+        except Docente.DoesNotExist as e:
+            messages.error(request, 'El correo electrónico o la contraseña no son correctos')
+
+    return render(request, 'nuevoshorizontes/login_portales/login_docente.html')
+
+def login_apoderado(request):
+    if request.method == 'POST':
+        try:
+            detalleApoderado = Apoderado.objects.get(correo_apoderado = request.POST['email'], password = request.POST['password'])
+            request.session['correo_apoderado'] = detalleApoderado.correo_apoderado
+            return redirect("home")
+        except Apoderado.DoesNotExist as e:
+            messages.error(request, 'El correo electrónico o la contraseña no son correctos')
+
+    return render(request, 'nuevoshorizontes/login_portales/login_apoderado.html')
+
+def login_administrativo(request):
+    if request.method == 'POST':
+        try:
+            detalleAdmin = Administrador.objects.get(correo_admin = request.POST['email'], password = request.POST['password'])
+            request.session['Correo'] = detalleAdmin.correo_admin
+            return redirect("home_admin")
+        except Administrador.DoesNotExist as e:
+            messages.success(request, 'El correo electrónico o la contraseña no son correctos')
+
+    return render(request, 'nuevoshorizontes/login_portales/login_administrativo.html')
+
+def cerrar_sesion(request):
+    try:
+        del request.session['Correo']
+    except:
+        return redirect("home")
+    
+    return redirect("home")   
 
 def home_admin(request):
 

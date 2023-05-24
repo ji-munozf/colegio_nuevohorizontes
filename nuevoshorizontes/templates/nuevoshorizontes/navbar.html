@@ -21,6 +21,11 @@
                         Nosotros</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link mx-2" href="{% url 'portales' %}"><img
+                            src="{% static 'nuevoshorizontes/img/icons_navbar/monitor.png' %}" alt="portales">
+                        Portales</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link mx-2" href="{% url 'sedes' %}"><img
                             src="{% static 'nuevoshorizontes/img/icons_navbar/sede.png' %}" alt="sede">
                         Sedes</a>
@@ -30,31 +35,6 @@
                             src="{% static 'nuevoshorizontes/img/icons_navbar/periodico.png' %}" alt="news">
                         Noticias</a>
                 </li>
-                {% if user.is_authenticated %}
-                {% if perms.peludos_petshop.view_producto %}
-                <li class="nav-item">
-                    <a class="nav-link mx-2" href="{% url 'home_admin' %}"><img
-                            src="{% static 'nuevoshorizontes/img/icons_navbar/admin-con-ruedas-dentadas.png' %}"
-                            alt="admin"> Menú administrador</a>
-                </li>
-                {% endif %}
-                <li class="nav-item">
-                    <a class="nav-link mx-2" href="#"><img src="{% static 'nuevoshorizontes/img/icons_navbar/acceso.png' %}" alt=""> {{ user.username }}</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link mx-2" href="{% url 'logout' %}"><img
-                            src="{% static 'nuevoshorizontes/img/icons_admin/cerrar-sesion.png' %}" alt="listado">
-                        Cerrar
-                        sesión</a>
-                </li>
-                {% else %}
-                <li class="nav-item">
-                    <a class="nav-link mx-2" href="{% url 'login' %}"><img
-                            src="{% static 'nuevoshorizontes/img/icons_navbar/acceso.png' %}" alt="">
-                        Iniciar
-                        sesión</a>
-                </li>
-                {% endif %}
             </ul>
         </div>
     </div>

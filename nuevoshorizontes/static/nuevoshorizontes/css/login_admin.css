@@ -1,0 +1,23 @@
+body {
+    background: rgb(21, 20, 55);
+    background: linear-gradient(to right, #1a1944, #333186);
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
+
+.bg {
+    background-image: url(/static/nuevoshorizontes/img/adminstrador.jpg);
+    background-position: center center;
+    background-size: cover;
+}
+
+.d-grid .btn {
+    background-color: rgb(21, 20, 55);
+    border-color: rgb(21, 20, 55);
+    border-radius: 15px;
+}
+
+.d-grid .btn:hover {
+    background-color: rgb(38, 37, 102);
+    border-color: rgb(38, 37, 102);
+}

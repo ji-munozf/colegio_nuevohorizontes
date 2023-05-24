@@ -1,0 +1,22 @@
+.card {
+    background-color: rgb(20, 21, 55);
+    border-radius: 30px;
+}
+
+.card img {
+    width: 90px;
+    padding-top: 8px;
+}
+
+.card h5 {
+    color: #fff;
+    font-size: 20px;
+    padding-bottom: 15px;
+}
+
+.card .btn {
+    background-color: #fff;
+    border-color: #fff;
+    color: rgb(20, 21, 55);
+    font-weight: 500;
+}

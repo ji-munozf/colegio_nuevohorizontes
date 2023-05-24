@@ -4,6 +4,7 @@ from .views import *
 urlpatterns = [
     path('', home, name="home"),
     path('nosotros', nosotros, name="nosotros"),
+    path('portales', portales, name="portales"),
     path('sedes', sedes, name="sedes"),
     path('noticias', noticias, name="noticias"),
     path('home_admin', home_admin, name="home_admin"),
@@ -17,5 +18,11 @@ urlpatterns = [
     path('portal_admin/formularios/agregar_cursos', agregar_cursos, name="agregar_cursos"),
     path('portal_admin/formularios/agregar_noticias', agregar_noticias, name="agregar_noticias"),
     path('portal_admin/formularios/agregar_salas', agregar_salas, name="agregar_salas"),
-    path('portal_admin/formularios/agregar_sedes', agregar_sedes, name="agregar_sedes")
+    path('portal_admin/formularios/agregar_sedes', agregar_sedes, name="agregar_sedes"),
+
+    path('portales/login_alumno', login_alumno, name="login_alumno"),
+    path('portales/login_docente', login_docente, name="login_docente"),
+    path('portales/login_apoderado', login_apoderado, name="login_apoderado"),
+    path('portales/login_administrativo', login_administrativo, name="login_administrativo"),
+    path('cerrar_sesion', cerrar_sesion, name="cerrar_sesion")
 ]
