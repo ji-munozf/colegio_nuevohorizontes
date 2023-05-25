@@ -186,3 +186,43 @@ def agregar_sedes(request):
             data["form"] = formulario
 
     return render(request, 'nuevoshorizontes/portal_admin/formularios/agregar_sedes.html', data)
+
+def home_alumno(request):
+
+    return render(request, 'nuevoshorizontes/portal_alumno/home_alumno.html')
+
+def notas_alumno(request):
+
+    return render(request, 'nuevoshorizontes/portal_alumno/notas_alumno.html')
+
+def horario_alumno(request):
+
+    return render(request, 'nuevoshorizontes/portal_alumno/horario_alumno.html')
+
+def home_apoderado(request):
+
+    return render(request, 'nuevoshorizontes/portal_apoderado/home_apoderado.html')
+
+def notas_apoderado(request):
+
+    return render(request, 'nuevoshorizontes/portal_apoderado/notas_apoderado.html')
+
+def perfil_asistencia_apoderado(request):
+
+    return render(request, 'nuevoshorizontes/portal_apoderado/perfil_asistencia_apoderado.html')
+
+def pagos_apoderado(request):
+
+    return render(request, 'nuevoshorizontes/portal_apoderado/pagos_apoderado.html')
+
+def home_docente(request):
+
+    return render(request, 'nuevoshorizontes/portal_docente/home_docente.html')
+
+def curso_docente(request):
+
+    return render(request, 'nuevoshorizontes/portal_docente/curso_docente.html')
+
+def asignaturas_docente(request):
+
+    return render(request, 'nuevoshorizontes/portal_docente/asignaturas_docente.html')

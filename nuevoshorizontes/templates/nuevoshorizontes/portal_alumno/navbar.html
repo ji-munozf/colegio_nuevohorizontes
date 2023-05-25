@@ -1,0 +1,36 @@
+{% load static %}
+<nav class="navbar navbar-expand-lg fixed-top bg-light navbar-light" id="neubar">
+    <div class="container">
+        <a class="navbar-brand" href="{% url 'home_alumno' %}"><img id="MDB-logo" src="{% static 'nuevoshorizontes/img/logo.png' %}" alt="ENH Logo"
+                draggable="false" height="60" /></a>
+        <button class="navbar-toggler" style="border-color: black;" type="button" data-bs-toggle="collapse"
+            data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false"
+            aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon" style="border-color: black;"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav ms-auto align-items-center">
+                <li class="nav-item">
+                    <a class="nav-link mx-2" href="{% url 'notas_alumno' %}"><img src="{% static 'nuevoshorizontes/img/icons_navbar/periodico.png' %}"
+                            alt="usuarios">
+                        Notas</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link mx-2" href="{% url 'horario_alumno' %}"><img src="{% static 'nuevoshorizontes/img/icons_navbar/monitor.png' %}" alt="sede">
+                        Horario</a>
+                </li>
+                
+                {% if request.session.Correo %}
+                <li class="nav-item">
+                    <a class="nav-link mx-2"><img src="{% static 'nuevoshorizontes/img/icons_navbar/acceso.png' %}" alt=""> {{ request.session.Correo }}</a>
+                </li>
+                {% endif %}
+                <li class="nav-item">
+                    <a class="nav-link mx-2" href="{% url 'cerrar_sesion' %}"><img
+                            src="{% static 'nuevoshorizontes/img/icons_admin/cerrar-sesion.png' %}" alt="cerrar">
+                        Cerrar sesión</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>

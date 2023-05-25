@@ -19,6 +19,19 @@ urlpatterns = [
     path('portal_admin/formularios/agregar_noticias', agregar_noticias, name="agregar_noticias"),
     path('portal_admin/formularios/agregar_salas', agregar_salas, name="agregar_salas"),
     path('portal_admin/formularios/agregar_sedes', agregar_sedes, name="agregar_sedes"),
+    
+    path('home_alumno', home_alumno, name="home_alumno"),
+    path('notas_alumno', notas_alumno, name="notas_alumno"),
+    path('horario_alumno', horario_alumno, name="horario_alumno"),
+
+    path('home_apoderado', home_apoderado, name="home_apoderado"),
+    path('notas_apoderado', notas_apoderado, name="notas_apoderado"),
+    path('perfil_asistencia_apoderado', perfil_asistencia_apoderado, name="perfil_asistencia_apoderado"),
+    path('pagos_apoderado', pagos_apoderado, name="pagos_apoderado"),
+
+    path('home_docente', home_docente, name="home_docente"),
+    path('curso_docente', curso_docente, name="curso_docente"),
+    path('asignaturas_docente', asignaturas_docente, name="asignaturas_docente"),
 
     path('portales/login_alumno', login_alumno, name="login_alumno"),
     path('portales/login_docente', login_docente, name="login_docente"),
