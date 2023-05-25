@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from .models import Sede, Noticias, Alumno, Docente, Apoderado, Administrador
 from .forms import *
+from datetime import date
 
 # Create your views here.
 
@@ -23,9 +24,10 @@ def sedes(request):
     return render(request, 'nuevoshorizontes/sedes.html', {'lista_sedes': lista_sedes})
 
 def noticias(request):
-    lista_noticias = Noticias.objects.all()
+    fecha_actual = date.today()
+    noticias = Noticias.objects.filter(fecha_publi__year=fecha_actual.year, fecha_publi__month=fecha_actual.month)
     
-    return render(request, 'nuevoshorizontes/noticias.html', {'lista_noticias': lista_noticias})
+    return render(request, 'nuevoshorizontes/noticias.html', {'noticias':noticias})
 
 def login_alumno(request):
     if request.method == 'POST':
