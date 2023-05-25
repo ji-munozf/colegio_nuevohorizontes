@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Region, Comuna, Sede, Tipo_Sala, Sala, Docente, Curso, Asignatura, Horario, Bloque, Apoderado, Alumno, Boleta, Tipo_Pago, Pago, Administrador, Noticias
+from .models import Region, Comuna, Sede, Tipo_Sala, Sala, Docente, Curso, Asignatura, Horario, Bloque, Apoderado, Alumno, Boleta, Tipo_Pago, Pago, Administrador
 # Register your models here.
 
 admin.site.register(Region)
@@ -18,4 +18,3 @@ admin.site.register(Boleta)
 admin.site.register(Tipo_Pago)
 admin.site.register(Pago)
 admin.site.register(Administrador)
-admin.site.register(Noticias)

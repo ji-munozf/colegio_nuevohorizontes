@@ -26,32 +26,29 @@
     <h1 class="heading" style="padding-top: 120px;"><img class="title-img mx-2"
             src="{% static 'nuevoshorizontes/img/icons_navbar/sede.png' %}" alt="nosotros" height="60">Sedes</h1>
 
-
+    
 
     {% for sede in lista_sedes %}
-
-    <div class="container" style="width: 100%;">
-
-        <div class="row">
-            <div class="card mb-5">
-                <div class="row g-0">
-                    <div class="col-md-4">
-                        <img src="{{ sede.fotoSede.url }}" class="img-fluid rounded-start" alt="foto sede">
-                    </div>
-                    <div class="col-md-8">
-                        <div class="card-body">
-                            <h5 class="card-title">{{sede.nombre_sede}}</h5>
-                            <p class="card-text">Calle: {{sede.direccion_sede}}<br> Comuna:
-                                {{sede.comuna_sede.nombre_comuna}}<br> Región:
-                                {{sede.comuna_sede.region_comuna.nombre_region}} <br> Número de contacto:
-                                {{sede.telefono_sede}}</p>
+   
+        <div class="container" style="width: 100%;">
+            
+             <div class="row">
+                <div class="card mb-5">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img src="{{ sede.fotoSede.url }}" class="img-fluid rounded-start" alt="foto sede">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title">{{sede.nombre_sede}}</h5>
+                                <p class="card-text">Calle: {{sede.direccion_sede}}<br> Comuna: {{sede.comuna_sede.nombre_comuna}}<br> Región: {{sede.comuna_sede.region_comuna.nombre_region}} <br> Número de contacto: {{sede.telefono_sede}}</p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-
+      
     {% endfor %}
 
     <h1 class="heading">Formulario de Postulación</h1>
@@ -80,9 +77,9 @@
                     <label for="exampleInputPassword1" class="form-label">Sede:</label>
                     <select class="form-select" aria-label="Default select example" required>
                         <option value="">Ingrese una sede...</option>
-                        {% for sede in lista_sedes %}
-                        <option value="{{sede.id_sede}}">{{sede.nombre_sede}}</option>
-                        {% endfor %}
+                        <option value="1">Sede 1</option>
+                        <option value="2">Sede 2</option>
+                        <option value="3">Sede</option>
                     </select>
                 </div>
                 <button type="submit" class="btn"
