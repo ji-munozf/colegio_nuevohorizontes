@@ -11,26 +11,35 @@
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav ms-auto align-items-center">
                 <li class="nav-item">
-                    <a class="nav-link mx-2" href="{% url 'perfil_asistencia_apoderado' %}"><img src="{% static 'nuevoshorizontes/img/icons_navbar/grupo.png' %}"
+                    <a class="nav-link mx-2" href="{% url 'miperfil_apoderado' %}"><img src="{% static 'nuevoshorizontes/img/icons_navbar/acceso.png' %}"
                             alt="usuarios">
-                        Perfiles</a>
+                        Mi perfil</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link mx-2" href="{% url 'notas_apoderado' %}"><img src="{% static 'nuevoshorizontes/img/icons_navbar/monitor.png' %}" alt="sede">
+                    <a class="nav-link mx-2" href="{% url 'lista_hijos' %}"><img src="{% static 'nuevoshorizontes/img/icons_navbar/grupo.png' %}"
+                            alt="usuarios">
+                        Lista hijos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link mx-2" href="{% url 'horarios_apoderado' %}"><img src="{% static 'nuevoshorizontes/img/horario.png' %}"
+                            alt="horario">
+                        Horarios</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link mx-2" href="{% url 'asistencias_apoderado' %}"><img src="{% static 'nuevoshorizontes/img/seguro.png' %}"
+                            alt="asistenciass">
+                        Asistencias</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link mx-2" href="{% url 'notas_apoderado' %}"><img src="{% static 'nuevoshorizontes/img/icons_navbar/periodico.png' %}" alt="notas">
                         Notas</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link mx-2" href="{% url 'pagos_apoderado' %}"><img src="{% static 'nuevoshorizontes/img/icons_navbar/periodico.png' %}" alt="sede">
+                    <a class="nav-link mx-2" href="{% url 'pagos_apoderado' %}"><img src="{% static 'nuevoshorizontes/img/ingresos.png' %}" alt="pagos">
                         Pagos</a>
                 </li>
-                
-                {% if request.session.Correo %}
                 <li class="nav-item">
-                    <a class="nav-link mx-2"><img src="{% static 'nuevoshorizontes/img/icons_navbar/acceso.png' %}" alt=""> {{ request.session.Correo }}</a>
-                </li>
-                {% endif %}
-                <li class="nav-item">
-                    <a class="nav-link mx-2" href="{% url 'cerrar_sesion' %}"><img
+                    <a class="nav-link mx-2" href="{% url 'cerrar_sesion_apoderado' %}"><img
                             src="{% static 'nuevoshorizontes/img/icons_admin/cerrar-sesion.png' %}" alt="cerrar">
                         Cerrar sesión</a>
                 </li>

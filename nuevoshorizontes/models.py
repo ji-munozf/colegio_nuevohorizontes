@@ -54,16 +54,15 @@ class Docente(models.Model):
     sede_docente = models.ForeignKey(Sede, on_delete=models.CASCADE, verbose_name="Sede asignado")
     
     def __str__(self):
-        return self.alumno_docente + " " + self.appaterno_docente + " " + self.apmaterno_docente + " RUT: " + self.rut_docente
+        return self.nombre_docente + " " + self.appaterno_docente + " " + self.apmaterno_docente + " RUT: " + self.rut_docente
 
 class Curso(models.Model):
     id_curso = models.IntegerField(primary_key=True, verbose_name="ID del curso")
     nombre_curso = models.CharField(max_length=30, verbose_name="Nombre del curso")
-    anno_curso = models.IntegerField(verbose_name="Año del curso")
     docente_curso = models.ForeignKey(Docente, on_delete=models.CASCADE, verbose_name="Docente asignado")
 
     def __str__(self):
-        return self.id_curso
+        return self.nombre_curso
 
 class Asignatura(models.Model):
     id_asignatura = models.CharField(max_length=6, primary_key=True, verbose_name="ID de la asignatura")
@@ -102,7 +101,7 @@ class Apoderado(models.Model):
     password = models.CharField(max_length=125, verbose_name="Contraseña")
 
     def __str__(self):
-        return self.nombre_apoderado + " " + self.appaterno_apoderado + " " + self.apmaterno_apoderado  + " RUT: " + self.rut_apoderado
+        return self.nombre_apoderado + " " + self.appaterno_apoderado + " " + self.apmaterno_apoderado
 
 class Alumno(models.Model):
     rut_alumno = models.CharField(primary_key=True, max_length=12, verbose_name="Rut")
@@ -152,7 +151,7 @@ class Noticias(models.Model):
     foto_noticia = models.ImageField(upload_to="noticias", null=True, verbose_name="Imagen de la noticia")
 
     def __str__(self):
-        return self.id_noticia
+        return self.titulo
     
 class Administrador(models.Model):
     rut_admin = models.CharField(primary_key=True, max_length=12, verbose_name="Rut")

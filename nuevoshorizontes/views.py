@@ -34,7 +34,7 @@ def login_alumno(request):
         try:
             detalleAlumno = Alumno.objects.get(correo_alumno = request.POST['email'], password = request.POST['password'])
             request.session['correo_alumno'] = detalleAlumno.correo_alumno
-            return redirect("home")
+            return redirect("home_alumno")
         except Alumno.DoesNotExist as e:
             messages.error(request, 'El correo electrónico o la contraseña no son correctos')
 
@@ -45,7 +45,7 @@ def login_docente(request):
         try:
             detalleDocente = Docente.objects.get(correo_docente = request.POST['email'], password = request.POST['password'])
             request.session['correo_docente'] = detalleDocente.correo_docente
-            return redirect("home")
+            return redirect("home_docente")
         except Docente.DoesNotExist as e:
             messages.error(request, 'El correo electrónico o la contraseña no son correctos')
 
@@ -56,7 +56,7 @@ def login_apoderado(request):
         try:
             detalleApoderado = Apoderado.objects.get(correo_apoderado = request.POST['email'], password = request.POST['password'])
             request.session['correo_apoderado'] = detalleApoderado.correo_apoderado
-            return redirect("home")
+            return redirect("home_apoderado")
         except Apoderado.DoesNotExist as e:
             messages.error(request, 'El correo electrónico o la contraseña no son correctos')
 
@@ -73,13 +73,37 @@ def login_administrativo(request):
 
     return render(request, 'nuevoshorizontes/login_portales/login_administrativo.html')
 
-def cerrar_sesion(request):
+def cerrar_sesion_admin(request):
     try:
         del request.session['Correo']
     except:
         return redirect("home")
     
-    return redirect("home")   
+    return redirect("home") 
+
+def cerrar_sesion_apoderado(request):
+    try:
+        del request.session['correo_apoderado']
+    except:
+        return redirect("home")
+    
+    return redirect("home")
+
+def cerrar_sesion_alumno(request):
+    try:
+        del request.session['correo_alumno']
+    except:
+        return redirect("home")
+    
+    return redirect("home")
+
+def cerrar_sesion_docente(request):
+    try:
+        del request.session['correo_docente']
+    except:
+        return redirect("home")
+    
+    return redirect("home")
 
 def home_admin(request):
 
@@ -190,8 +214,41 @@ def agregar_sedes(request):
     return render(request, 'nuevoshorizontes/portal_admin/formularios/agregar_sedes.html', data)
 
 def home_alumno(request):
+    correo_alumno = request.session.get('correo_alumno', None)
+    if correo_alumno:
+        alumno = Alumno.objects.get(correo_alumno=correo_alumno)
+        # Puedes pasar el objeto 'apoderado' al contexto de renderizado
+        return render(request, 'nuevoshorizontes/portal_alumno/home_alumno.html', {'alumno': alumno})
+    else:
+        # El usuario no ha iniciado sesión, redirigir a la página de inicio de sesión
+        return redirect("login_alumno")
+    
+def miperfil_alumno(request):
+    correo_alumno = request.session.get('correo_alumno', None)
+    if correo_alumno:
+        alumno = Alumno.objects.get(correo_alumno=correo_alumno)
+        return render(request, 'nuevoshorizontes/portal_alumno/miperfil.html', {'alumno': alumno})
 
-    return render(request, 'nuevoshorizontes/portal_alumno/home_alumno.html')
+    else:
+        return redirect("login_alumno")
+    
+def guardar_perfil_alumno(request):
+    if request.method == 'POST':
+        correo_alumno = request.session.get('correo_alumno', None)
+        if correo_alumno:
+            alumno = Alumno.objects.get(correo_alumno=correo_alumno)
+            alumno.nombre_alumno = request.POST.get('nombre')
+            alumno.appaterno_alumno = request.POST.get('paterno')
+            alumno.apmaterno_alumno = request.POST.get('materno')
+            alumno.direccion_alumno = request.POST.get('direccion')
+            alumno.telefono_alumno = request.POST.get('telefono')
+            # Actualizar otros campos del modelo "Apoderado" según sea necesario
+            alumno.save()  # Guardar los cambios en el modelo
+            messages.success(request, "Los cambios se guardaron exitosamente.")
+        else:
+            messages.error(request, "No se pudo guardar los cambios. Por favor, intenta nuevamente.")
+
+    return redirect('miperfil_alumno')
 
 def notas_alumno(request):
 
@@ -202,24 +259,104 @@ def horario_alumno(request):
     return render(request, 'nuevoshorizontes/portal_alumno/horario_alumno.html')
 
 def home_apoderado(request):
+    correo_apoderado = request.session.get('correo_apoderado', None)
+    if correo_apoderado:
+        apoderado = Apoderado.objects.get(correo_apoderado=correo_apoderado)
+        # Puedes pasar el objeto 'apoderado' al contexto de renderizado
+        return render(request, 'nuevoshorizontes/portal_apoderado/home_apoderado.html', {'apoderado': apoderado})
+    else:
+        # El usuario no ha iniciado sesión, redirigir a la página de inicio de sesión
+        return redirect("login_apoderado")
+    
+def miperfil_apoderado(request):
+    correo_apoderado = request.session.get('correo_apoderado', None)
+    if correo_apoderado:
+        apoderado = Apoderado.objects.get(correo_apoderado=correo_apoderado)
+        return render(request, 'nuevoshorizontes/portal_apoderado/miperfil.html', {'apoderado': apoderado})
 
-    return render(request, 'nuevoshorizontes/portal_apoderado/home_apoderado.html')
+    else:
+        return redirect("login_apoderado")
+    
+def guardar_perfil_apoderado(request):
+    if request.method == 'POST':
+        correo_apoderado = request.session.get('correo_apoderado', None)
+        if correo_apoderado:
+            apoderado = Apoderado.objects.get(correo_apoderado=correo_apoderado)
+            apoderado.nombre_apoderado = request.POST.get('nombre')
+            apoderado.appaterno_apoderado = request.POST.get('paterno')
+            apoderado.apmaterno_apoderado = request.POST.get('materno')
+            apoderado.direccion_apoderado = request.POST.get('direccion')
+            apoderado.telefono_apoderado = request.POST.get('telefono')
+            # Actualizar otros campos del modelo "Apoderado" según sea necesario
+            apoderado.save()  # Guardar los cambios en el modelo
+            messages.success(request, "Los cambios se guardaron exitosamente.")
+        else:
+            messages.error(request, "No se pudo guardar los cambios. Por favor, intenta nuevamente.")
+
+    return redirect('miperfil_apoderado')
+
+def lista_hijos(request):
+    correo_apoderado = request.session.get('correo_apoderado', None)
+    if correo_apoderado:
+        apoderado = Apoderado.objects.get(correo_apoderado=correo_apoderado)
+        alumnos = Alumno.objects.filter(apoderado_alumno=apoderado)
+        return render(request, 'nuevoshorizontes/portal_apoderado/lista_hijos.html', {'apoderado': apoderado, 'alumnos': alumnos})
+
+    else:
+        return redirect("login_apoderado")
+    
+def horarios_apoderado(request):
+
+    return render(request, 'nuevoshorizontes/portal_apoderado/horarios_apoderado.html')
+
+def asistencias_apoderado(request):
+
+    return render(request, 'nuevoshorizontes/portal_apoderado/asistencias_apoderado.html')
 
 def notas_apoderado(request):
 
     return render(request, 'nuevoshorizontes/portal_apoderado/notas_apoderado.html')
-
-def perfil_asistencia_apoderado(request):
-
-    return render(request, 'nuevoshorizontes/portal_apoderado/perfil_asistencia_apoderado.html')
 
 def pagos_apoderado(request):
 
     return render(request, 'nuevoshorizontes/portal_apoderado/pagos_apoderado.html')
 
 def home_docente(request):
+    correo_docente = request.session.get('correo_docente', None)
+    if correo_docente:
+        docente = Docente.objects.get(correo_docente=correo_docente)
+        # Puedes pasar el objeto 'apoderado' al contexto de renderizado
+        return render(request, 'nuevoshorizontes/portal_docente/home_docente.html', {'docente': docente})
+    else:
+        # El usuario no ha iniciado sesión, redirigir a la página de inicio de sesión
+        return redirect("login_docente")
+    
+def  miperfil_docente(request):
+    correo_docente = request.session.get('correo_docente', None)
+    if correo_docente:
+        docente = Docente.objects.get(correo_docente=correo_docente)
+        return render(request, 'nuevoshorizontes/portal_docente/miperfil.html', {'docente': docente})
 
-    return render(request, 'nuevoshorizontes/portal_docente/home_docente.html')
+    else:
+        return redirect("login_docente")
+    
+def guardar_perfil_docente(request):
+    if request.method == 'POST':
+        correo_docente = request.session.get('correo_docente', None)
+        if correo_docente:
+            docente = Docente.objects.get(correo_docente=correo_docente)
+            docente.nombre_docente = request.POST.get('nombre')
+            docente.appaterno_docente = request.POST.get('paterno')
+            docente.apmaterno_docente = request.POST.get('materno')
+            docente.direccion_docente = request.POST.get('direccion')
+            docente.telefono_docente = request.POST.get('telefono')
+            # Actualizar otros campos del modelo "Apoderado" según sea necesario
+            docente.save()  # Guardar los cambios en el modelo
+            messages.success(request, "Los cambios se guardaron exitosamente.")
+        else:
+            messages.error(request, "No se pudo guardar los cambios. Por favor, intenta nuevamente.")
+
+    return redirect('miperfil_docente')
 
 def curso_docente(request):
 

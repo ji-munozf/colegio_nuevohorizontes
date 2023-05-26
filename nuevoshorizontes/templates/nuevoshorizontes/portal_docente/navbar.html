@@ -11,22 +11,21 @@
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav ms-auto align-items-center">
                 <li class="nav-item">
+                    <a class="nav-link mx-2" href="{% url 'miperfil_docente' %}"><img src="{% static 'nuevoshorizontes/img/icons_navbar/acceso.png' %}"
+                            alt="usuarios">
+                        Mi perfil</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link mx-2" href="{% url 'curso_docente' %}"><img src="{% static 'nuevoshorizontes/img/icons_navbar/grupo.png' %}"
                             alt="usuarios">
                         Curso</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link mx-2" href="{% url 'asignaturas_docente' %}"><img src="{% static 'nuevoshorizontes/img/icons_navbar/monitor.png' %}" alt="sede">
+                    <a class="nav-link mx-2" href="{% url 'asignaturas_docente' %}"><img src="{% static 'nuevoshorizontes/img/icons_navbar/periodico.png' %}" alt="sede">
                         Asignaturas</a>
                 </li>
-                
-                {% if request.session.Correo %}
                 <li class="nav-item">
-                    <a class="nav-link mx-2"><img src="{% static 'nuevoshorizontes/img/icons_navbar/acceso.png' %}" alt=""> {{ request.session.Correo }}</a>
-                </li>
-                {% endif %}
-                <li class="nav-item">
-                    <a class="nav-link mx-2" href="{% url 'cerrar_sesion' %}"><img
+                    <a class="nav-link mx-2" href="{% url 'cerrar_sesion_docente' %}"><img
                             src="{% static 'nuevoshorizontes/img/icons_admin/cerrar-sesion.png' %}" alt="cerrar">
                         Cerrar sesión</a>
                 </li>
