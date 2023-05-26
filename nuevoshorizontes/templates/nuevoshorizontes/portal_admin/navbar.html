@@ -11,36 +11,17 @@
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav ms-auto align-items-center">
                 <li class="nav-item">
-                    <a class="nav-link mx-2" href="{% url 'usuarios_admin' %}"><img src="{% static 'nuevoshorizontes/img/icons_admin/acceso.png' %}"
-                            alt="usuarios">
-                        Usuarios</a>
+                    <a class="nav-link mx-2" href="{% url 'home_agregar' %}"><img src="{% static 'nuevoshorizontes/img/icons_admin/sede.png' %}" alt="agregar">
+                        Agregar</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link mx-2" href="{% url 'sedes_admin' %}"><img src="{% static 'nuevoshorizontes/img/icons_admin/sede.png' %}" alt="sede">
-                        Sedes</a>
+                    <a class="nav-link mx-2" href="{% url 'home_listado' %}"><img src="{% static 'nuevoshorizontes/img/icons_admin/periodico.png' %}" alt="">
+                        Listado</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link mx-2" href="{% url 'noticias_admin' %}"><img src="{% static 'nuevoshorizontes/img/icons_admin/periodico.png' %}" alt="">
-                        Noticias</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link mx-2" href="{% url 'cursos_admin' %}"><img src="{% static 'nuevoshorizontes/img/icons_admin/graduados.png' %}"
-                            alt="news">
-                        Cursos</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link mx-2" href="{% url 'asignaturas_admin' %}"><img src="{% static 'nuevoshorizontes/img/icons_admin/libro.png' %}" alt="">
-                        Asignaturas</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link mx-2" href="{% url 'salas_admin' %}"><img src="{% static 'nuevoshorizontes/img/icons_admin/aula.png' %}" alt="">
-                        Salas y/o laboratorios</a>
-                </li>
-                {% if request.session.Correo %}
-                <li class="nav-item">
-                    <a class="nav-link mx-2"><img src="{% static 'nuevoshorizontes/img/icons_navbar/acceso.png' %}" alt=""> {{ request.session.Correo }}</a>
-                </li>
-                {% endif %}
+                    <a class="nav-link mx-2" href="{% url 'home_pagos' %}"><img src="{% static 'nuevoshorizontes/img/ingresos.png' %}" alt="">
+                        Pagos</a>
+                </li>   
                 <li class="nav-item">
                     <a class="nav-link mx-2" href="{% url 'cerrar_sesion_admin' %}"><img
                             src="{% static 'nuevoshorizontes/img/icons_admin/cerrar-sesion.png' %}" alt="cerrar">
