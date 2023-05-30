@@ -1,9 +1,9 @@
 from django import forms
-from .models import *
+from .models import Alumno, Apoderado, Asignatura, Curso, Docente, Materia, Noticias, Sala, Sede
 
 class AlumnoForm(forms.ModelForm):
 
-    rut_alumno = forms.CharField(widget=forms.TextInput, max_length=9)
+    rut_alumno = forms.CharField(widget=forms.TextInput, max_length=10)
     password = forms.CharField(widget=forms.PasswordInput)
 
     class Meta:
@@ -12,7 +12,7 @@ class AlumnoForm(forms.ModelForm):
 
 class DocenteForm(forms.ModelForm):
 
-    rut_docente = forms.CharField(widget=forms.TextInput, max_length=9)
+    rut_docente = forms.CharField(widget=forms.TextInput, max_length=10)
     password = forms.CharField(widget=forms.PasswordInput)
 
     class Meta:
@@ -21,7 +21,7 @@ class DocenteForm(forms.ModelForm):
 
 class ApoderadoForm(forms.ModelForm):
 
-    rut_apoderado = forms.CharField(widget=forms.TextInput, max_length=9)
+    rut_apoderado = forms.CharField(widget=forms.TextInput, max_length=10)
     password = forms.CharField(widget=forms.PasswordInput)
 
     class Meta:
@@ -30,7 +30,7 @@ class ApoderadoForm(forms.ModelForm):
 
 class AdminForm(forms.ModelForm):
 
-    rut_admin = forms.CharField(widget=forms.TextInput, max_length=9)
+    rut_admin = forms.CharField(widget=forms.TextInput, max_length=10)
     password = forms.CharField(widget=forms.PasswordInput)
 
     class Meta:
@@ -69,10 +69,16 @@ class NoticiaForm(forms.ModelForm):
                'placeholder': 'Select a date',
                'type': 'date'
               }),
-}
+        }
 
 class SalaForm(forms.ModelForm):
 
     class Meta:
         model = Sala
+        fields = '__all__'
+
+class MateriaForm(forms.ModelForm):
+
+    class Meta:
+        model = Materia
         fields = '__all__'

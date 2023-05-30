@@ -1,5 +1,7 @@
 from django.db import models
 
+from nuevoshorizontes.forms import *
+
 class Region(models.Model):
     id_region = models.IntegerField(primary_key=True, verbose_name="ID región")
     nombre_region = models.CharField(max_length=15, verbose_name="Nombre")
@@ -52,7 +54,8 @@ class Docente(models.Model):
     correo_docente = models.CharField(max_length=30, verbose_name="Correo electrónico")
     password = models.CharField(max_length=125, verbose_name="Contraseña")
     sede_docente = models.ForeignKey(Sede, on_delete=models.CASCADE, verbose_name="Sede asignado")
-    
+    asignaturas_docente = models.ManyToManyField(Asignatura, verbose_name="Asignaturas asignadas")
+
     def __str__(self):
         return self.nombre_docente + " " + self.appaterno_docente + " " + self.apmaterno_docente + " RUT: " + self.rut_docente
 
@@ -63,16 +66,23 @@ class Curso(models.Model):
 
     def __str__(self):
         return self.nombre_curso
+    
+class Materia(models.Model):
+    id_materia = models.CharField(max_length=6, primary_key=True, verbose_name="ID de la materia", default="")
+    nombre_materia = models.CharField(max_length = 25, default="")
+
+    def __str__(self):
+        return self.nombre_materia
 
 class Asignatura(models.Model):
     id_asignatura = models.CharField(max_length=6, primary_key=True, verbose_name="ID de la asignatura")
-    nombre_asignatura = models.CharField(max_length=12, verbose_name="Nombre")
+    nombre_materia = models.ForeignKey(Materia, on_delete=models.CASCADE, verbose_name="Nombre de la asignatura", default="")
     curso_asignatura = models.ForeignKey(Curso, on_delete=models.CASCADE, verbose_name="Curso asignado")
     docente_asignatura = models.ForeignKey(Docente, on_delete=models.CASCADE, verbose_name="Docente asignado")
 
     def __str__(self):
-        return self.nombre_asignatura
-
+        return self.nombre_materia
+    
 class Horario(models.Model):
     id_horario = models.IntegerField(primary_key=True, verbose_name="ID del horario")
     dia_horario = models.CharField(max_length=9, verbose_name="Días")
