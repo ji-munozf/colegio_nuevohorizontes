@@ -73,35 +73,15 @@ def login_administrativo(request):
 
     return render(request, 'nuevoshorizontes/login_portales/login_administrativo.html')
 
-def cerrar_sesion_admin(request):
-    try:
+def cerrar_sesion(request):
+    if 'Correo' in request.session:
         del request.session['Correo']
-    except:
-        return redirect("home")
-    
-    return redirect("home") 
-
-def cerrar_sesion_apoderado(request):
-    try:
+    elif 'correo_apoderado' in request.session:
         del request.session['correo_apoderado']
-    except:
-        return redirect("home")
-    
-    return redirect("home")
-
-def cerrar_sesion_alumno(request):
-    try:
+    elif 'correo_alumno' in request.session:
         del request.session['correo_alumno']
-    except:
-        return redirect("home")
-    
-    return redirect("home")
-
-def cerrar_sesion_docente(request):
-    try:
+    elif 'correo_docente' in request.session:
         del request.session['correo_docente']
-    except:
-        return redirect("home")
     
     return redirect("home")
 
@@ -147,146 +127,207 @@ def home_pagos(request):
 
 def agregar_admins(request):
 
-    data = {
-        'form': AdminForm()
-    }
+    correo_admin = request.session.get('Correo', None)
+    if correo_admin:
+        admin = Administrador.objects.get(correo_admin=correo_admin)
+        data = {
+            'admin': admin,
+            'form': AdminForm()
+        }
 
-    if request.method == 'POST':
-        formulario = AdminForm(data=request.POST)
-        if formulario.is_valid():
-            formulario.save()
-            data["mensaje"] = "Guardado correctamente"
-        else:
-            data["form"] = formulario
-    return render(request, 'nuevoshorizontes/portal_admin/formularios/agregar_admins.html', data)
+        if request.method == 'POST':
+            formulario = AdminForm(data=request.POST)
+            if formulario.is_valid():
+                formulario.save()
+                data["mensaje"] = "Guardado correctamente"
+            else:
+                data["form"] = formulario
+        return render(request, 'nuevoshorizontes/portal_admin/formularios/agregar_admins.html', data)
+    else:
+        return redirect("login_administrativo")
 
 def agregar_alumnos(request):
 
-    data = {
-        'form': AlumnoForm()
-    }
+    correo_admin = request.session.get('Correo', None)
+    if correo_admin:
+        admin = Administrador.objects.get(correo_admin=correo_admin)
+        data = {
+            'admin': admin,
+            'form': AlumnoForm()
+        }
 
-    if request.method == 'POST':
-        formulario = AlumnoForm(data=request.POST)
-        if formulario.is_valid():
-            formulario.save()
-            data["mensaje"] = "Guardado correctamente"
-        else:
-            data["form"] = formulario
+        if request.method == 'POST':
+            formulario = AlumnoForm(data=request.POST)
+            if formulario.is_valid():
+                formulario.save()
+                data["mensaje"] = "Guardado correctamente"
+            else:
+                data["form"] = formulario
 
-    return render(request, 'nuevoshorizontes/portal_admin/formularios/agregar_alumnos.html', data)
+        return render(request, 'nuevoshorizontes/portal_admin/formularios/agregar_alumnos.html', data)
+    else:
+        return redirect("login_administrativo")
 
 def agregar_docentes(request):
 
-    data = {
-        'form': DocenteForm()
-    }
+    correo_admin = request.session.get('Correo', None)
+    if correo_admin:
+        admin = Administrador.objects.get(correo_admin=correo_admin)
+        data = {
+            'admin': admin,
+            'form': DocenteForm()
+        }
 
-    if request.method == 'POST':
-        formulario = DocenteForm(data=request.POST)
-        if formulario.is_valid():
-            formulario.save()
-            data["mensaje"] = "Guardado correctamente"
-        else:
-            data["form"] = formulario
+        if request.method == 'POST':
+            formulario = DocenteForm(data=request.POST)
+            if formulario.is_valid():
+                formulario.save()
+                data["mensaje"] = "Guardado correctamente"
+            else:
+                data["form"] = formulario
 
-    return render(request, 'nuevoshorizontes/portal_admin/formularios/agregar_docentes.html', data)
+        return render(request, 'nuevoshorizontes/portal_admin/formularios/agregar_docentes.html', data)
+    else:
+        return redirect("login_administrativo")
+
 
 def agregar_apoderados(request):
 
-    data = {
-        'form': ApoderadoForm()
-    }
+    correo_admin = request.session.get('Correo', None)
+    if correo_admin:
+        admin = Administrador.objects.get(correo_admin=correo_admin)
+        data = {
+            'admin': admin,
+            'form': ApoderadoForm()
+        }
 
-    if request.method == 'POST':
-        formulario = ApoderadoForm(data=request.POST)
-        if formulario.is_valid():
-            formulario.save()
-            data["mensaje"] = "Guardado correctamente"
-        else:
-            data["form"] = formulario
+        if request.method == 'POST':
+            formulario = ApoderadoForm(data=request.POST)
+            if formulario.is_valid():
+                formulario.save()
+                data["mensaje"] = "Guardado correctamente"
+            else:
+                data["form"] = formulario
 
-    return render(request, 'nuevoshorizontes/portal_admin/formularios/agregar_apoderados.html', data)
+        return render(request, 'nuevoshorizontes/portal_admin/formularios/agregar_apoderados.html', data)
+    else:
+        return redirect("login_administrativo")
+
 
 def agregar_asignaturas(request):
 
-    data = {
-        'form': AsignaturaForm()
-    }
+    correo_admin = request.session.get('Correo', None)
+    if correo_admin:
+        admin = Administrador.objects.get(correo_admin=correo_admin)
+        data = {
+            'admin': admin,
+            'form': AsignaturaForm()
+        }
 
-    if request.method == 'POST':
-        formulario = AsignaturaForm(data=request.POST)
-        if formulario.is_valid():
-            formulario.save()
-            data["mensaje"] = "Guardado correctamente"
-        else:
-            data["form"] = formulario
+        if request.method == 'POST':
+            formulario = AsignaturaForm(data=request.POST)
+            if formulario.is_valid():
+                formulario.save()
+                data["mensaje"] = "Guardado correctamente"
+            else:
+                data["form"] = formulario
 
-    return render(request, 'nuevoshorizontes/portal_admin/formularios/agregar_asignaturas.html', data)
+        return render(request, 'nuevoshorizontes/portal_admin/formularios/agregar_asignaturas.html', data)
+    else:
+        return redirect("login_administrativo")
+
 
 def agregar_cursos(request):
 
-    data = {
-        'form': CursoForm()
-    }
+    correo_admin = request.session.get('Correo', None)
+    if correo_admin:
+        admin = Administrador.objects.get(correo_admin=correo_admin)
+        data = {
+            'admin': admin,
+            'form': CursoForm()
+        }
 
-    if request.method == 'POST':
-        formulario = CursoForm(data=request.POST)
-        if formulario.is_valid():
-            formulario.save()
-            data["mensaje"] = "Guardado correctamente"
-        else:
-            data["form"] = formulario
+        if request.method == 'POST':
+            formulario = CursoForm(data=request.POST)
+            if formulario.is_valid():
+                formulario.save()
+                data["mensaje"] = "Guardado correctamente"
+            else:
+                data["form"] = formulario
 
-    return render(request, 'nuevoshorizontes/portal_admin/formularios/agregar_cursos.html', data)
+        return render(request, 'nuevoshorizontes/portal_admin/formularios/agregar_cursos.html', data)
+    else:
+        return redirect("login_administrativo")
+
 
 def agregar_noticias(request):
 
-    data = {
-        'form': NoticiaForm()
-    }
+    correo_admin = request.session.get('Correo', None)
+    if correo_admin:
+        admin = Administrador.objects.get(correo_admin=correo_admin)
+        data = {
+            'admin': admin,
+            'form': NoticiaForm()
+        }
 
-    if request.method == 'POST':
-        formulario = NoticiaForm(data=request.POST, files=request.FILES)
-        if formulario.is_valid():
-            formulario.save()
-            data["mensaje"] = "Guardado correctamente"
-        else:
-            data["form"] = formulario
+        if request.method == 'POST':
+            formulario = NoticiaForm(data=request.POST, files=request.FILES)
+            if formulario.is_valid():
+                formulario.save()
+                data["mensaje"] = "Guardado correctamente"
+            else:
+                data["form"] = formulario
 
-    return render(request, 'nuevoshorizontes/portal_admin/formularios/agregar_noticias.html', data)
+        return render(request, 'nuevoshorizontes/portal_admin/formularios/agregar_noticias.html', data)
+    else:
+        return redirect("login_administrativo")
+
 
 def agregar_salas(request):
 
-    data = {
-        'form': SalaForm()
-    }
+    correo_admin = request.session.get('Correo', None)
+    if correo_admin:
+        admin = Administrador.objects.get(correo_admin=correo_admin)
+        data = {
+            'admin': admin,
+            'form': SalaForm()
+        }
 
-    if request.method == 'POST':
-        formulario = SalaForm(data=request.POST)
-        if formulario.is_valid():
-            formulario.save()
-            data["mensaje"] = "Guardado correctamente"
-        else:
-            data["form"] = formulario
+        if request.method == 'POST':
+            formulario = SalaForm(data=request.POST)
+            if formulario.is_valid():
+                formulario.save()
+                data["mensaje"] = "Guardado correctamente"
+            else:
+                data["form"] = formulario
 
-    return render(request, 'nuevoshorizontes/portal_admin/formularios/agregar_salas.html', data)
+        return render(request, 'nuevoshorizontes/portal_admin/formularios/agregar_salas.html', data)
+    else:
+        return redirect("login_administrativo")
+
 
 def agregar_sedes(request):
 
-    data = {
-        'form': SedeForm()
-    }
+    correo_admin = request.session.get('Correo', None)
+    if correo_admin:
+        admin = Administrador.objects.get(correo_admin=correo_admin)
+        data = {
+            'admin': admin,
+            'form': SedeForm()
+        }
 
-    if request.method == 'POST':
-        formulario = SedeForm(data=request.POST, files=request.FILES)
-        if formulario.is_valid():
-            formulario.save()
-            data["mensaje"] = "Guardado correctamente"
-        else:
-            data["form"] = formulario
+        if request.method == 'POST':
+            formulario = SedeForm(data=request.POST, files=request.FILES)
+            if formulario.is_valid():
+                formulario.save()
+                data["mensaje"] = "Guardado correctamente"
+            else:
+                data["form"] = formulario
 
-    return render(request, 'nuevoshorizontes/portal_admin/formularios/agregar_sedes.html', data)
+        return render(request, 'nuevoshorizontes/portal_admin/formularios/agregar_sedes.html', data)
+    else:
+        return redirect("login_administrativo")
+
 
 def home_alumno(request):
     correo_alumno = request.session.get('correo_alumno', None)

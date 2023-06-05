@@ -49,8 +49,5 @@ urlpatterns = [
     path('portales/login_apoderado', login_apoderado, name="login_apoderado"),
     path('portales/login_administrativo', login_administrativo, name="login_administrativo"),
 
-    path('cerrar_sesion', cerrar_sesion_admin, name="cerrar_sesion_admin"),
-    path('cerrar_sesion', cerrar_sesion_apoderado, name="cerrar_sesion_apoderado"),
-    path('cerrar_sesion', cerrar_sesion_alumno, name="cerrar_sesion_alumno"),
-    path('cerrar_sesion', cerrar_sesion_docente, name="cerrar_sesion_docente")
+    path('cerrar_sesion/', cerrar_sesion, name='cerrar_sesion'),
 ]
