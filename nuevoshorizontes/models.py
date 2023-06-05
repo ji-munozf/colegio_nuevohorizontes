@@ -53,6 +53,7 @@ class Asignatura(models.Model):
     id_asignatura = models.CharField(max_length=6, primary_key=True, verbose_name="ID de la asignatura")
     nombre_materia = models.ForeignKey(Materia, on_delete=models.CASCADE, verbose_name="Nombre de la asignatura", default="")
 
+
 class Docente(models.Model):
     rut_docente = models.CharField(primary_key=True, max_length=12, verbose_name="Rut")
     nombre_docente = models.CharField(max_length=15, verbose_name="Nombres")
@@ -76,9 +77,6 @@ class Curso(models.Model):
     def __str__(self):
         return self.nombre_curso
 
-    def __str__(self):
-        return self.nombre_materia
-    
 class Horario(models.Model):
     id_horario = models.IntegerField(primary_key=True, verbose_name="ID del horario")
     dia_horario = models.CharField(max_length=9, verbose_name="Días")
