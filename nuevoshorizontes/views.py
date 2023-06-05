@@ -66,7 +66,7 @@ def login_administrativo(request):
     if request.method == 'POST':
         try:
             detalleAdmin = Administrador.objects.get(correo_admin = request.POST['email'], password = request.POST['password'])
-            request.session['Correo'] = detalleAdmin.correo_admin
+            request.session['correo_admin'] = detalleAdmin.correo_admin
             return redirect("home_admin")
         except Administrador.DoesNotExist as e:
             messages.success(request, 'El correo electrónico o la contraseña no son correctos')
@@ -74,8 +74,8 @@ def login_administrativo(request):
     return render(request, 'nuevoshorizontes/login_portales/login_administrativo.html')
 
 def cerrar_sesion(request):
-    if 'Correo' in request.session:
-        del request.session['Correo']
+    if 'correo_admin' in request.session:
+        del request.session['correo_admin']
     elif 'correo_apoderado' in request.session:
         del request.session['correo_apoderado']
     elif 'correo_alumno' in request.session:
@@ -86,7 +86,7 @@ def cerrar_sesion(request):
     return redirect("home")
 
 def home_admin(request):
-    correo_admin = request.session.get('Correo', None)
+    correo_admin = request.session.get('correo_admin', None)
     if correo_admin:
         admin = Administrador.objects.get(correo_admin=correo_admin)
         # Puedes pasar el objeto 'apoderado' al contexto de renderizado
@@ -96,7 +96,7 @@ def home_admin(request):
         return redirect("login_administrativo")
 
 def home_agregar(request):
-    correo_admin = request.session.get('Correo', None)
+    correo_admin = request.session.get('correo_admin', None)
     if correo_admin:
         admin = Administrador.objects.get(correo_admin=correo_admin)
         # Puedes pasar el objeto 'apoderado' al contexto de renderizado
@@ -106,7 +106,7 @@ def home_agregar(request):
         return redirect("login_administrativo")
 
 def home_listado(request):
-    correo_admin = request.session.get('Correo', None)
+    correo_admin = request.session.get('correo_admin', None)
     if correo_admin:
         admin = Administrador.objects.get(correo_admin=correo_admin)
         # Puedes pasar el objeto 'apoderado' al contexto de renderizado
@@ -116,7 +116,7 @@ def home_listado(request):
         return redirect("login_administrativo")
 
 def home_pagos(request):
-    correo_admin = request.session.get('Correo', None)
+    correo_admin = request.session.get('correo_admin', None)
     if correo_admin:
         admin = Administrador.objects.get(correo_admin=correo_admin)
         # Puedes pasar el objeto 'apoderado' al contexto de renderizado
@@ -127,7 +127,7 @@ def home_pagos(request):
 
 def agregar_admins(request):
 
-    correo_admin = request.session.get('Correo', None)
+    correo_admin = request.session.get('correo_admin', None)
     if correo_admin:
         admin = Administrador.objects.get(correo_admin=correo_admin)
         data = {
@@ -139,7 +139,7 @@ def agregar_admins(request):
             formulario = AdminForm(data=request.POST)
             if formulario.is_valid():
                 formulario.save()
-                data["mensaje"] = "Guardado correctamente"
+                messages.success(request, "Administrador agregado correctamente")
             else:
                 data["form"] = formulario
         return render(request, 'nuevoshorizontes/portal_admin/formularios/agregar_admins.html', data)
@@ -148,7 +148,7 @@ def agregar_admins(request):
 
 def agregar_alumnos(request):
 
-    correo_admin = request.session.get('Correo', None)
+    correo_admin = request.session.get('correo_admin', None)
     if correo_admin:
         admin = Administrador.objects.get(correo_admin=correo_admin)
         data = {
@@ -160,7 +160,7 @@ def agregar_alumnos(request):
             formulario = AlumnoForm(data=request.POST)
             if formulario.is_valid():
                 formulario.save()
-                data["mensaje"] = "Guardado correctamente"
+                messages.success(request, "Alumno agregado correctamente")
             else:
                 data["form"] = formulario
 
@@ -170,7 +170,7 @@ def agregar_alumnos(request):
 
 def agregar_docentes(request):
 
-    correo_admin = request.session.get('Correo', None)
+    correo_admin = request.session.get('correo_admin', None)
     if correo_admin:
         admin = Administrador.objects.get(correo_admin=correo_admin)
         data = {
@@ -182,7 +182,7 @@ def agregar_docentes(request):
             formulario = DocenteForm(data=request.POST)
             if formulario.is_valid():
                 formulario.save()
-                data["mensaje"] = "Guardado correctamente"
+                messages.success(request, "Docente agregado correctamente")
             else:
                 data["form"] = formulario
 
@@ -193,7 +193,7 @@ def agregar_docentes(request):
 
 def agregar_apoderados(request):
 
-    correo_admin = request.session.get('Correo', None)
+    correo_admin = request.session.get('correo_admin', None)
     if correo_admin:
         admin = Administrador.objects.get(correo_admin=correo_admin)
         data = {
@@ -205,7 +205,7 @@ def agregar_apoderados(request):
             formulario = ApoderadoForm(data=request.POST)
             if formulario.is_valid():
                 formulario.save()
-                data["mensaje"] = "Guardado correctamente"
+                messages.success(request, "Apoderado agregado correctamente")
             else:
                 data["form"] = formulario
 
@@ -216,7 +216,7 @@ def agregar_apoderados(request):
 
 def agregar_asignaturas(request):
 
-    correo_admin = request.session.get('Correo', None)
+    correo_admin = request.session.get('correo_admin', None)
     if correo_admin:
         admin = Administrador.objects.get(correo_admin=correo_admin)
         data = {
@@ -228,7 +228,7 @@ def agregar_asignaturas(request):
             formulario = AsignaturaForm(data=request.POST)
             if formulario.is_valid():
                 formulario.save()
-                data["mensaje"] = "Guardado correctamente"
+                messages.success(request, "Asignatura agregada correctamente")
             else:
                 data["form"] = formulario
 
@@ -239,7 +239,7 @@ def agregar_asignaturas(request):
 
 def agregar_cursos(request):
 
-    correo_admin = request.session.get('Correo', None)
+    correo_admin = request.session.get('correo_admin', None)
     if correo_admin:
         admin = Administrador.objects.get(correo_admin=correo_admin)
         data = {
@@ -251,7 +251,7 @@ def agregar_cursos(request):
             formulario = CursoForm(data=request.POST)
             if formulario.is_valid():
                 formulario.save()
-                data["mensaje"] = "Guardado correctamente"
+                messages.success(request, "Curso agregado correctamente")
             else:
                 data["form"] = formulario
 
@@ -262,7 +262,7 @@ def agregar_cursos(request):
 
 def agregar_noticias(request):
 
-    correo_admin = request.session.get('Correo', None)
+    correo_admin = request.session.get('correo_admin', None)
     if correo_admin:
         admin = Administrador.objects.get(correo_admin=correo_admin)
         data = {
@@ -274,7 +274,7 @@ def agregar_noticias(request):
             formulario = NoticiaForm(data=request.POST, files=request.FILES)
             if formulario.is_valid():
                 formulario.save()
-                data["mensaje"] = "Guardado correctamente"
+                messages.success(request, "Noticia agregada correctamente")
             else:
                 data["form"] = formulario
 
@@ -285,7 +285,7 @@ def agregar_noticias(request):
 
 def agregar_salas(request):
 
-    correo_admin = request.session.get('Correo', None)
+    correo_admin = request.session.get('correo_admin', None)
     if correo_admin:
         admin = Administrador.objects.get(correo_admin=correo_admin)
         data = {
@@ -297,7 +297,7 @@ def agregar_salas(request):
             formulario = SalaForm(data=request.POST)
             if formulario.is_valid():
                 formulario.save()
-                data["mensaje"] = "Guardado correctamente"
+                messages.success(request, "Sala agregada correctamente")
             else:
                 data["form"] = formulario
 
@@ -308,7 +308,7 @@ def agregar_salas(request):
 
 def agregar_sedes(request):
 
-    correo_admin = request.session.get('Correo', None)
+    correo_admin = request.session.get('correo_admin', None)
     if correo_admin:
         admin = Administrador.objects.get(correo_admin=correo_admin)
         data = {
@@ -320,7 +320,7 @@ def agregar_sedes(request):
             formulario = SedeForm(data=request.POST, files=request.FILES)
             if formulario.is_valid():
                 formulario.save()
-                data["mensaje"] = "Guardado correctamente"
+                messages.success(request, "Sede agregada correctamente")
             else:
                 data["form"] = formulario
 
@@ -328,6 +328,23 @@ def agregar_sedes(request):
     else:
         return redirect("login_administrativo")
 
+def listar_admins(request):
+    correo_admin = request.session.get('correo_admin', None)
+    if correo_admin:
+        admin = Administrador.objects.get(correo_admin=correo_admin)
+        admins = Administrador.objects.all()
+        return render(request, 'nuevoshorizontes/portal_admin/listados/listar_admins.html', {'admins': admins, 'admin': admin})
+    else:
+        return redirect("login_administrativo")
+    
+def listar_alumnos(request):
+    correo_admin = request.session.get('correo_admin', None)
+    if correo_admin:
+        admin = Administrador.objects.get(correo_admin=correo_admin)
+        alumnos = Alumno.objects.all()
+        return render(request, 'nuevoshorizontes/portal_admin/listados/listar_alumnos.html', {'alumnos': alumnos, 'admin': admin})
+    else:
+        return redirect("login_administrativo")
 
 def home_alumno(request):
     correo_alumno = request.session.get('correo_alumno', None)
@@ -358,7 +375,6 @@ def guardar_perfil_alumno(request):
             alumno.apmaterno_alumno = request.POST.get('materno')
             alumno.direccion_alumno = request.POST.get('direccion')
             alumno.telefono_alumno = request.POST.get('telefono')
-            # Actualizar otros campos del modelo "Apoderado" según sea necesario
             alumno.save()  # Guardar los cambios en el modelo
             messages.success(request, "Los cambios se guardaron exitosamente.")
         else:

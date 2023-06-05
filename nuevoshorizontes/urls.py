@@ -22,6 +22,9 @@ urlpatterns = [
     path('portal_admin/formularios/agregar_noticias', agregar_noticias, name="agregar_noticias"),
     path('portal_admin/formularios/agregar_salas', agregar_salas, name="agregar_salas"),
     path('portal_admin/formularios/agregar_sedes', agregar_sedes, name="agregar_sedes"),
+
+    path('portal_admin/listados/listar_admins', listar_admins, name="listar_admins"),
+    path('portal_admin/listados/listar_alumnos', listar_alumnos, name="listar_alumnos"),
     
     path('portal_alumno/home_alumno', home_alumno, name="home_alumno"),
     path('portal_alumno/mi_perfil', miperfil_alumno, name="miperfil_alumno"),

@@ -1,5 +1,5 @@
 from django import forms
-from .models import Alumno, Apoderado, Asignatura, Curso, Docente, Materia, Noticias, Sala, Sede
+from .models import Alumno, Apoderado, Asignatura, Curso, Docente, Materia, Noticias, Sala, Sede, Administrador
 
 class AlumnoForm(forms.ModelForm):
 
@@ -34,9 +34,8 @@ class AdminForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput)
 
     class Meta:
-        model = Apoderado
+        model = Administrador
         fields = '__all__'
-
 
 class SedeForm(forms.ModelForm):
 

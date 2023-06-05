@@ -159,12 +159,14 @@ class Noticias(models.Model):
     def __str__(self):
         return self.titulo
     
+from django.contrib.auth.hashers import make_password
+
 class Administrador(models.Model):
     rut_admin = models.CharField(primary_key=True, max_length=12, verbose_name="Rut")
     nombre_admin = models.CharField(max_length=30, verbose_name="Nombres")
     apellido_admin = models.CharField(max_length=30, verbose_name="Apellidos")
     correo_admin = models.CharField(max_length=30, verbose_name="Correo electrónico")
     password = models.CharField(max_length=125, verbose_name="Contraseña")
-
+    
     def __str__(self):
         return "RUT: " + self.rut_admin + " " + "Nombres: " + self.nombre_admin + " " + self.apellido_admin

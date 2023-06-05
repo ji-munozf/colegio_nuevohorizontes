@@ -16,73 +16,114 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link rel="stylesheet" href="{% static 'nuevoshorizontes/css/navbar.css' %}">
     <link rel="stylesheet" href="{% static 'nuevoshorizontes/css/home_admin.css' %}">
+    <link rel="stylesheet" href="{% static 'nuevoshorizontes/css/listar_page.css' %}">
 </head>
 
 <body>
 
     {% include "nuevoshorizontes/portal_admin/navbar.html" %}
 
-    <h1 class="heading" style="padding-top: 120px;"><img class="title-img mx-2" src="{% static 'nuevoshorizontes/img/icons_admin/boton-mas-blanco.png' %}"
-        alt="nosotros" height="60">Agregar</h1>
+    <h1 class="heading" style="padding-top: 120px;"><img class="title-img mx-2"
+            src="{% static 'nuevoshorizontes/img/icons_admin/boton-mas-blanco.png' %}" alt="nosotros"
+            height="60">Agregar</h1>
 
-    <div class="container botones" style="text-align: center; align-items: center;">
+    <div class="container">
         <div class="row">
-            <button type="button" class="btn btn-lg btn-block"><a href="{% url 'agregar_alumnos' %}">Agregar alumnos</a></button>
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="{% static 'nuevoshorizontes/img/icons_listar/alumno.png' %}" class="card-img-top"
+                        alt="Imagen 1">
+                    <div class="card-body">
+                        <h3 class="card-title">Alumnos</h3>
+                        <a href="{% url 'agregar_alumnos' %}" class="btn btn-primary align-self-center">Agregar alumnos</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="{% static 'nuevoshorizontes/img/icons_listar/profesor.png' %}" class="card-img-top"
+                        alt="Imagen 2">
+                    <div class="card-body">
+                        <h3 class="card-title">Docentes</h3>
+                        <a href="{% url 'agregar_docentes' %}" class="btn btn-primary align-self-center">Agregar docentes</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="{% static 'nuevoshorizontes/img/icons_listar/padre-e-hijo.png' %}" class="card-img-top"
+                        alt="Imagen 3">
+                    <div class="card-body">
+                        <h3 class="card-title">Apoderados</h3>
+                        <a href="{% url 'agregar_apoderados' %}" class="btn btn-primary align-self-center">Agregar apoderados</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="{% static 'nuevoshorizontes/img/icons_listar/administrar.png' %}" class="card-img-top"
+                        alt="Imagen 4">
+                    <div class="card-body">
+                        <h3 class="card-title">Administradores</h3>
+                        <a href="{% url 'agregar_admins' %}" class="btn btn-primary align-self-center">Agregar administradores</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="{% static 'nuevoshorizontes/img/icons_navbar/sede.png' %}" class="card-img-top"
+                        alt="Imagen 5">
+                    <div class="card-body">
+                        <h3 class="card-title">Sedes</h3>
+                        <a href="{% url 'agregar_sedes' %}" class="btn btn-primary align-self-center">Agregar sedes</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="{% static 'nuevoshorizontes/img/icons_navbar/periodico.png' %}" class="card-img-top"
+                        alt="Imagen 6">
+                    <div class="card-body">
+                        <h3 class="card-title">Noticias</h3>
+                        <a href="{% url 'agregar_noticias' %}" class="btn btn-primary align-self-center">Agregar noticias</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="{% static 'nuevoshorizontes/img/icons_listar/graduados.png' %}" class="card-img-top"
+                        alt="Imagen 7">
+                    <div class="card-body">
+                        <h3 class="card-title">Cursos</h3>
+                        <a href="{% url 'agregar_cursos' %}" class="btn btn-primary align-self-center">Agregar cursos</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="{% static 'nuevoshorizontes/img/icons_listar/aula.png' %}" class="card-img-top"
+                        alt="Imagen 8">
+                    <div class="card-body">
+                        <h3 class="card-title">Salas</h3>
+                        <a href="{% url 'agregar_salas' %}" class="btn btn-primary align-self-center">Agregar salas</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="{% static 'nuevoshorizontes/img/icons_listar/libro.png' %}" class="card-img-top"
+                        alt="Imagen 9">
+                    <div class="card-body">
+                        <h3 class="card-title">Asignaturas</h3>
+                        <a href="{% url 'agregar_asignaturas' %}" class="btn btn-primary align-self-center">Agregar asignaturas</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
     <div class="container botones" style="text-align: center; align-items: center;">
-        <div class="row">
-            <button type="button" class="btn btn-lg btn-block"><a href="{% url 'agregar_docentes' %}">Agregar docentes</a></button>
-        </div>
-    </div>
-
-    <div class="container botones" style="text-align: center; align-items: center;">
-        <div class="row">
-            <button type="button" class="btn btn-lg btn-block"><a href="{% url 'agregar_apoderados' %}">Agregar apoderados</a></button>
-        </div>
-    </div>
-
-    <div class="container botones" style="text-align: center; align-items: center;">
-        <div class="row">
-            <button type="button" class="btn btn-lg btn-block"><a href="{% url 'agregar_admins' %}">Agregar administradores</a></button>
-        </div>
-    </div>
-
-    <div class="container botones" style="text-align: center; align-items: center;">
-        <div class="row">
-            <button type="button" class="btn btn-lg btn-block"><a href="{% url 'agregar_sedes' %}">Agregar sedes</a></button>
-        </div>
-    </div>
-
-    <div class="container botones" style="text-align: center; align-items: center;">
-        <div class="row">
-            <button type="button" class="btn btn-lg btn-block"><a href="{% url 'agregar_noticias' %}">Agregar noticias</a></button>
-        </div>
-    </div>
-
-    <div class="container botones" style="text-align: center; align-items: center;">
-        <div class="row">
-            <button type="button" class="btn btn-lg btn-block"><a href="{% url 'agregar_cursos' %}">Agregar cursos</a></button>
-        </div>
-    </div>
-
-    <div class="container botones" style="text-align: center; align-items: center;">
-        <div class="row">
-            <button type="button" class="btn btn-lg btn-block"><a href="{% url 'agregar_salas' %}">Agregar salas</a></button>
-        </div>
-    </div>
-
-    <div class="container botones" style="text-align: center; align-items: center;">
-        <div class="row">
-            <button type="button" class="btn btn-lg btn-block"><a href="{% url 'agregar_asignaturas' %}">Agregar asignaturas</a></button>
-        </div>
-    </div>
-
-    <div class="container botones" style="text-align: center; align-items: center;">
-        <div class="row">
-            <button type="button" class="btn btn-lg btn-block"><a href="{% url 'home_admin' %}">Volver al inicio</a></button>
-        </div>
+        <button type="button" class="btn btn-lg btn-block"><a href="{% url 'home_admin' %}">Volver al inicio</a></button>
     </div>
 
 </body>
