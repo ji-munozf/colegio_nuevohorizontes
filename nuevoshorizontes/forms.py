@@ -1,5 +1,5 @@
 from django import forms
-from .models import Alumno, Apoderado, Asignatura, Curso, Docente, Materia, Noticias, Sala, Sede, Administrador
+from .models import *
 
 class AlumnoForm(forms.ModelForm):
 
@@ -39,9 +39,28 @@ class AdminForm(forms.ModelForm):
 
 class SedeForm(forms.ModelForm):
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['region_sede'].empty_label = 'Seleccione una región'
+        self.fields['comuna_sede'].empty_label = 'Seleccione una comuna'
+
+        # Cambiar el asterisco por dos puntos en los labels
+        self.fields['id_sede'].label = 'ID de la sede'
+        self.fields['nombre_sede'].label = 'Nombre de la sede'
+        self.fields['direccion_sede'].label = 'Dirección de la sede'
+        self.fields['telefono_sede'].label = 'Teléfono de la sede'
+        self.fields['fotoSede'].label = 'Foto de la sede'
+        self.fields['region_sede'].label = 'Región de la sede'
+        self.fields['comuna_sede'].label = 'Comuna de la sede'
+
     class Meta:
         model = Sede
-        fields = '__all__'
+        fields = ['id_sede', 'nombre_sede', 'direccion_sede', 'telefono_sede', 'fotoSede', 'region_sede', 'comuna_sede']
+        widgets = {
+            'region_sede': forms.Select(attrs={'id': 'region-select'}),
+            'comuna_sede': forms.Select(attrs={'id': 'comuna-select'})
+        }
+
 
 class AsignaturaForm(forms.ModelForm):
 

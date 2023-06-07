@@ -13,6 +13,8 @@ urlpatterns = [
     path('portal_admin/home_listado', home_listado, name="home_listado"),
     path('portal_admin/home_pagos', home_pagos, name="home_pagos"),
 
+    path('api/comunas/', obtener_comunas, name='api_comunas'),
+
     path('portal_admin/formularios/agregar_admins', agregar_admins, name="agregar_admins"),
     path('portal_admin/formularios/agregar_alumnos', agregar_alumnos, name="agregar_alumnos"),
     path('portal_admin/formularios/agregar_docentes', agregar_docentes, name="agregar_docentes"),

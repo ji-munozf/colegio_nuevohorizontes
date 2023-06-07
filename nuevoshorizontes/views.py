@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .models import Sede, Noticias, Alumno, Docente, Apoderado, Administrador
+from .models import *
 from .forms import *
 from datetime import date
+from django.http import JsonResponse
 
 # Create your views here.
 
@@ -327,6 +328,15 @@ def agregar_sedes(request):
         return render(request, 'nuevoshorizontes/portal_admin/formularios/agregar_sedes.html', data)
     else:
         return redirect("login_administrativo")
+    
+def obtener_comunas(request):
+    region_id = request.GET.get('region', None)  # Obtener el ID de la región desde los parámetros de la solicitud
+
+    # Obtener las comunas de la región especificada
+    comunas = Comuna.objects.filter(region_comuna_id=region_id).values('id_comuna', 'nombre_comuna')
+
+    # Devolver las comunas en formato JSON
+    return JsonResponse(list(comunas), safe=False)
 
 def listar_admins(request):
     correo_admin = request.session.get('correo_admin', None)
