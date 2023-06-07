@@ -44,15 +44,6 @@ class SedeForm(forms.ModelForm):
         self.fields['region_sede'].empty_label = 'Seleccione una región'
         self.fields['comuna_sede'].empty_label = 'Seleccione una comuna'
 
-        # Cambiar el asterisco por dos puntos en los labels
-        self.fields['id_sede'].label = 'ID de la sede'
-        self.fields['nombre_sede'].label = 'Nombre de la sede'
-        self.fields['direccion_sede'].label = 'Dirección de la sede'
-        self.fields['telefono_sede'].label = 'Teléfono de la sede'
-        self.fields['fotoSede'].label = 'Foto de la sede'
-        self.fields['region_sede'].label = 'Región de la sede'
-        self.fields['comuna_sede'].label = 'Comuna de la sede'
-
     class Meta:
         model = Sede
         fields = ['id_sede', 'nombre_sede', 'direccion_sede', 'telefono_sede', 'fotoSede', 'region_sede', 'comuna_sede']
