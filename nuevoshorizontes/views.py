@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from .models import *
 from .forms import *
@@ -355,6 +355,46 @@ def listar_alumnos(request):
         return render(request, 'nuevoshorizontes/portal_admin/listados/listar_alumnos.html', {'alumnos': alumnos, 'admin': admin})
     else:
         return redirect("login_administrativo")
+    
+def listar_docentes(request):
+    correo_admin = request.session.get('correo_admin', None)
+    if correo_admin:
+        admin = Administrador.objects.get(correo_admin=correo_admin)
+        docentes = Docente.objects.all()
+        return render(request, 'nuevoshorizontes/portal_admin/listados/listar_docentes.html', {'docentes': docentes, 'admin': admin})
+    else:
+        return redirect("login_administrativo")
+    
+def modificar_docentes(request, id):
+    docente = get_object_or_404(Docente, rut_docente=id)
+    
+    data = {
+        'form': DocenteForm(instance=docente)
+    }
+
+    if request.method == 'POST':
+        formulario = DocenteForm(data=request.POST, instance=docente)
+
+        # Excluir el campo 'rut_docente' del formulario
+        formulario.fields.pop('rut_docente', None)
+        # Excluir el campo 'password' del formulario
+        formulario.fields.pop('password', None)
+
+        if formulario.is_valid():
+            formulario.save()
+            messages.success(request, "Docente modificado correctamente")
+            return redirect(to="listar_docentes")
+        else:
+            data["form"] = formulario
+
+    return render(request, 'nuevoshorizontes/portal_admin/modificar/modificar_docentes.html', data)
+
+def eliminar_docentes(request, id):
+    docente = get_object_or_404(Docente, rut_docente=id)
+    docente.delete()
+    messages.success(request, "Docente eliminado correctamente")
+    return redirect(to="listar_docentes")
+
 
 def home_alumno(request):
     correo_alumno = request.session.get('correo_alumno', None)

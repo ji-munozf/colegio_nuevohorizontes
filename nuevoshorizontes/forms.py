@@ -12,8 +12,16 @@ class AlumnoForm(forms.ModelForm):
 
 class DocenteForm(forms.ModelForm):
 
-    rut_docente = forms.CharField(widget=forms.TextInput, max_length=10)
-    password = forms.CharField(widget=forms.PasswordInput)
+    rut_docente = forms.CharField(widget=forms.TextInput(attrs={"class": "form-control", "required": "required"}), max_length=10)
+    nombre_docente = forms.CharField(widget=forms.TextInput(attrs={"class": "form-control", "required": "required"}))
+    appaterno_docente = forms.CharField(widget=forms.TextInput(attrs={"class": "form-control", "required": "required"}))
+    apmaterno_docente = forms.CharField(widget=forms.TextInput(attrs={"class": "form-control", "required": "required"}))
+    direccion_docente = forms.CharField(widget=forms.TextInput(attrs={"class": "form-control", "required": "required"}))
+    telefono_docente = forms.CharField(widget=forms.TextInput(attrs={"class": "form-control", "required": "required"}))
+    correo_docente = forms.CharField(widget=forms.TextInput(attrs={"class": "form-control", "required": "required"}))
+    password = forms.CharField(widget=forms.TextInput(attrs={"class": "form-control", "required": "required"}))
+    sede_docente = forms.ModelChoiceField(queryset=Sede.objects.all(), empty_label="Seleccione una sede", widget=forms.Select(attrs={"class": "form-control", "required": "required"}))
+    asignaturas_docente = forms.ModelMultipleChoiceField(queryset=Asignatura.objects.all(), widget=forms.SelectMultiple(attrs={"class": "form-control", "required": "required"}))
 
     class Meta:
         model = Docente
@@ -84,10 +92,4 @@ class SalaForm(forms.ModelForm):
 
     class Meta:
         model = Sala
-        fields = '__all__'
-
-class MateriaForm(forms.ModelForm):
-
-    class Meta:
-        model = Materia
         fields = '__all__'

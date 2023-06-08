@@ -43,17 +43,12 @@ class Sala(models.Model):
     def __str__(self):
         return self.nombre_sala
 
-class Materia(models.Model):
-    id_materia = models.CharField(max_length=6, primary_key=True, verbose_name="ID de la materia", default="")
-    nombre_materia = models.CharField(max_length = 25, default="")
-
-    def __str__(self):
-        return self.nombre_materia
-
 class Asignatura(models.Model):
     id_asignatura = models.CharField(max_length=6, primary_key=True, verbose_name="ID de la asignatura")
-    nombre_materia = models.ForeignKey(Materia, on_delete=models.CASCADE, verbose_name="Nombre de la asignatura", default="")
+    nombre_asignatura = models.CharField(max_length=30, verbose_name="Nombre de la asignatura")
 
+    def __str__(self):
+        return self.nombre_asignatura
 
 class Docente(models.Model):
     rut_docente = models.CharField(primary_key=True, max_length=12, verbose_name="Rut del docente")

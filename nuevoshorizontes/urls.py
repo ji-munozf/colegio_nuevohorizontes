@@ -27,6 +27,11 @@ urlpatterns = [
 
     path('portal_admin/listados/listar_admins', listar_admins, name="listar_admins"),
     path('portal_admin/listados/listar_alumnos', listar_alumnos, name="listar_alumnos"),
+    path('portal_admin/listados/listar_docentes', listar_docentes, name="listar_docentes"),
+
+    path('portal_admin/listados/listar_docentes/modificar_docente/<id>/', modificar_docentes, name="modificar_docente"),
+
+    path('eliminar_docente/<id>/', eliminar_docentes, name="eliminar_docente"),
     
     path('portal_alumno/home_alumno', home_alumno, name="home_alumno"),
     path('portal_alumno/mi_perfil', miperfil_alumno, name="miperfil_alumno"),
