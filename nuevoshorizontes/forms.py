@@ -54,7 +54,7 @@ class SedeForm(forms.ModelForm):
 
     class Meta:
         model = Sede
-        fields = ['id_sede', 'nombre_sede', 'direccion_sede', 'telefono_sede', 'fotoSede', 'region_sede', 'comuna_sede']
+        fields = ['nombre_sede', 'direccion_sede', 'telefono_sede', 'fotoSede', 'region_sede', 'comuna_sede']
         widgets = {
             'region_sede': forms.Select(attrs={'id': 'region-select'}),
             'comuna_sede': forms.Select(attrs={'id': 'comuna-select'})

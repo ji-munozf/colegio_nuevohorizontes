@@ -16,7 +16,6 @@ class Comuna(models.Model):
         return self.nombre_comuna
 
 class Sede(models.Model):
-    id_sede = models.IntegerField(primary_key=True, verbose_name="ID de la sede")
     nombre_sede = models.CharField(max_length=15, verbose_name="Nombre de la sede")
     direccion_sede = models.CharField(max_length=25, verbose_name="Dirección de la sede")
     telefono_sede = models.IntegerField(verbose_name="Teléfono de la sede")
@@ -144,7 +143,6 @@ class Pago(models.Model):
         return self.id_pago
     
 class Noticias(models.Model):
-    id_noticia = models.IntegerField(primary_key=True, verbose_name="ID de la noticia")
     titulo = models.CharField(max_length=20, verbose_name="Título")
     descripcion = models.TextField(verbose_name="Descripción")
     fecha_publi = models.DateTimeField(verbose_name="Fecha de publicación")

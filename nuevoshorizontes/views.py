@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from .models import *
 from .forms import *
-from datetime import date
+from datetime import date, datetime
 from django.http import JsonResponse
 
 # Create your views here.
@@ -365,6 +365,15 @@ def listar_docentes(request):
     else:
         return redirect("login_administrativo")
     
+def listar_noticias(request):
+    correo_admin = request.session.get('correo_admin', None)
+    if correo_admin:
+        admin = Administrador.objects.get(correo_admin=correo_admin)
+        noticias = Noticias.objects.order_by('fecha_publi').all()  # Corregido
+        return render(request, 'nuevoshorizontes/portal_admin/listados/listar_noticias.html', {'noticias': noticias, 'admin': admin})
+    else:
+        return redirect("login_administrativo")
+ 
 def modificar_docentes(request, id):
     docente = get_object_or_404(Docente, rut_docente=id)
     

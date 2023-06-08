@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de noticias - Administrador</title>
+    <link rel="icon" href="{% static 'nuevoshorizontes/img/logo_blanco.png' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{% static 'nuevoshorizontes/css/navbar.css' %}">
+    <link rel="stylesheet" href="{% static 'nuevoshorizontes/css/home_admin.css' %}">
+    <link rel="stylesheet" href="{% static 'nuevoshorizontes/css/noticias.css' %}">
+    <link rel="stylesheet" href="{% static 'nuevoshorizontes/css/listar_noticias.css' %}">
+</head>
+
+<body>
+
+    {% include "nuevoshorizontes/portal_admin/navbar.html" %}
+
+    <h1 class="heading" style="padding-top: 120px;">
+        <img class="title-img mx-2" src="{% static 'nuevoshorizontes/img/icons_admin/periodico_blanco.png' %}"
+            alt="nosotros" height="60">
+        Lista de noticias
+    </h1>
+
+    <div class="container">
+        {% regroup noticias by fecha_publi|date:"F Y" as noticias_grouped %}
+
+        {% for noticias_month in noticias_grouped %}
+        <div class="row">
+            <p style="color: #fff; font-size: 25px;">Noticias de {{ noticias_month.grouper }}</p>
+        </div>
+        <div class="row">
+            {% for noticia in noticias_month.list %}
+            <div class="card" style="width: 30rem; margin-right: 20px;">
+                <img class="card-img-top" src="{{ noticia.foto_noticia.url }}" alt="foto noticia">
+                <div class="card-body">
+                    <h5 class="card-title">{{ noticia.titulo }}</h5>
+                    <p class="card-text">{{ noticia.descripcion }}</p>
+                    <p class="card-text"><small class="text-muted">{{ noticia.fecha_publi|date:"d F Y" }}</small></p>
+                    <div class="row">
+                        <div class="col">
+                            <a type="button" class="btn btn-success" href="#"
+                                style="background-color: green; color: #fff; font-weight: 500;">Modificar</a>
+                        </div>
+                        <div class="col">
+                            <a type="button" class="btn btn-danger" href="#"
+                                style="background-color: rgb(221, 31, 31); color: #fff; font-weight: 500;">Eliminar</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% empty %}
+        <section class="parrafo" id="parrafo">
+            <div class="row">
+                <div class="content">
+                    <p style="text-align: center; color: #fff; font-size: 25px;">No hay noticias agregadas</p>
+                </div>
+            </div>
+        </section>
+        {% endfor %}
+    </div>
+
+    <div class="container botones" style="text-align: center; align-items: center; margin-top: 20px;">
+        <button type="button" class="btn btn-lg btn-block">
+            <a href="{% url 'home_listado' %}" style="font-weight: 500;">Volver a las listas</a>
+        </button>
+    </div>
+
+</body>
+
+</html>

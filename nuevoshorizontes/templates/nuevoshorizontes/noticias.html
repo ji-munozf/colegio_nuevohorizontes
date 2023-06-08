@@ -32,7 +32,7 @@
     <section class="parrafo" id="parrafo">
         <div class="row">
             <div class="content">
-                <p>Noticias de {% now "F" %} del {% now "Y" %} <!--(mes actual) del (año).--></p>
+                <p>Noticias de {% now "F" %} {% now "Y" %} <!--(mes actual) del (año).--></p>
             </div>
     </section>
 
@@ -59,8 +59,6 @@
             {% endfor %}
         </div>
     </div>
-
-    {% include "nuevoshorizontes/footer.html" %}
 
 </body>
 
