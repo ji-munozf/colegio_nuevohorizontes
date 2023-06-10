@@ -32,7 +32,6 @@
 
     <div class="container">
         {% regroup noticias by fecha_publi|date:"F Y" as noticias_grouped %}
-
         {% for noticias_month in noticias_grouped %}
         <div class="row">
             <p style="color: #fff; font-size: 25px;">Noticias de {{ noticias_month.grouper }}</p>
@@ -45,6 +44,8 @@
                     <h5 class="card-title">{{ noticia.titulo }}</h5>
                     <p class="card-text">{{ noticia.descripcion }}</p>
                     <p class="card-text"><small class="text-muted">{{ noticia.fecha_publi|date:"d F Y" }}</small></p>
+                </div>
+                <div class="card-footer">
                     <div class="row">
                         <div class="col">
                             <a type="button" class="btn btn-success" href="#"
@@ -69,6 +70,7 @@
         </section>
         {% endfor %}
     </div>
+
 
     <div class="container botones" style="text-align: center; align-items: center; margin-top: 20px;">
         <button type="button" class="btn btn-lg btn-block">

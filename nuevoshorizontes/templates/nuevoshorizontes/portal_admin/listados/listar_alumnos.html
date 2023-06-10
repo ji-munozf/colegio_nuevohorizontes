@@ -27,46 +27,50 @@
         Lista de alumnos
     </h1>
 
-    <div class="container">
-        <table class="table table-striped" style="background-color: white; border: 1px solid rgb(21, 20, 55); text-align: center;">
-            <thead>
-                <tr>
-                    <th>Rut</th>
-                    <th>Nombres</th>
-                    <th>Apellido paterno</th>
-                    <th>Apellido materno</th>
-                    <th>Dirección</th>
-                    <th>Teléfono</th>
-                    <th>Correo electrónico</th>
-                    <th>Contraseña</th>
-                    <th>Sede asignado</th>
-                    <th>Apoderado asignado</th>
-                    <th>Curso asignado</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for alumnos in alumnos %}
-                <tr>
-                    <td>{{ Alumnos.rut_alumno }}</td>
-                    <td>{{ Alumnos.nombre_alumno }}</td>
-                    <td>{{ Alumnos.appaterno_alumno }}</td>
-                    <td>{{ Alumnos.apmaterno_alumno }}</td>
-                    <td>{{ Alumnos.direccion_alumno }}</td>
-                    <td>{{ Alumnos.telefono_alumno }}</td>
-                    <td>{{ Alumnos.correo_alumno }}</td>
-                    <td style="font-weight: 600;">************</td>
-                    <td>{{ Alumnos.sede_alumno }}</td>
-                    <td>{{ Alumnos.apoderado_alumno }}</td>
-                    <td>{{ Alumnos.curso_alumno }}</td>
-                    <td>
-                        <button type="button" class="btn btn-success" style="background-color: green; color: #fff;">Modificar</button>
-                        <button type="button" class="btn btn-danger" style="background-color: rgb(221, 31, 31); color: #fff;">Eliminar</button>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+    <div class="container" style="margin-bottom: 20px;">
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped" style="background-color: white; border: 1px solid rgb(21, 20, 55); text-align: center;">
+                        <thead>
+                            <tr>
+                                <th>Rut</th>
+                                <th>Nombres</th>
+                                <th>Apellido paterno</th>
+                                <th>Apellido materno</th>
+                                <th>Dirección</th>
+                                <th>Teléfono</th>
+                                <th>Correo electrónico</th>
+                                <th>Sede asignado</th>
+                                <th>Apoderado asignado</th>
+                                <th>Curso asignado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for alumnos in alumnos %}
+                            <tr>
+                                <td>{{ Alumnos.rut_alumno }}</td>
+                                <td>{{ Alumnos.nombre_alumno }}</td>
+                                <td>{{ Alumnos.appaterno_alumno }}</td>
+                                <td>{{ Alumnos.apmaterno_alumno }}</td>
+                                <td>{{ Alumnos.direccion_alumno }}</td>
+                                <td>{{ Alumnos.telefono_alumno }}</td>
+                                <td>{{ Alumnos.correo_alumno }}</td>
+                                <td>{{ Alumnos.sede_alumno }}</td>
+                                <td>{{ Alumnos.apoderado_alumno }}</td>
+                                <td>{{ Alumnos.curso_alumno }}</td>
+                                <td>
+                                    <button type="button" class="btn btn-success" style="background-color: green; color: #fff;">Modificar</button>
+                                    <button type="button" class="btn btn-danger" style="background-color: rgb(221, 31, 31); color: #fff;">Eliminar</button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="container botones" style="text-align: center; align-items: center;">

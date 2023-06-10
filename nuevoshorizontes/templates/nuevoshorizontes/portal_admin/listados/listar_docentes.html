@@ -47,6 +47,7 @@
                                 <th>Sede asignada</th>
                                 <th>Asignaturas asignadas</th>
                                 <th>Acciones</th>
+                                <th>Cambiar contraseña</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -65,9 +66,12 @@
                                     {{ asignatura.nombre_asignatura }}<br>
                                     {% endfor %}
                                 </td>
-                                <td>
-                                    <a type="button" class="btn btn-success" href="{% url 'modificar_docente' docente.rut_docente %}" style="background-color: green; color: #fff;">Modificar</a>
-                                    <a type="button" class="btn btn-danger" onclick="eliminarDocente('{{ docente.rut_docente }}')" style="background-color: rgb(221, 31, 31); color: #fff;">Eliminar</a>
+                                <td style="text-align: center; vertical-align: middle;">
+                                    <a type="button" class="btn btn-success btn-block" href="{% url 'modificar_docente' docente.rut_docente %}" style="background-color: green; color: #fff;">Modificar</a>
+                                    <a type="button" class="btn btn-danger btn-block" onclick="eliminarDocente('{{ docente.rut_docente }}')" style="background-color: #dc3545; color: #fff;">Eliminar</a>
+                                </td>
+                                <td style="text-align: center; vertical-align: middle;">
+                                    <a type="button" class="btn btn-primary" onclick="cambiarPassword('{{ docente.rut_docente }}')" style="background-color: #0d6efd; color: #fff;">Cambiar contraseña</a>
                                 </td>
                             </tr>
                             {% endfor %}
@@ -94,11 +98,31 @@
                 "cancelButtonText": "No, cancelar",
                 "confirmButtonText": "Si, eliminar",
                 "confirmButtonColor": "green",
-                "cancelButtonColor": "rgb(221, 31, 31)"
+                "cancelButtonColor": "#dc3545"
             })
             .then(function(result) {
                 if(result.isConfirmed) {
                     window.location.href = "/eliminar_docente/" + id + "/";
+                }
+            })
+        }
+    </script>
+
+    <script>
+        function cambiarPassword(id) {
+            Swal.fire({
+                "title": "¿Estas seguro?",
+                "text": "Estas seguro que quieres cambiar la contraseña de este docente",
+                "icon": "question",
+                "showCancelButton": true,
+                "cancelButtonText": "No, cancelar",
+                "confirmButtonText": "Si, cambiar contraseña",
+                "confirmButtonColor": "green",
+                "cancelButtonColor": "#dc3545"
+            })
+            .then(function(result) {
+                if(result.isConfirmed) {
+                    window.location.href = "/portal_admin/listados/listar_docentes/cambiar_pass_docente/" + id + "/";
                 }
             })
         }

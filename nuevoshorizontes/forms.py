@@ -19,7 +19,7 @@ class DocenteForm(forms.ModelForm):
     direccion_docente = forms.CharField(widget=forms.TextInput(attrs={"class": "form-control", "required": "required"}))
     telefono_docente = forms.CharField(widget=forms.TextInput(attrs={"class": "form-control", "required": "required"}))
     correo_docente = forms.CharField(widget=forms.TextInput(attrs={"class": "form-control", "required": "required"}))
-    password = forms.CharField(widget=forms.TextInput(attrs={"class": "form-control", "required": "required"}))
+    password = forms.CharField(widget=forms.PasswordInput(attrs={"class": "form-control", "required": "required"}))
     sede_docente = forms.ModelChoiceField(queryset=Sede.objects.all(), empty_label="Seleccione una sede", widget=forms.Select(attrs={"class": "form-control", "required": "required"}))
     asignaturas_docente = forms.ModelMultipleChoiceField(queryset=Asignatura.objects.all(), widget=forms.SelectMultiple(attrs={"class": "form-control", "required": "required"}))
 

@@ -30,6 +30,8 @@ urlpatterns = [
     path('portal_admin/listados/listar_docentes', listar_docentes, name="listar_docentes"),
     path('portal_admin/listados/listar_noticias', listar_noticias, name="listar_noticias"),
 
+    path('portal_admin/listados/listar_docentes/cambiar_pass_docente/<id>/', cambiar_pass_docente, name="cambiar_pass_docente"),
+
     path('portal_admin/listados/listar_docentes/modificar_docente/<id>/', modificar_docentes, name="modificar_docente"),
 
     path('eliminar_docente/<id>/', eliminar_docentes, name="eliminar_docente"),

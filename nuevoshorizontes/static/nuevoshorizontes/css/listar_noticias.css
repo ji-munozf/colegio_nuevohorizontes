@@ -4,3 +4,14 @@
     margin: 10px 0 70px 0;
     text-align: center;
 }
+
+.card-img-top {
+    height: 200px;
+    width: auto;
+    object-fit: cover;
+    margin-top: 9px;
+}
+
+.card-footer {
+    background-color: inherit;
+}
