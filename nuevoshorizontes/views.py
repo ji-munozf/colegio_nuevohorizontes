@@ -2,37 +2,109 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from .models import *
 from .forms import *
-from datetime import date
+from datetime import date, datetime
 from django.http import JsonResponse
 
 # Create your views here.
 
 
 def home(request):
-    return render(request, "nuevoshorizontes/home.html")
+    correo_admin = request.session.get("correo_admin", None)
+    correo_alumno = request.session.get("correo_alumno", None)
+    correo_apoderado = request.session.get("correo_apoderado", None)
+    correo_docente = request.session.get("correo_docente", None)
+
+    return render(
+        request,
+        "nuevoshorizontes/home.html",
+        {
+            "correo_admin": correo_admin,
+            "correo_alumno": correo_alumno,
+            "correo_apoderado": correo_apoderado,
+            "correo_docente": correo_docente,
+        },
+    )
 
 
 def nosotros(request):
-    return render(request, "nuevoshorizontes/nosotros.html")
+    correo_admin = request.session.get("correo_admin", None)
+    correo_alumno = request.session.get("correo_alumno", None)
+    correo_apoderado = request.session.get("correo_apoderado", None)
+    correo_docente = request.session.get("correo_docente", None)
+
+    return render(
+        request,
+        "nuevoshorizontes/nosotros.html",
+        {
+            "correo_admin": correo_admin,
+            "correo_alumno": correo_alumno,
+            "correo_apoderado": correo_apoderado,
+            "correo_docente": correo_docente,
+        },
+    )
 
 
 def portales(request):
-    return render(request, "nuevoshorizontes/portales.html")
+    correo_admin = request.session.get("correo_admin", None)
+    correo_alumno = request.session.get("correo_alumno", None)
+    correo_apoderado = request.session.get("correo_apoderado", None)
+    correo_docente = request.session.get("correo_docente", None)
+
+    return render(
+        request,
+        "nuevoshorizontes/portales.html",
+        {
+            "correo_admin": correo_admin,
+            "correo_alumno": correo_alumno,
+            "correo_apoderado": correo_apoderado,
+            "correo_docente": correo_docente,
+        },
+    )
 
 
 def sedes(request):
+    correo_admin = request.session.get("correo_admin", None)
+    correo_alumno = request.session.get("correo_alumno", None)
+    correo_apoderado = request.session.get("correo_apoderado", None)
+    correo_docente = request.session.get("correo_docente", None)
+
     lista_sedes = Sede.objects.all()
 
-    return render(request, "nuevoshorizontes/sedes.html", {"lista_sedes": lista_sedes})
+    return render(
+        request,
+        "nuevoshorizontes/sedes.html",
+        {
+            "correo_admin": correo_admin,
+            "correo_alumno": correo_alumno,
+            "correo_apoderado": correo_apoderado,
+            "correo_docente": correo_docente,
+            "lista_sedes": lista_sedes,
+        },
+    )
 
 
 def noticias(request):
+    correo_admin = request.session.get("correo_admin", None)
+    correo_alumno = request.session.get("correo_alumno", None)
+    correo_apoderado = request.session.get("correo_apoderado", None)
+    correo_docente = request.session.get("correo_docente", None)
+
     fecha_actual = date.today()
     noticias = Noticias.objects.filter(
         fecha_publi__year=fecha_actual.year, fecha_publi__month=fecha_actual.month
     )
 
-    return render(request, "nuevoshorizontes/noticias.html", {"noticias": noticias})
+    return render(
+        request,
+        "nuevoshorizontes/noticias.html",
+        {
+            "correo_admin": correo_admin,
+            "correo_alumno": correo_alumno,
+            "correo_apoderado": correo_apoderado,
+            "correo_docente": correo_docente,
+            "noticias": noticias,
+        },
+    )
 
 
 def login_alumno(request):
@@ -426,13 +498,11 @@ def listar_docentes(request):
     else:
         return redirect("login_administrativo")
 
+
 def cambiar_pass_docente(request, id):
     docente = get_object_or_404(Docente, rut_docente=id)
 
-    data = {
-        "form": DocenteForm(instance=docente),
-        "docente": docente
-    }
+    data = {"form": DocenteForm(instance=docente), "docente": docente}
 
     if request.method == "POST":
         formulario = DocenteForm(data=request.POST, instance=docente)
@@ -472,6 +542,7 @@ def cambiar_pass_docente(request, id):
         data,
     )
 
+
 def listar_noticias(request):
     correo_admin = request.session.get("correo_admin", None)
     if correo_admin:
@@ -495,9 +566,11 @@ def modificar_docentes(request, id):
         formulario = DocenteForm(data=request.POST, instance=docente)
 
         [
-            formulario.fields.pop(field, None) # Elimina el campo 'field' del diccionario 'formulario.fields'
+            formulario.fields.pop(
+                field, None
+            )  # Elimina el campo 'field' del diccionario 'formulario.fields'
             for field in [  # Itera sobre cada campo de la lista
-                "rut_docente", # Campo: rut del docente
+                "rut_docente",  # Campo: rut del docente
                 "password",  # Campo: contraseña
             ]
         ]
@@ -514,12 +587,36 @@ def modificar_docentes(request, id):
     )
 
 
+def modificar_noticias(request, id):
+    noticias = get_object_or_404(Noticias, id=id)
+
+    data = {"form": NoticiaForm(instance=noticias)}
+
+    if request.method == "POST":
+        formulario = NoticiaForm(data=request.POST, instance=noticias, files=request.FILES)
+        if formulario.is_valid():
+            formulario.save()
+            messages.success(request, "Noticia modificada correctamente")
+            return redirect(to="listar_noticias")
+        else:
+            data["form"] = formulario
+
+    return render(
+        request, "nuevoshorizontes/portal_admin/modificar/modificar_noticias.html", data
+    )
+
+
 def eliminar_docentes(request, id):
     docente = get_object_or_404(Docente, rut_docente=id)
     docente.delete()
     messages.success(request, "Docente eliminado correctamente")
     return redirect(to="listar_docentes")
 
+def eliminar_noticias(request, id):
+    noticias = get_object_or_404(Noticias, id=id)
+    noticias.delete()
+    messages.success(request, "Noticia eliminada correctamente")
+    return redirect(to="listar_noticias")
 
 def home_alumno(request):
     correo_alumno = request.session.get("correo_alumno", None)

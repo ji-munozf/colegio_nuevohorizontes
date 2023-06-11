@@ -1,5 +1,6 @@
 from django import forms
 from .models import *
+from datetime import date
 
 class AlumnoForm(forms.ModelForm):
 
@@ -78,14 +79,32 @@ class NoticiaForm(forms.ModelForm):
     class Meta:
         model = Noticias
         fields = '__all__'
-
         widgets = {
-            'fecha_publi': forms.DateInput(
-        format=('%d-%m-%Y'),
-        attrs={'class': 'form-control', 
-               'placeholder': 'Select a date',
-               'type': 'date'
-              }),
+            "fecha_publi": forms.SelectDateWidget(
+                attrs={
+                    'class': 'form-control',
+                    'style': 'width:auto; display:inline-block;'
+                },
+                years=range(date.today().year, date.today().year + 20)  # Cambia el rango de años aquí
+            ),
+            "titulo": forms.TextInput(
+                attrs={
+                    'class': 'form-control',
+                    'required': 'required'
+                }
+            ),
+            "descripcion": forms.Textarea(
+                attrs={
+                    'class': 'form-control',
+                    'required': 'required'
+                }
+            ),
+            "foto_noticia": forms.ClearableFileInput(
+                attrs={
+                    'class': 'form-control',
+                    'required': 'required'
+                }
+            )
         }
 
 class SalaForm(forms.ModelForm):

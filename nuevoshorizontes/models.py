@@ -145,7 +145,7 @@ class Pago(models.Model):
 class Noticias(models.Model):
     titulo = models.CharField(max_length=20, verbose_name="Título")
     descripcion = models.TextField(verbose_name="Descripción")
-    fecha_publi = models.DateTimeField(verbose_name="Fecha de publicación")
+    fecha_publi = models.DateField(verbose_name="Fecha de publicación")
     foto_noticia = models.ImageField(upload_to="noticias", null=True, verbose_name="Imagen de la noticia")
 
     def __str__(self):
