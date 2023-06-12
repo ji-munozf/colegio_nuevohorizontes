@@ -28,14 +28,21 @@ urlpatterns = [
     path('portal_admin/listados/listar_admins', listar_admins, name="listar_admins"),
     path('portal_admin/listados/listar_alumnos', listar_alumnos, name="listar_alumnos"),
     path('portal_admin/listados/listar_docentes', listar_docentes, name="listar_docentes"),
+    path('portal_admin/listados/listar_apoderados', listar_apoderados, name="listar_apoderados"),
     path('portal_admin/listados/listar_noticias', listar_noticias, name="listar_noticias"),
 
     path('portal_admin/listados/listar_docentes/cambiar_pass_docente/<id>/', cambiar_pass_docente, name="cambiar_pass_docente"),
+    path('portal_admin/listados/listar_alumnos/cambiar_pass_alumno/<id>/', cambiar_pass_alumno, name="cambiar_pass_alumno"),
+    path('portal_admin/listados/listar_apoderado/cambiar_pass_apoderado/<id>/', cambiar_pass_apoderado, name="cambiar_pass_apoderado"),
 
+    path('portal_admin/listados/listar_docentes/modificar_alumno/<id>/', modificar_alumnos, name="modificar_alumno"),
     path('portal_admin/listados/listar_docentes/modificar_docente/<id>/', modificar_docentes, name="modificar_docente"),
+    path('portal_admin/listados/listar_docentes/modificar_apoderado/<id>/', modificar_apoderados, name="modificar_apoderado"),
     path('portal_admin/listados/listar_noticias/modificar_noticia/<id>/', modificar_noticias, name="modificar_noticias"),
 
+    path('eliminar_alumno/<id>/', eliminar_alumno, name="eliminar_alumno"),
     path('eliminar_docente/<id>/', eliminar_docentes, name="eliminar_docente"),
+    path('eliminar_apoderado/<id>/', eliminar_apoderado, name="eliminar_apoderado"),
     path('eliminar_noticias/<id>/', eliminar_noticias, name="eliminar_noticias"),
     
     path('portal_alumno/home_alumno', home_alumno, name="home_alumno"),

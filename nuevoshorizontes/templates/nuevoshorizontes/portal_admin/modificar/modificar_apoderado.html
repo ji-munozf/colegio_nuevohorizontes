@@ -77,15 +77,8 @@
                             {{ form.correo_apoderado }}
                         </div>
 
-                        <div class="form-group" style="margin-bottom: 15px;">
-                            <label class="form-label">Contraseña del apoderado:</label>
-                            {{ form.password }}
-                        </div>
-
                         <div class="d-flex justify-content-end" style="padding-top: 20px; padding-bottom: 10px;">
-                            &nbsp;
-                            <input type="reset" value="Limpiar campos" class="btn btn-secondary">
-                            <input type="submit" value="Guardar apoderado" class="btn btn-primary">
+                            <input type="submit" value="Modificar alumno" class="btn btn-primary">
                         </div>
                     </form>
 
@@ -100,6 +93,10 @@
         </div>
 
     </div>
+
+    <script>
+        document.getElementById("id_rut_apoderado").disabled = true;
+    </script>
 
 </body>
 

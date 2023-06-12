@@ -4,8 +4,17 @@ from datetime import date
 
 class AlumnoForm(forms.ModelForm):
 
-    rut_alumno = forms.CharField(widget=forms.TextInput, max_length=10)
-    password = forms.CharField(widget=forms.PasswordInput)
+    rut_alumno = forms.CharField(widget=forms.TextInput(attrs={"class": "form-control", "required": "required"}), max_length=10)
+    nombre_alumno = forms.CharField(widget=forms.TextInput(attrs={"class": "form-control", "required": "required"}))
+    appaterno_alumno = forms.CharField(widget=forms.TextInput(attrs={"class": "form-control", "required": "required"}))
+    apmaterno_alumno = forms.CharField(widget=forms.TextInput(attrs={"class": "form-control", "required": "required"}))
+    direccion_alumno = forms.CharField(widget=forms.TextInput(attrs={"class": "form-control", "required": "required"}))
+    telefono_alumno = forms.IntegerField(widget=forms.NumberInput(attrs={"class": "form-control"}), required=False)
+    correo_alumno = forms.CharField(widget=forms.TextInput(attrs={"class": "form-control", "required": "required"}))
+    password = forms.CharField(widget=forms.PasswordInput(attrs={"class": "form-control", "required": "required"}))
+    sede_alumno = forms.ModelChoiceField(queryset=Sede.objects.all(), empty_label="Seleccione una sede", widget=forms.Select(attrs={"class": "form-control", "required": "required"}))
+    apoderado_alumno = forms.ModelChoiceField(queryset=Apoderado.objects.all(), empty_label="Seleccione un apoderado", widget=forms.Select(attrs={"class": "form-control", "required": "required"}))
+    curso_alumno = forms.ModelChoiceField(queryset=Curso.objects.all(), empty_label="Seleccione el curso", widget=forms.Select(attrs={"class": "form-control", "required": "required"}))
 
     class Meta:
         model = Alumno
@@ -18,7 +27,7 @@ class DocenteForm(forms.ModelForm):
     appaterno_docente = forms.CharField(widget=forms.TextInput(attrs={"class": "form-control", "required": "required"}))
     apmaterno_docente = forms.CharField(widget=forms.TextInput(attrs={"class": "form-control", "required": "required"}))
     direccion_docente = forms.CharField(widget=forms.TextInput(attrs={"class": "form-control", "required": "required"}))
-    telefono_docente = forms.CharField(widget=forms.TextInput(attrs={"class": "form-control", "required": "required"}))
+    telefono_docente = forms.IntegerField(widget=forms.NumberInput(attrs={"class": "form-control", "required": "required"}))
     correo_docente = forms.CharField(widget=forms.TextInput(attrs={"class": "form-control", "required": "required"}))
     password = forms.CharField(widget=forms.PasswordInput(attrs={"class": "form-control", "required": "required"}))
     sede_docente = forms.ModelChoiceField(queryset=Sede.objects.all(), empty_label="Seleccione una sede", widget=forms.Select(attrs={"class": "form-control", "required": "required"}))
@@ -30,8 +39,14 @@ class DocenteForm(forms.ModelForm):
 
 class ApoderadoForm(forms.ModelForm):
 
-    rut_apoderado = forms.CharField(widget=forms.TextInput, max_length=10)
-    password = forms.CharField(widget=forms.PasswordInput)
+    rut_apoderado = forms.CharField(widget=forms.TextInput(attrs={"class": "form-control", "required": "required"}), max_length=10)
+    nombre_apoderado = forms.CharField(widget=forms.TextInput(attrs={"class": "form-control", "required": "required"}))
+    appaterno_apoderado = forms.CharField(widget=forms.TextInput(attrs={"class": "form-control", "required": "required"}))
+    apmaterno_apoderado = forms.CharField(widget=forms.TextInput(attrs={"class": "form-control", "required": "required"}))
+    direccion_apoderado = forms.CharField(widget=forms.TextInput(attrs={"class": "form-control", "required": "required"}))
+    telefono_apoderado = forms.IntegerField(widget=forms.NumberInput(attrs={"class": "form-control", "required": "required"}))
+    correo_apoderado = forms.CharField(widget=forms.TextInput(attrs={"class": "form-control", "required": "required"}))
+    password = forms.CharField(widget=forms.PasswordInput(attrs={"class": "form-control", "required": "required"}))
 
     class Meta:
         model = Apoderado

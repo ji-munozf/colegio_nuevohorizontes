@@ -100,7 +100,7 @@ class Apoderado(models.Model):
     password = models.CharField(max_length=125, verbose_name="Contraseña")
 
     def __str__(self):
-        return "RUT: " + self.rut_apoderado + " " + "Nombres: " + self.nombre_apoderado + " " + self.appaterno_apoderado
+        return "RUT: " + self.rut_apoderado + " " + "Nombre completo: " + self.nombre_apoderado + " " + self.appaterno_apoderado
 
 class Alumno(models.Model):
     rut_alumno = models.CharField(primary_key=True, max_length=12, verbose_name="Rut")
@@ -108,7 +108,7 @@ class Alumno(models.Model):
     appaterno_alumno = models.CharField(max_length=30, verbose_name="Apellido paterno")
     apmaterno_alumno = models.CharField(max_length=30, verbose_name="Apellido materno")
     direccion_alumno = models.CharField(max_length=30, verbose_name="Dirección")
-    telefono_alumno = models.IntegerField(verbose_name="Teléfono")
+    telefono_alumno = models.IntegerField(verbose_name="Teléfono", null=True, blank=True)
     correo_alumno = models.CharField(max_length=30, verbose_name="Correo electrónico")
     password = models.CharField(max_length=125, verbose_name="Contraseña")
     sede_alumno = models.ForeignKey(Sede, on_delete=models.CASCADE, verbose_name="Sede del alumno")
@@ -117,6 +117,7 @@ class Alumno(models.Model):
 
     def __str__(self):
         return "RUT: " + self.rut_alumno + " " + "Nombres: " + self.nombre_alumno + " " + self.appaterno_alumno
+
 
 class Boleta(models.Model):
     id_boleta = models.IntegerField(primary_key=True, verbose_name="ID de la boleta")

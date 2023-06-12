@@ -485,6 +485,59 @@ def listar_alumnos(request):
         return redirect("login_administrativo")
 
 
+def cambiar_pass_alumno(request, id):
+    correo_admin = request.session.get("correo_admin", None)
+    if correo_admin:
+        admin = Administrador.objects.get(correo_admin=correo_admin)
+        alumno = get_object_or_404(Alumno, rut_alumno=id)
+
+        data = {"form": AlumnoForm(instance=alumno), "alumno": alumno, "admin": admin}
+
+        if request.method == "POST":
+            formulario = AlumnoForm(data=request.POST, instance=alumno)
+
+            [
+                formulario.fields.pop(field, None)
+                for field in [
+                    "rut_alumno",
+                    "nombre_alumno",
+                    "appaterno_alumno",
+                    "apmaterno_alumno",
+                    "direccion_alumno",
+                    "telefono_alumno",
+                    "correo_alumno",
+                    "sede_alumno",
+                    "apoderado_alumno",
+                    "curso_alumno",
+                ]
+            ]
+
+            nueva_contraseña = request.POST.get("password")
+            repetir_contraseña = request.POST.get("repetir_contraseña")
+
+            if len(nueva_contraseña) < 8:
+                messages.error(
+                    request, "La contraseña debe tener al menos 8 caracteres"
+                )
+            elif nueva_contraseña != repetir_contraseña:
+                messages.error(request, "Las contraseñas no coinciden")
+            else:
+                if formulario.is_valid():
+                    alumno.password = nueva_contraseña
+                    alumno.save()
+                    messages.success(request, "Contraseña cambiada con éxito")
+                    return redirect(to="listar_alumnos")
+
+        return render(
+            request,
+            "nuevoshorizontes/portal_admin/listados/cambiar_pass_alumno.html",
+            data,
+        )
+    else:
+        # El usuario no ha iniciado sesión, redirigir a la página de inicio de sesión
+        return redirect("login_administrativo")
+
+
 def listar_docentes(request):
     correo_admin = request.session.get("correo_admin", None)
     if correo_admin:
@@ -500,47 +553,127 @@ def listar_docentes(request):
 
 
 def cambiar_pass_docente(request, id):
-    docente = get_object_or_404(Docente, rut_docente=id)
+    correo_admin = request.session.get("correo_admin", None)
+    if correo_admin:
+        admin = Administrador.objects.get(correo_admin=correo_admin)
+        docente = get_object_or_404(Docente, rut_docente=id)
 
-    data = {"form": DocenteForm(instance=docente), "docente": docente}
+        data = {
+            "form": DocenteForm(instance=docente),
+            "docente": docente,
+            "admin": admin,
+        }
 
-    if request.method == "POST":
-        formulario = DocenteForm(data=request.POST, instance=docente)
+        if request.method == "POST":
+            formulario = DocenteForm(data=request.POST, instance=docente)
 
-        [
-            formulario.fields.pop(field, None)
-            for field in [
-                "rut_docente",
-                "nombre_docente",
-                "appaterno_docente",
-                "apmaterno_docente",
-                "direccion_docente",
-                "telefono_docente",
-                "correo_docente",
-                "sede_docente",
-                "asignaturas_docente",
+            [
+                formulario.fields.pop(field, None)
+                for field in [
+                    "rut_docente",
+                    "nombre_docente",
+                    "appaterno_docente",
+                    "apmaterno_docente",
+                    "direccion_docente",
+                    "telefono_docente",
+                    "correo_docente",
+                    "sede_docente",
+                    "asignaturas_docente",
+                ]
             ]
-        ]
 
-        nueva_contraseña = request.POST.get("password")
-        repetir_contraseña = request.POST.get("repetir_contraseña")
+            nueva_contraseña = request.POST.get("password")
+            repetir_contraseña = request.POST.get("repetir_contraseña")
 
-        if len(nueva_contraseña) < 8:
-            messages.error(request, "La contraseña debe tener al menos 8 caracteres")
-        elif nueva_contraseña != repetir_contraseña:
-            messages.error(request, "Las contraseñas no coinciden")
-        else:
-            if formulario.is_valid():
-                docente.password = nueva_contraseña
-                docente.save()
-                messages.success(request, "Contraseña cambiada con éxito")
-                return redirect(to="listar_docentes")
+            if len(nueva_contraseña) < 8:
+                messages.error(
+                    request, "La contraseña debe tener al menos 8 caracteres"
+                )
+            elif nueva_contraseña != repetir_contraseña:
+                messages.error(request, "Las contraseñas no coinciden")
+            else:
+                if formulario.is_valid():
+                    docente.password = nueva_contraseña
+                    docente.save()
+                    messages.success(request, "Contraseña cambiada con éxito")
+                    return redirect(to="listar_docentes")
 
-    return render(
-        request,
-        "nuevoshorizontes/portal_admin/listados/cambiar_pass_docente.html",
-        data,
-    )
+        return render(
+            request,
+            "nuevoshorizontes/portal_admin/listados/cambiar_pass_docente.html",
+            data,
+        )
+    else:
+        # El usuario no ha iniciado sesión, redirigir a la página de inicio de sesión
+        return redirect("login_administrativo")
+
+
+def listar_apoderados(request):
+    correo_admin = request.session.get("correo_admin", None)
+    if correo_admin:
+        admin = Administrador.objects.get(correo_admin=correo_admin)
+        apoderado = Apoderado.objects.all()
+        return render(
+            request,
+            "nuevoshorizontes/portal_admin/listados/listar_apoderados.html",
+            {"apoderado": apoderado, "admin": admin},
+        )
+    else:
+        return redirect("login_administrativo")
+
+
+def cambiar_pass_apoderado(request, id):
+    correo_admin = request.session.get("correo_admin", None)
+    if correo_admin:
+        admin = Administrador.objects.get(correo_admin=correo_admin)
+        apoderado = get_object_or_404(Apoderado, rut_apoderado=id)
+
+        data = {
+            "form": ApoderadoForm(instance=apoderado),
+            "apoderado": apoderado,
+            "admin": admin,
+        }
+
+        if request.method == "POST":
+            formulario = ApoderadoForm(data=request.POST, instance=apoderado)
+
+            [
+                formulario.fields.pop(field, None)
+                for field in [
+                    "rut_apoderado",
+                    "nombre_apoderado",
+                    "appaterno_apoderado",
+                    "apmaterno_apoderado",
+                    "direccion_apoderado",
+                    "telefono_apoderado",
+                    "correo_apoderado",
+                ]
+            ]
+
+            nueva_contraseña = request.POST.get("password")
+            repetir_contraseña = request.POST.get("repetir_contraseña")
+
+            #if len(nueva_contraseña) < 8:
+                #messages.error(
+                 #   request, "La contraseña debe tener al menos 8 caracteres"
+                #)
+            if nueva_contraseña != repetir_contraseña:
+                messages.error(request, "Las contraseñas no coinciden")
+            else:
+                if formulario.is_valid():
+                    apoderado.password = nueva_contraseña
+                    apoderado.save()
+                    messages.success(request, "Contraseña cambiada con éxito")
+                    return redirect(to="listar_apoderados")
+
+        return render(
+            request,
+            "nuevoshorizontes/portal_admin/listados/cambiar_pass_apoderado.html",
+            data,
+        )
+    else:
+        # El usuario no ha iniciado sesión, redirigir a la página de inicio de sesión
+        return redirect("login_administrativo")
 
 
 def listar_noticias(request):
@@ -557,53 +690,154 @@ def listar_noticias(request):
         return redirect("login_administrativo")
 
 
-def modificar_docentes(request, id):
-    docente = get_object_or_404(Docente, rut_docente=id)
+def modificar_alumnos(request, id):
+    correo_admin = request.session.get("correo_admin", None)
+    if correo_admin:
+        admin = Administrador.objects.get(correo_admin=correo_admin)
+        alumno = get_object_or_404(Alumno, rut_alumno=id)
 
-    data = {"form": DocenteForm(instance=docente)}
+        data = {"form": AlumnoForm(instance=alumno), "admin": admin}
 
-    if request.method == "POST":
-        formulario = DocenteForm(data=request.POST, instance=docente)
+        if request.method == "POST":
+            formulario = AlumnoForm(data=request.POST, instance=alumno)
 
-        [
-            formulario.fields.pop(
-                field, None
-            )  # Elimina el campo 'field' del diccionario 'formulario.fields'
-            for field in [  # Itera sobre cada campo de la lista
-                "rut_docente",  # Campo: rut del docente
-                "password",  # Campo: contraseña
+            [
+                formulario.fields.pop(
+                    field, None
+                )  # Elimina el campo 'field' del diccionario 'formulario.fields'
+                for field in [  # Itera sobre cada campo de la lista
+                    "rut_alumno",  # Campo: rut del alumno
+                    "password",  # Campo: contraseña
+                ]
             ]
-        ]
 
-        if formulario.is_valid():
-            formulario.save()
-            messages.success(request, "Docente modificado correctamente")
-            return redirect(to="listar_docentes")
-        else:
-            data["form"] = formulario
+            if formulario.is_valid():
+                formulario.save()
+                messages.success(request, "Alumno modificado correctamente")
+                return redirect(to="listar_alumnos")
+            else:
+                data["form"] = formulario
 
-    return render(
-        request, "nuevoshorizontes/portal_admin/modificar/modificar_docentes.html", data
-    )
+        return render(
+            request,
+            "nuevoshorizontes/portal_admin/modificar/modificar_alumnos.html",
+            data,
+        )
+    else:
+        # El usuario no ha iniciado sesión, redirigir a la página de inicio de sesión
+        return redirect("login_administrativo")
+
+
+def modificar_docentes(request, id):
+    correo_admin = request.session.get("correo_admin", None)
+    if correo_admin:
+        admin = Administrador.objects.get(correo_admin=correo_admin)
+        docente = get_object_or_404(Docente, rut_docente=id)
+
+        data = {"form": DocenteForm(instance=docente), "admin": admin}
+
+        if request.method == "POST":
+            formulario = DocenteForm(data=request.POST, instance=docente)
+
+            [
+                formulario.fields.pop(
+                    field, None
+                )  # Elimina el campo 'field' del diccionario 'formulario.fields'
+                for field in [  # Itera sobre cada campo de la lista
+                    "rut_docente",  # Campo: rut del docente
+                    "password",  # Campo: contraseña
+                ]
+            ]
+
+            if formulario.is_valid():
+                formulario.save()
+                messages.success(request, "Docente modificado correctamente")
+                return redirect(to="listar_docentes")
+            else:
+                data["form"] = formulario
+
+        return render(
+            request,
+            "nuevoshorizontes/portal_admin/modificar/modificar_apoderado.html",
+            data,
+        )
+    else:
+        # El usuario no ha iniciado sesión, redirigir a la página de inicio de sesión
+        return redirect("login_administrativo")
+
+
+def modificar_apoderados(request, id):
+    correo_admin = request.session.get("correo_admin", None)
+    if correo_admin:
+        admin = Administrador.objects.get(correo_admin=correo_admin)
+        apoderado = get_object_or_404(Apoderado, rut_apoderado=id)
+
+        data = {"form": ApoderadoForm(instance=apoderado), "admin": admin}
+
+        if request.method == "POST":
+            formulario = ApoderadoForm(data=request.POST, instance=apoderado)
+
+            [
+                formulario.fields.pop(
+                    field, None
+                )  # Elimina el campo 'field' del diccionario 'formulario.fields'
+                for field in [  # Itera sobre cada campo de la lista
+                    "rut_apoderado",  # Campo: rut del docente
+                    "password",  # Campo: contraseña
+                ]
+            ]
+
+            if formulario.is_valid():
+                formulario.save()
+                messages.success(request, "Apoderado modificado correctamente")
+                return redirect(to="listar_apoderados")
+            else:
+                data["form"] = formulario
+
+        return render(
+            request,
+            "nuevoshorizontes/portal_admin/modificar/modificar_apoderado.html",
+            data,
+        )
+    else:
+        # El usuario no ha iniciado sesión, redirigir a la página de inicio de sesión
+        return redirect("login_administrativo")
 
 
 def modificar_noticias(request, id):
-    noticias = get_object_or_404(Noticias, id=id)
+    correo_admin = request.session.get("correo_admin", None)
+    if correo_admin:
+        admin = Administrador.objects.get(correo_admin=correo_admin)
+        noticias = get_object_or_404(Noticias, id=id)
 
-    data = {"form": NoticiaForm(instance=noticias)}
+        data = {"form": NoticiaForm(instance=noticias), "admin": admin}
 
-    if request.method == "POST":
-        formulario = NoticiaForm(data=request.POST, instance=noticias, files=request.FILES)
-        if formulario.is_valid():
-            formulario.save()
-            messages.success(request, "Noticia modificada correctamente")
-            return redirect(to="listar_noticias")
-        else:
-            data["form"] = formulario
+        if request.method == "POST":
+            formulario = NoticiaForm(
+                data=request.POST, instance=noticias, files=request.FILES
+            )
+            if formulario.is_valid():
+                formulario.save()
+                messages.success(request, "Noticia modificada correctamente")
+                return redirect(to="listar_noticias")
+            else:
+                data["form"] = formulario
 
-    return render(
-        request, "nuevoshorizontes/portal_admin/modificar/modificar_noticias.html", data
-    )
+        return render(
+            request,
+            "nuevoshorizontes/portal_admin/modificar/modificar_noticias.html",
+            data,
+        )
+    else:
+        # El usuario no ha iniciado sesión, redirigir a la página de inicio de sesión
+        return redirect("login_administrativo")
+
+
+def eliminar_alumno(request, id):
+    alumno = get_object_or_404(Alumno, rut_alumno=id)
+    alumno.delete()
+    messages.success(request, "Alumno eliminado correctamente")
+    return redirect(to="listar_alumnos")
 
 
 def eliminar_docentes(request, id):
@@ -612,11 +846,20 @@ def eliminar_docentes(request, id):
     messages.success(request, "Docente eliminado correctamente")
     return redirect(to="listar_docentes")
 
+
+def eliminar_apoderado(request, id):
+    apoderado = get_object_or_404(Apoderado, rut_apoderado=id)
+    apoderado.delete()
+    messages.success(request, "Apoderado eliminado correctamente")
+    return redirect(to="listar_apoderados")
+
+
 def eliminar_noticias(request, id):
     noticias = get_object_or_404(Noticias, id=id)
     noticias.delete()
     messages.success(request, "Noticia eliminada correctamente")
     return redirect(to="listar_noticias")
+
 
 def home_alumno(request):
     correo_alumno = request.session.get("correo_alumno", None)
