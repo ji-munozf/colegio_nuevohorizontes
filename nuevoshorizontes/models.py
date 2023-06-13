@@ -16,8 +16,8 @@ class Comuna(models.Model):
         return self.nombre_comuna
 
 class Sede(models.Model):
-    nombre_sede = models.CharField(max_length=15, verbose_name="Nombre de la sede")
-    direccion_sede = models.CharField(max_length=25, verbose_name="Dirección de la sede")
+    nombre_sede = models.CharField(max_length=40, verbose_name="Nombre de la sede")
+    direccion_sede = models.CharField(max_length=40, verbose_name="Dirección de la sede")
     telefono_sede = models.IntegerField(verbose_name="Teléfono de la sede")
     fotoSede = models.ImageField(upload_to="sedes", null=True,verbose_name="Imagen de la sede")
     region_sede = models.ForeignKey(Region, on_delete=models.CASCADE, verbose_name="Región de la sede")

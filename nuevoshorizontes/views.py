@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from .models import *
 from .forms import *
-from datetime import date, datetime
+from datetime import date
 from django.http import JsonResponse
 
 # Create your views here.
@@ -653,10 +653,10 @@ def cambiar_pass_apoderado(request, id):
             nueva_contraseña = request.POST.get("password")
             repetir_contraseña = request.POST.get("repetir_contraseña")
 
-            #if len(nueva_contraseña) < 8:
-                #messages.error(
-                 #   request, "La contraseña debe tener al menos 8 caracteres"
-                #)
+            # if len(nueva_contraseña) < 8:
+            # messages.error(
+            #   request, "La contraseña debe tener al menos 8 caracteres"
+            # )
             if nueva_contraseña != repetir_contraseña:
                 messages.error(request, "Las contraseñas no coinciden")
             else:
@@ -685,6 +685,62 @@ def listar_noticias(request):
             request,
             "nuevoshorizontes/portal_admin/listados/listar_noticias.html",
             {"noticias": noticias, "admin": admin},
+        )
+    else:
+        return redirect("login_administrativo")
+
+
+def listar_asignaturas(request):
+    correo_admin = request.session.get("correo_admin", None)
+    if correo_admin:
+        admin = Administrador.objects.get(correo_admin=correo_admin)
+        asignaturas = Asignatura.objects.all()
+        return render(
+            request,
+            "nuevoshorizontes/portal_admin/listados/listar_asignaturas.html",
+            {"asignaturas": asignaturas, "admin": admin},
+        )
+    else:
+        return redirect("login_administrativo")
+
+
+def listar_cursos(request):
+    correo_admin = request.session.get("correo_admin", None)
+    if correo_admin:
+        admin = Administrador.objects.get(correo_admin=correo_admin)
+        cursos = Curso.objects.all()
+        return render(
+            request,
+            "nuevoshorizontes/portal_admin/listados/listar_cursos.html",
+            {"cursos": cursos, "admin": admin},
+        )
+    else:
+        return redirect("login_administrativo")
+
+
+def listar_sedes_admin(request):
+    correo_admin = request.session.get("correo_admin", None)
+    if correo_admin:
+        admin = Administrador.objects.get(correo_admin=correo_admin)
+        sedes = Sede.objects.all()
+        return render(
+            request,
+            "nuevoshorizontes/portal_admin/listados/listar_sedes.html",
+            {"sedes": sedes, "admin": admin},
+        )
+    else:
+        return redirect("login_administrativo")
+
+
+def listar_salas(request):
+    correo_admin = request.session.get("correo_admin", None)
+    if correo_admin:
+        admin = Administrador.objects.get(correo_admin=correo_admin)
+        salas = Sala.objects.all()
+        return render(
+            request,
+            "nuevoshorizontes/portal_admin/listados/listar_salas.html",
+            {"salas": salas, "admin": admin},
         )
     else:
         return redirect("login_administrativo")
@@ -833,6 +889,122 @@ def modificar_noticias(request, id):
         return redirect("login_administrativo")
 
 
+def modificar_asignaturas(request, id):
+    correo_admin = request.session.get("correo_admin", None)
+    if correo_admin:
+        admin = Administrador.objects.get(correo_admin=correo_admin)
+        asignaturas = get_object_or_404(Asignatura, id_asignatura=id)
+
+        data = {"form": AsignaturaForm(instance=asignaturas), "admin": admin}
+
+        if request.method == "POST":
+            formulario = AsignaturaForm(data=request.POST, instance=asignaturas)
+            if formulario.is_valid():
+                formulario.save()
+                messages.success(request, "Asignatura modificada correctamente")
+                return redirect(to="listar_asignaturas")
+            else:
+                data["form"] = formulario
+
+        return render(
+            request,
+            "nuevoshorizontes/portal_admin/modificar/modificar_asignaturas.html",
+            data,
+        )
+    else:
+        # El usuario no ha iniciado sesión, redirigir a la página de inicio de sesión
+        return redirect("login_administrativo")
+
+
+def modificar_cursos(request, id):
+    correo_admin = request.session.get("correo_admin", None)
+    if correo_admin:
+        admin = Administrador.objects.get(correo_admin=correo_admin)
+        cursos = get_object_or_404(Curso, id_curso=id)
+
+        data = {"form": CursoForm(instance=cursos), "admin": admin}
+
+        if request.method == "POST":
+            formulario = CursoForm(data=request.POST, instance=cursos)
+            if formulario.is_valid():
+                formulario.save()
+                messages.success(request, "Curso modificado correctamente")
+                return redirect(to="listar_cursos")
+            else:
+                data["form"] = formulario
+
+        return render(
+            request,
+            "nuevoshorizontes/portal_admin/modificar/modificar_cursos.html",
+            data,
+        )
+    else:
+        # El usuario no ha iniciado sesión, redirigir a la página de inicio de sesión
+        return redirect("login_administrativo")
+
+
+def modificar_sedes(request, id):
+    correo_admin = request.session.get("correo_admin", None)
+    if correo_admin:
+        admin = Administrador.objects.get(correo_admin=correo_admin)
+        sedes = get_object_or_404(Sede, id=id)
+
+        data = {"form": SedeForm(instance=sedes), "admin": admin}
+
+        if request.method == "POST":
+            formulario = SedeForm(
+                data=request.POST, instance=sedes, files=request.FILES
+            )
+            if formulario.is_valid():
+                formulario.save()
+                messages.success(request, "Sede modificada correctamente")
+                return redirect(to="listar_sedes")
+            else:
+                data["form"] = formulario
+
+        return render(
+            request,
+            "nuevoshorizontes/portal_admin/modificar/modificar_sedes.html",
+            data,
+        )
+    else:
+        # El usuario no ha iniciado sesión, redirigir a la página de inicio de sesión
+        return redirect("login_administrativo")
+
+
+def modificar_salas(request, id):
+    correo_admin = request.session.get("correo_admin", None)
+    if correo_admin:
+        admin = Administrador.objects.get(correo_admin=correo_admin)
+        sala = get_object_or_404(Sala, id_sala=id)
+        data = {"form": SalaForm(instance=sala), "admin": admin}
+
+        if request.method == "POST":
+            formulario = SalaForm(data=request.POST, instance=sala)
+            [
+                formulario.fields.pop(
+                    field, None
+                )  # Elimina el campo 'field' del diccionario 'formulario.fields'
+                for field in [  # Itera sobre cada campo de la lista
+                    "id_sala",
+                ]
+            ]
+            if formulario.is_valid():
+                formulario.save()
+                messages.success(request, "Sala modificada correctamente")
+                return redirect(to="listar_salas")
+            else:
+                data["form"] = formulario
+
+        return render(
+            request,
+            "nuevoshorizontes/portal_admin/modificar/modificar_salas.html",
+            data,
+        )
+    else:
+        return redirect("login_administrativo")
+
+
 def eliminar_alumno(request, id):
     alumno = get_object_or_404(Alumno, rut_alumno=id)
     alumno.delete()
@@ -859,6 +1031,34 @@ def eliminar_noticias(request, id):
     noticias.delete()
     messages.success(request, "Noticia eliminada correctamente")
     return redirect(to="listar_noticias")
+
+
+def eliminar_asignatura(request, id):
+    asignaturas = get_object_or_404(Asignatura, id_asignatura=id)
+    asignaturas.delete()
+    messages.success(request, "Asignatura eliminada correctamente")
+    return redirect(to="listar_asignaturas")
+
+
+def eliminar_curso(request, id):
+    cursos = get_object_or_404(Curso, id_curso=id)
+    cursos.delete()
+    messages.success(request, "Curso eliminado correctamente")
+    return redirect(to="listar_cursos")
+
+
+def eliminar_sedes(request, id):
+    sedes = get_object_or_404(Sede, id=id)
+    sedes.delete()
+    messages.success(request, "Sede eliminada correctamente")
+    return redirect(to="listar_sedes")
+
+
+def eliminar_salas(request, id):
+    salas = get_object_or_404(Sala, id_sala=id)
+    salas.delete()
+    messages.success(request, "Sala eliminada correctamente")
+    return redirect(to="listar_salas")
 
 
 def home_alumno(request):
