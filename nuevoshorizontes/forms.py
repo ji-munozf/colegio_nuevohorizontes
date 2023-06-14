@@ -24,8 +24,8 @@ class AlumnoForm(forms.ModelForm):
     telefono_alumno = forms.IntegerField(
         widget=forms.NumberInput(attrs={"class": "form-control"}), required=False
     )
-    correo_alumno = forms.CharField(
-        widget=forms.TextInput(attrs={"class": "form-control", "required": "required"})
+    correo_alumno = forms.EmailField(
+        widget=forms.EmailInput(attrs={"class": "form-control", "required": "required"})
     )
     password = forms.CharField(
         widget=forms.PasswordInput(
@@ -75,8 +75,8 @@ class DocenteForm(forms.ModelForm):
             attrs={"class": "form-control", "required": "required"}
         )
     )
-    correo_docente = forms.CharField(
-        widget=forms.TextInput(attrs={"class": "form-control", "required": "required"})
+    correo_docente = forms.EmailField(
+        widget=forms.EmailInput(attrs={"class": "form-control", "required": "required"})
     )
     password = forms.CharField(
         widget=forms.PasswordInput(
@@ -122,8 +122,8 @@ class ApoderadoForm(forms.ModelForm):
             attrs={"class": "form-control", "required": "required"}
         )
     )
-    correo_apoderado = forms.CharField(
-        widget=forms.TextInput(attrs={"class": "form-control", "required": "required"})
+    correo_apoderado = forms.EmailField(
+        widget=forms.EmailInput(attrs={"class": "form-control", "required": "required"})
     )
     password = forms.CharField(
         widget=forms.PasswordInput(
@@ -137,8 +137,23 @@ class ApoderadoForm(forms.ModelForm):
 
 
 class AdminForm(forms.ModelForm):
-    rut_admin = forms.CharField(widget=forms.TextInput, max_length=10)
-    password = forms.CharField(widget=forms.PasswordInput)
+    nombre_admin = forms.CharField(
+        widget=forms.TextInput(attrs={"class": "form-control", "required": "required"})
+    )
+
+    apellido_admin = forms.CharField(
+        widget=forms.TextInput(attrs={"class": "form-control", "required": "required"})
+    )
+
+    correo_admin = forms.EmailField(
+        widget=forms.EmailInput(attrs={"class": "form-control", "required": "required"})
+    )
+
+    password = forms.CharField(
+        widget=forms.PasswordInput(
+            attrs={"class": "form-control", "required": "required"}
+        )
+    )
 
     class Meta:
         model = Administrador

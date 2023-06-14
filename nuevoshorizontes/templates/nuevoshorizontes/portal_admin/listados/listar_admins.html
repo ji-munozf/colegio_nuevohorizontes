@@ -13,6 +13,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
         crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link rel="stylesheet" href="{% static 'nuevoshorizontes/css/navbar.css' %}">
     <link rel="stylesheet" href="{% static 'nuevoshorizontes/css/home_admin.css' %}">
@@ -21,47 +22,109 @@
 <body>
 
     {% include "nuevoshorizontes/portal_admin/navbar.html" %}
+    {% include "nuevoshorizontes/portal_admin/mensajes.html" %}
 
     <h1 class="heading" style="padding-top: 120px;">
-        <img class="title-img mx-2" src="{% static 'nuevoshorizontes/img/icons_admin/boton-mas-blanco.png' %}" alt="nosotros" height="60">
+        <img class="title-img mx-2" src="{% static 'nuevoshorizontes/img/icons_admin/boton-mas-blanco.png' %}"
+            alt="nosotros" height="60">
         Lista de administradores
     </h1>
 
     <div class="container">
-        <table class="table table-striped" style="background-color: white; border: 1px solid rgb(21, 20, 55); text-align: center;">
+        {% if admins %}
+        <table class="table table-striped"
+            style="background-color: white; border: 1px solid rgb(21, 20, 55); text-align: center;">
             <thead>
                 <tr>
-                    <th>Rut</th>
+                    <th>ID</th>
                     <th>Nombres</th>
                     <th>Apellidos</th>
                     <th>Correo electrónico</th>
-                    <th>Contraseña</th>
                     <th>Acciones</th>
+                    <th>Cambiar contraseña</th>
                 </tr>
             </thead>
             <tbody>
                 {% for admin in admins %}
+                {% if admin.id != 1 %}
                 <tr>
-                    <td>{{ admin.rut_admin }}</td>
+                    <td>{{ admin.id }}</td>
                     <td>{{ admin.nombre_admin }}</td>
                     <td>{{ admin.apellido_admin }}</td>
                     <td>{{ admin.correo_admin }}</td>
-                    <td style="font-weight: 600;">************</td>
                     <td>
-                        <button type="button" class="btn btn-success" style="background-color: green; color: #fff;">Modificar</button>
-                        <button type="button" class="btn btn-danger" style="background-color: rgb(221, 31, 31); color: #fff;">Eliminar</button>
+                        {% if admin == admin_actual  %}
+                        <button type="button" class="btn btn-success btn-block" disabled>Modificar</button>
+                        <button type="button" class="btn btn-danger btn-block" disabled>Eliminar</button>
+                        {% else %}
+                        <a type="button" class="btn btn-success btn-block"
+                            href="{% url 'modificar_admins' admin.id %}"
+                            style="background-color: green; color: #fff;">Modificar</a>
+                        <a type="button" class="btn btn-danger btn-block"
+                            style="background-color: #dc3545; color: #fff;">Eliminar</a>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if admin == admin_actual %}
+                        <button type="button" class="btn btn-primary" disabled>Cambiar contraseña</button>
+                        {% else %}
+                        <a type="button" class="btn btn-primary" onclick="cambiarPassword('{{ admin.id }}')"
+                            style="background-color: #0d6efd; color: #fff;">Cambiar contraseña</a>
+                        {% endif %}
                     </td>
                 </tr>
+                {% endif %}
                 {% endfor %}
             </tbody>
         </table>
+        {% else %}
+        <p>No hay admins registrados.</p>
+        {% endif %}
     </div>
 
     <div class="container botones" style="text-align: center; align-items: center;">
-        <button type="button" class="btn btn-lg btn-block">
-            <a href="{% url 'home_listado' %}">Volver a las listas</a>
-        </button>
+        <a type="button" class="btn btn-lg btn-block" href="{% url 'home_listado' %}">Volver a las listas</a>
     </div>
+
+    <script>
+        function eliminarAlumno(id) {
+            Swal.fire({
+                "title": "¿Estas seguro?",
+                "text": "Esta acción no se puede deshacer",
+                "icon": "question",
+                "showCancelButton": true,
+                "cancelButtonText": "No, cancelar",
+                "confirmButtonText": "Si, eliminar",
+                "confirmButtonColor": "green",
+                "cancelButtonColor": "#dc3545"
+            })
+                .then(function (result) {
+                    if (result.isConfirmed) {
+                        window.location.href = "/eliminar_alumno/" + id + "/";
+                    }
+                })
+        }
+    </script>
+
+    <script>
+        function cambiarPassword(id) {
+            Swal.fire({
+                "title": "¿Estas seguro?",
+                "text": "Estas seguro que quieres cambiar la contraseña de este alumno",
+                "icon": "question",
+                "showCancelButton": true,
+                "cancelButtonText": "No, cancelar",
+                "confirmButtonText": "Si, cambiar contraseña",
+                "confirmButtonColor": "green",
+                "cancelButtonColor": "#dc3545"
+            })
+                .then(function (result) {
+                    if (result.isConfirmed) {
+                        window.location.href = "/portal_admin/listados/listar_admins/cambiar_pass_admin/" + id + "/";
+                    }
+                })
+        }
+    </script>
 
 </body>
 

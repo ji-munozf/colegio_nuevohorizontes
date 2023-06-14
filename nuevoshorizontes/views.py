@@ -460,14 +460,66 @@ def obtener_comunas(request):
 def listar_admins(request):
     correo_admin = request.session.get("correo_admin", None)
     if correo_admin:
-        admin = Administrador.objects.get(correo_admin=correo_admin)
+        admin_actual = Administrador.objects.get(correo_admin=correo_admin)
+        admins = Administrador.objects.exclude(id=1)  # Excluir al administrador específico
         admins = Administrador.objects.all()
         return render(
             request,
             "nuevoshorizontes/portal_admin/listados/listar_admins.html",
-            {"admins": admins, "admin": admin},
+            {"admins": admins, "admin_actual": admin_actual},
         )
     else:
+        return redirect("login_administrativo")
+
+
+def cambiar_pass_admin(request, id):
+    correo_admin = request.session.get("correo_admin", None)
+    if correo_admin:
+        admin = Administrador.objects.get(correo_admin=correo_admin)
+        administrador = get_object_or_404(Administrador, id=id)
+
+        data = {
+            "form": AdminForm(instance=administrador),
+            "administrador": administrador,
+            "admin": admin,
+        }
+
+        if request.method == "POST":
+            formulario = AdminForm(data=request.POST, instance=administrador)
+
+            [
+                formulario.fields.pop(field, None)
+                for field in [
+                    "id",
+                    "nombre_admin",
+                    "apellido_admin",
+                    "correo_admin",
+                ]
+            ]
+
+            nueva_contraseña = request.POST.get("password")
+            repetir_contraseña = request.POST.get("repetir_contraseña")
+
+            if len(nueva_contraseña) < 8:
+                messages.error(
+                    request, "La contraseña debe tener al menos 8 caracteres"
+                )
+            elif nueva_contraseña != repetir_contraseña:
+                messages.error(request, "Las contraseñas no coinciden")
+            else:
+                if formulario.is_valid():
+                    administrador.password = nueva_contraseña
+                    administrador.save()
+                    messages.success(request, "Contraseña cambiada con éxito")
+                    return redirect(to="listar_admins")
+
+        return render(
+            request,
+            "nuevoshorizontes/portal_admin/cambiar_pass/cambiar_pass_admin.html",
+            data,
+        )
+    else:
+        # El usuario no ha iniciado sesión, redirigir a la página de inicio de sesión
         return redirect("login_administrativo")
 
 
@@ -530,7 +582,7 @@ def cambiar_pass_alumno(request, id):
 
         return render(
             request,
-            "nuevoshorizontes/portal_admin/listados/cambiar_pass_alumno.html",
+            "nuevoshorizontes/portal_admin/cambiar_pass/cambiar_pass_alumno.html",
             data,
         )
     else:
@@ -600,7 +652,7 @@ def cambiar_pass_docente(request, id):
 
         return render(
             request,
-            "nuevoshorizontes/portal_admin/listados/cambiar_pass_docente.html",
+            "nuevoshorizontes/portal_admin/cambiar_pass/cambiar_pass_docente.html",
             data,
         )
     else:
@@ -653,11 +705,11 @@ def cambiar_pass_apoderado(request, id):
             nueva_contraseña = request.POST.get("password")
             repetir_contraseña = request.POST.get("repetir_contraseña")
 
-            # if len(nueva_contraseña) < 8:
-            # messages.error(
-            #   request, "La contraseña debe tener al menos 8 caracteres"
-            # )
-            if nueva_contraseña != repetir_contraseña:
+            if len(nueva_contraseña) < 8:
+                messages.error(
+                    request, "La contraseña debe tener al menos 8 caracteres"
+                )
+            elif nueva_contraseña != repetir_contraseña:
                 messages.error(request, "Las contraseñas no coinciden")
             else:
                 if formulario.is_valid():
@@ -668,7 +720,7 @@ def cambiar_pass_apoderado(request, id):
 
         return render(
             request,
-            "nuevoshorizontes/portal_admin/listados/cambiar_pass_apoderado.html",
+            "nuevoshorizontes/portal_admin/cambiar_pass/cambiar_pass_apoderado.html",
             data,
         )
     else:
@@ -853,6 +905,44 @@ def modificar_apoderados(request, id):
         return render(
             request,
             "nuevoshorizontes/portal_admin/modificar/modificar_apoderado.html",
+            data,
+        )
+    else:
+        # El usuario no ha iniciado sesión, redirigir a la página de inicio de sesión
+        return redirect("login_administrativo")
+
+
+def modificar_admins(request, id):
+    correo_admin = request.session.get("correo_admin", None)
+    if correo_admin:
+        admin = Administrador.objects.get(correo_admin=correo_admin)
+        administrador = get_object_or_404(Administrador, id=id)
+
+        data = {"form": AdminForm(instance=administrador), "admin": admin}
+
+        if request.method == "POST":
+            formulario = AdminForm(data=request.POST, instance=administrador)
+
+            [
+                formulario.fields.pop(
+                    field, None
+                )  # Elimina el campo 'field' del diccionario 'formulario.fields'
+                for field in [  # Itera sobre cada campo de la lista
+                    "id",  # Campo: id del admin
+                    "password",  # Campo: contraseña
+                ]
+            ]
+
+            if formulario.is_valid():
+                formulario.save()
+                messages.success(request, "Administrador modificado correctamente")
+                return redirect(to="listar_admins")
+            else:
+                data["form"] = formulario
+
+        return render(
+            request,
+            "nuevoshorizontes/portal_admin/modificar/modificar_admins.html",
             data,
         )
     else:
@@ -1059,6 +1149,13 @@ def eliminar_salas(request, id):
     salas.delete()
     messages.success(request, "Sala eliminada correctamente")
     return redirect(to="listar_salas")
+
+
+def eliminar_admin(request, id):
+    admin = get_object_or_404(admin, id=id)
+    admin.delete()
+    messages.success(request, "Administrador eliminado correctamente")
+    return redirect(to="listar_admins")
 
 
 def home_alumno(request):
