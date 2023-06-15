@@ -8,6 +8,9 @@ class AlumnoForm(forms.ModelForm):
     rut_alumno = forms.CharField(
         widget=forms.TextInput(attrs={"class": "form-control", "required": "required"}),
         max_length=10,
+        error_messages={
+            "unique": "El rut del alumno ya existe.",
+        },
     )
     nombre_alumno = forms.CharField(
         widget=forms.TextInput(attrs={"class": "form-control", "required": "required"})
@@ -25,7 +28,10 @@ class AlumnoForm(forms.ModelForm):
         widget=forms.NumberInput(attrs={"class": "form-control"}), required=False
     )
     correo_alumno = forms.EmailField(
-        widget=forms.EmailInput(attrs={"class": "form-control", "required": "required"})
+        widget=forms.EmailInput(attrs={"class": "form-control", "required": "required"}),
+        error_messages={
+            "unique": "El correo del alumno ya existe.",
+        },
     )
     password = forms.CharField(
         widget=forms.PasswordInput(
@@ -48,6 +54,20 @@ class AlumnoForm(forms.ModelForm):
         widget=forms.Select(attrs={"class": "form-control", "required": "required"}),
     )
 
+    def clean_field(self, field_name):
+        field_value = self.cleaned_data[field_name]
+        try:
+            Alumno.objects.get(**{field_name: field_value})
+            raise ValidationError(self.fields[field_name].error_messages["unique"])
+        except Alumno.DoesNotExist:
+            return field_value
+        
+    def clean_rut_alumno(self):
+        return self.clean_field("rut_alumno")
+    
+    def clean_correo_alumno(self):
+        return self.clean_field("correo_alumno")
+
     class Meta:
         model = Alumno
         fields = "__all__"
@@ -57,6 +77,9 @@ class DocenteForm(forms.ModelForm):
     rut_docente = forms.CharField(
         widget=forms.TextInput(attrs={"class": "form-control", "required": "required"}),
         max_length=10,
+        error_messages={
+            "unique": "El rut del docente ya existe.",
+        },
     )
     nombre_docente = forms.CharField(
         widget=forms.TextInput(attrs={"class": "form-control", "required": "required"})
@@ -76,7 +99,10 @@ class DocenteForm(forms.ModelForm):
         )
     )
     correo_docente = forms.EmailField(
-        widget=forms.EmailInput(attrs={"class": "form-control", "required": "required"})
+        widget=forms.EmailInput(attrs={"class": "form-control", "required": "required"}),
+        error_messages={
+            "unique": "El correo del docente ya existe.",
+        },
     )
     password = forms.CharField(
         widget=forms.PasswordInput(
@@ -95,6 +121,20 @@ class DocenteForm(forms.ModelForm):
         ),
     )
 
+    def clean_field(self, field_name):
+        field_value = self.cleaned_data[field_name]
+        try:
+            Docente.objects.get(**{field_name: field_value})
+            raise ValidationError(self.fields[field_name].error_messages["unique"])
+        except Docente.DoesNotExist:
+            return field_value
+        
+    def clean_rut_docente(self):
+        return self.clean_field("rut_docente")
+    
+    def clean_correo_docente(self):
+        return self.clean_field("correo_docente")
+
     class Meta:
         model = Docente
         fields = "__all__"
@@ -104,6 +144,9 @@ class ApoderadoForm(forms.ModelForm):
     rut_apoderado = forms.CharField(
         widget=forms.TextInput(attrs={"class": "form-control", "required": "required"}),
         max_length=10,
+        error_messages={
+            "unique": "El rut del apoderado ya existe.",
+        },
     )
     nombre_apoderado = forms.CharField(
         widget=forms.TextInput(attrs={"class": "form-control", "required": "required"})
@@ -123,13 +166,30 @@ class ApoderadoForm(forms.ModelForm):
         )
     )
     correo_apoderado = forms.EmailField(
-        widget=forms.EmailInput(attrs={"class": "form-control", "required": "required"})
+        widget=forms.EmailInput(attrs={"class": "form-control", "required": "required"}),
+        error_messages={
+            "unique": "El correo del apoderado ya existe.",
+        },
     )
     password = forms.CharField(
         widget=forms.PasswordInput(
             attrs={"class": "form-control", "required": "required"}
         )
     )
+
+    def clean_field(self, field_name):
+        field_value = self.cleaned_data[field_name]
+        try:
+            Apoderado.objects.get(**{field_name: field_value})
+            raise ValidationError(self.fields[field_name].error_messages["unique"])
+        except Apoderado.DoesNotExist:
+            return field_value
+        
+    def clean_rut_apoderado(self):
+        return self.clean_field("rut_apoderado")
+    
+    def clean_correo_apoderado(self):
+        return self.clean_field("correo_apoderado")
 
     class Meta:
         model = Apoderado
@@ -146,7 +206,10 @@ class AdminForm(forms.ModelForm):
     )
 
     correo_admin = forms.EmailField(
-        widget=forms.EmailInput(attrs={"class": "form-control", "required": "required"})
+        widget=forms.EmailInput(attrs={"class": "form-control", "required": "required"}),
+        error_messages={
+            "unique": "El correo del admin ya existe.",
+        },
     )
 
     password = forms.CharField(
@@ -154,6 +217,17 @@ class AdminForm(forms.ModelForm):
             attrs={"class": "form-control", "required": "required"}
         )
     )
+
+    def clean_field(self, field_name):
+        field_value = self.cleaned_data[field_name]
+        try:
+            Administrador.objects.get(**{field_name: field_value})
+            raise ValidationError(self.fields[field_name].error_messages["unique"])
+        except Administrador.DoesNotExist:
+            return field_value
+        
+    def clean_correo_admin(self):
+        return self.clean_field("correo_admin")
 
     class Meta:
         model = Administrador
@@ -235,16 +309,42 @@ class CursoForm(forms.ModelForm):
     id_curso = forms.IntegerField(
         widget=forms.NumberInput(
             attrs={"class": "form-control", "required": "required"}
-        )
+        ),
+        error_messages={
+            "unique": "El ID del curso ya existe.",
+        }
     )
     nombre_curso = forms.CharField(
-        widget=forms.TextInput(attrs={"class": "form-control", "required": "required"})
+        widget=forms.TextInput(attrs={"class": "form-control", "required": "required"}),
+        error_messages={
+            "unique": "El nombre del curso ya existe.",
+        },
     )
     docente_curso = forms.ModelChoiceField(
         queryset=Docente.objects.all(),
         empty_label="Seleccione a un docente",
         widget=forms.Select(attrs={"class": "form-control", "required": "required"}),
+        error_messages={
+            "unique": "El docente seleccionado ya fue asignado a otro curso.",
+        },
     )
+
+    def clean_field(self, field_name):
+        field_value = self.cleaned_data[field_name]
+        try:
+            Curso.objects.get(**{field_name: field_value})
+            raise ValidationError(self.fields[field_name].error_messages["unique"])
+        except Curso.DoesNotExist:
+            return field_value
+
+    def clean_id_curso(self):
+        return self.clean_field("id_curso")
+
+    def clean_nombre_curso(self):
+        return self.clean_field("nombre_curso")
+    
+    def clean_docente_curso(self):
+        return self.clean_field("docente_curso")
 
     class Meta:
         model = Curso
@@ -279,10 +379,16 @@ class SalaForm(forms.ModelForm):
     id_sala = forms.IntegerField(
         widget=forms.NumberInput(
             attrs={"class": "form-control", "required": "required"}
-        )
+        ),
+        error_messages={
+            "unique": "El ID de la sala ya existe.",
+        },
     )
     nombre_sala = forms.CharField(
-        widget=forms.TextInput(attrs={"class": "form-control", "required": "required"})
+        widget=forms.TextInput(attrs={"class": "form-control", "required": "required"}),
+        error_messages={
+            "unique": "El nombre de la sala ya existe.",
+        },
     )
     sede_sala = forms.ModelChoiceField(
         queryset=Sede.objects.all(),
@@ -294,6 +400,20 @@ class SalaForm(forms.ModelForm):
         empty_label="Seleccione el tipo de sala",
         widget=forms.Select(attrs={"class": "form-control", "required": "required"}),
     )
+
+    def clean_field(self, field_name):
+        field_value = self.cleaned_data[field_name]
+        try:
+            Sala.objects.get(**{field_name: field_value})
+            raise ValidationError(self.fields[field_name].error_messages["unique"])
+        except Sala.DoesNotExist:
+            return field_value
+
+    def clean_id_sala(self):
+        return self.clean_field("id_sala")
+
+    def clean_nombre_sala(self):
+        return self.clean_field("nombre_sala")
 
     class Meta:
         model = Sala
