@@ -83,6 +83,35 @@ def sedes(request):
     )
 
 
+def registrar_contacto(request):
+    nombres = request.POST["nombres"]
+    apellidos = request.POST["apellidos"]
+    correo = request.POST["correo"]
+    telefono = request.POST["telefono"]
+    sede_id = request.POST.get("sede")
+    mensaje = request.POST["mensaje"]
+
+    sede_obj = None
+    if sede_id:
+        try:
+            sede_obj = Sede.objects.get(id=sede_id)
+        except Sede.DoesNotExist:
+            pass
+
+    Postulaciones.objects.create(
+        nombres=nombres,
+        apellidos=apellidos,
+        email=correo,
+        telefono=telefono,
+        sede=sede_obj,
+        mensaje=mensaje,
+    )
+
+    messages.success(request, "Contacto enviado correctamente")
+
+    return redirect("sedes")
+
+
 def noticias(request):
     correo_admin = request.session.get("correo_admin", None)
     correo_alumno = request.session.get("correo_alumno", None)
@@ -461,7 +490,9 @@ def listar_admins(request):
     correo_admin = request.session.get("correo_admin", None)
     if correo_admin:
         admin_actual = Administrador.objects.get(correo_admin=correo_admin)
-        admins = Administrador.objects.exclude(id=1)  # Excluir al administrador específico
+        admins = Administrador.objects.exclude(
+            id=1
+        )  # Excluir al administrador específico
         admins = Administrador.objects.all()
         return render(
             request,
@@ -793,6 +824,20 @@ def listar_salas(request):
             request,
             "nuevoshorizontes/portal_admin/listados/listar_salas.html",
             {"salas": salas, "admin": admin},
+        )
+    else:
+        return redirect("login_administrativo")
+
+
+def listar_postulaciones(request):
+    correo_admin = request.session.get("correo_admin", None)
+    if correo_admin:
+        admin = Administrador.objects.get(correo_admin=correo_admin)
+        postulaciones = Postulaciones.objects.all()
+        return render(
+            request,
+            "nuevoshorizontes/portal_admin/listados/listar_postulaciones.html",
+            {"postulaciones": postulaciones, "admin": admin},
         )
     else:
         return redirect("login_administrativo")
@@ -1152,10 +1197,17 @@ def eliminar_salas(request, id):
 
 
 def eliminar_admin(request, id):
-    admin = get_object_or_404(admin, id=id)
+    admin = get_object_or_404(Administrador, id=id)
     admin.delete()
     messages.success(request, "Administrador eliminado correctamente")
     return redirect(to="listar_admins")
+
+
+def eliminar_postulacion(request, id):
+    postulacion = get_object_or_404(Postulaciones, id=id)
+    postulacion.delete()
+    messages.success(request, "Postulación eliminada correctamente")
+    return redirect(to="listar_postulaciones")
 
 
 def home_alumno(request):

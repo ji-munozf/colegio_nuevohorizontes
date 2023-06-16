@@ -160,3 +160,11 @@ class Administrador(models.Model):
     
     def __str__(self):
         return "Nombres: " + self.nombre_admin + " " + self.apellido_admin
+    
+class Postulaciones(models.Model):
+    nombres = models.CharField(max_length=50, verbose_name="Nombre")
+    apellidos = models.CharField(max_length=50, verbose_name="Apellido")
+    email = models.CharField(max_length=50, verbose_name="Correo")
+    telefono = models.IntegerField(verbose_name="Teléfono")
+    sede = models.CharField(max_length=50, verbose_name="sede")
+    mensaje = models.TextField(verbose_name="mensaje")

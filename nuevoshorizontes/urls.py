@@ -13,6 +13,8 @@ urlpatterns = [
     path('portal_admin/home_listado', home_listado, name="home_listado"),
     path('portal_admin/home_pagos', home_pagos, name="home_pagos"),
 
+    path('registro_contacto', registrar_contacto, name="registro_contacto"),
+
     path('api/comunas/', obtener_comunas, name='api_comunas'),
 
     path('portal_admin/formularios/agregar_admins', agregar_admins, name="agregar_admins"),
@@ -34,6 +36,7 @@ urlpatterns = [
     path('portal_admin/listados/listar_cursos', listar_cursos, name="listar_cursos"),
     path('portal_admin/listados/listar_sedes', listar_sedes_admin, name="listar_sedes"),
     path('portal_admin/listados/listar_salas', listar_salas, name="listar_salas"),
+    path('portal_admin/listados/listar_postulaciones', listar_postulaciones, name="listar_postulaciones"),
 
     path('portal_admin/listados/listar_docentes/cambiar_pass_docente/<id>/', cambiar_pass_docente, name="cambiar_pass_docente"),
     path('portal_admin/listados/listar_alumnos/cambiar_pass_alumno/<id>/', cambiar_pass_alumno, name="cambiar_pass_alumno"),
@@ -59,6 +62,7 @@ urlpatterns = [
     path('eliminar_curso/<id>/', eliminar_curso, name="eliminar_curso"),
     path('eliminar_sede/<id>/', eliminar_sedes, name="eliminar_sedes"),
     path('eliminar_sala/<id>/', eliminar_salas, name="eliminar_salas"),
+    path('eliminar_postulacion/<id>/', eliminar_postulacion, name="eliminar_postulacion"),
     
     path('portal_alumno/home_alumno', home_alumno, name="home_alumno"),
     path('portal_alumno/mi_perfil', miperfil_alumno, name="miperfil_alumno"),
