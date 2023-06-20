@@ -62,10 +62,11 @@
                                         <select name="{{ alumno.rut_alumno }}" required>
                                             <option value="">Seleccione un estado de asistencia</option>
                                             {% for estado_asistencia in estados_asistencia %}
-                                            <option value="{{ estado_asistencia.id_estado_asistencia }}">{{ estado_asistencia.nombre_estado_asistencia }}</option>
+                                                <option value="{{ estado_asistencia.id_estado_asistencia }}">
+                                                    {{ estado_asistencia.nombre_estado_asistencia }}
+                                                </option>
                                             {% endfor %}
                                         </select>
-                                        
                                     </td>
                                 </tr>
                                 {% endfor %}

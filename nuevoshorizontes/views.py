@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from .models import *
 from .forms import *
-from datetime import date
+from datetime import date, datetime
 from django.http import JsonResponse
 
 # Create your views here.
@@ -1458,14 +1458,31 @@ def buscar_asistencia(request):
     correo_docente = request.session.get("correo_docente", None)
     if correo_docente:
         docente = Docente.objects.get(correo_docente=correo_docente)
+        if request.method == "POST":
+            fecha = request.POST.get("fecha")
+            if fecha:
+                fecha = datetime.strptime(fecha, "%Y-%m-%d").date()
+                asistencias = Asistencia.objects.filter(alumno__curso_alumno__docente_curso=docente, fecha_asistencia=fecha)
+                if asistencias:
+                    return render(
+                        request,
+                        "nuevoshorizontes/portal_docente/asistencia/buscar_asistencia.html",
+                        {"docente": docente, "asistencias": asistencias},
+                    )
+                else:
+                    return render(
+                        request,
+                        "nuevoshorizontes/portal_docente/asistencia/buscar_asistencia.html",
+                        {"docente": docente, "no_asistencias": True},
+                    )
         return render(
             request,
             "nuevoshorizontes/portal_docente/asistencia/buscar_asistencia.html",
             {"docente": docente},
         )
-
     else:
         return redirect("login_docente")
+
 
 
 def agregar_asistencia(request):
