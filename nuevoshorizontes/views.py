@@ -935,7 +935,7 @@ def modificar_apoderados(request, id):
                     field, None
                 )  # Elimina el campo 'field' del diccionario 'formulario.fields'
                 for field in [  # Itera sobre cada campo de la lista
-                    "rut_apoderado", 
+                    "rut_apoderado",
                     "password",  # Campo: contraseña
                 ]
             ]
@@ -1491,6 +1491,7 @@ def agregar_asistencia(request):
                     alumno=alumno,
                 )
 
+            messages.success(request, "Asistencia guardada exitosamente.")
             return redirect("asistencia_docente")
 
         fecha_actual = date.today().strftime("%d/%m/%Y")
