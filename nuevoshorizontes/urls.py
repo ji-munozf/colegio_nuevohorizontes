@@ -84,6 +84,9 @@ urlpatterns = [
     path('portal_apoderado/guardar_perfil_docente/', guardar_perfil_docente, name='guardar_perfil_docente'),
     path('portal_docente/curso_docente', curso_docente, name="curso_docente"),
     path('portal_docente/asignaturas_docente', asignaturas_docente, name="asignaturas_docente"),
+    path('portal_docente/asistencia_docente', asistencia_docente, name="asistencia_docente"),
+    path('portal_docente/asistencia_docente/agregar_asistencia', agregar_asistencia, name="agregar_asistencia"),
+    path('portal_docente/asistencia_docente/buscar_asistencia', buscar_asistencia, name="buscar_asistencia"),
 
     path('portales/login_alumno', login_alumno, name="login_alumno"),
     path('portales/login_docente', login_docente, name="login_docente"),

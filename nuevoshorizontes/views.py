@@ -695,11 +695,11 @@ def listar_apoderados(request):
     correo_admin = request.session.get("correo_admin", None)
     if correo_admin:
         admin = Administrador.objects.get(correo_admin=correo_admin)
-        apoderado = Apoderado.objects.all()
+        apoderados = Apoderado.objects.all()
         return render(
             request,
             "nuevoshorizontes/portal_admin/listados/listar_apoderados.html",
-            {"apoderado": apoderado, "admin": admin},
+            {"apoderados": apoderados, "admin": admin},
         )
     else:
         return redirect("login_administrativo")
@@ -911,7 +911,7 @@ def modificar_docentes(request, id):
 
         return render(
             request,
-            "nuevoshorizontes/portal_admin/modificar/modificar_apoderado.html",
+            "nuevoshorizontes/portal_admin/modificar/modificar_docentes.html",
             data,
         )
     else:
@@ -935,7 +935,7 @@ def modificar_apoderados(request, id):
                     field, None
                 )  # Elimina el campo 'field' del diccionario 'formulario.fields'
                 for field in [  # Itera sobre cada campo de la lista
-                    "rut_apoderado",  # Campo: rut del docente
+                    "rut_apoderado", 
                     "password",  # Campo: contraseña
                 ]
             ]
@@ -1061,6 +1061,14 @@ def modificar_cursos(request, id):
 
         if request.method == "POST":
             formulario = CursoForm(data=request.POST, instance=cursos)
+            [
+                formulario.fields.pop(
+                    field, None
+                )  # Elimina el campo 'field' del diccionario 'formulario.fields'
+                for field in [  # Itera sobre cada campo de la lista
+                    "id_curso",
+                ]
+            ]
             if formulario.is_valid():
                 formulario.save()
                 messages.success(request, "Curso modificado correctamente")
@@ -1402,8 +1410,103 @@ def guardar_perfil_docente(request):
 
 
 def curso_docente(request):
-    return render(request, "nuevoshorizontes/portal_docente/curso_docente.html")
+    # Obtiene el valor de la clave "correo_docente" de la sesión del objeto request
+    correo_docente = request.session.get("correo_docente", None)
+    if correo_docente:  # Verifica si correo_docente tiene un valor
+        # Busca un objeto Docente en la base de datos con correo_docente igual al valor obtenido anteriormente
+        docente = Docente.objects.get(correo_docente=correo_docente)
+        # Obtiene el primer curso relacionado con el docente
+        curso = docente.curso_set.first()
+        if curso:  # Verifica si curso tiene un valor
+            # Obtiene todos los objetos Alumno de la base de datos con curso_alumno igual al valor de curso
+            alumnos = Alumno.objects.filter(curso_alumno=curso)
+            # Obtiene el primer alumno de la lista de alumnos
+            primer_alumno = alumnos.first()
+        else:
+            alumnos = []  # Establece una lista vacía
+            primer_alumno = None  # Establece primer_alumno como None
+        # Devuelve una respuesta de renderizado utilizando la plantilla y pasando un diccionario de contexto
+        return render(
+            request,
+            "nuevoshorizontes/portal_docente/curso_docente.html",
+            {"docente": docente, "alumnos": alumnos, "primer_alumno": primer_alumno},
+        )
+    else:
+        # Devuelve una respuesta de redirección a la vista con nombre "login_docente"
+        return redirect("login_docente")
 
 
 def asignaturas_docente(request):
     return render(request, "nuevoshorizontes/portal_docente/asignaturas_docente.html")
+
+
+def asistencia_docente(request):
+    correo_docente = request.session.get("correo_docente", None)
+    if correo_docente:
+        docente = Docente.objects.get(correo_docente=correo_docente)
+        return render(
+            request,
+            "nuevoshorizontes/portal_docente/asistencia_docente.html",
+            {"docente": docente},
+        )
+
+    else:
+        return redirect("login_docente")
+
+
+def buscar_asistencia(request):
+    correo_docente = request.session.get("correo_docente", None)
+    if correo_docente:
+        docente = Docente.objects.get(correo_docente=correo_docente)
+        return render(
+            request,
+            "nuevoshorizontes/portal_docente/asistencia/buscar_asistencia.html",
+            {"docente": docente},
+        )
+
+    else:
+        return redirect("login_docente")
+
+
+def agregar_asistencia(request):
+    correo_docente = request.session.get("correo_docente", None)
+    if correo_docente:
+        docente = Docente.objects.get(correo_docente=correo_docente)
+
+        if request.method == "POST":
+            fecha_actual = date.today()
+
+            # Obtener la lista de alumnos del curso del docente
+            curso = Curso.objects.get(docente_curso=docente)
+            alumnos = Alumno.objects.filter(curso_alumno=curso)
+
+            # Guardar la asistencia de cada alumno
+            for alumno in alumnos:
+                tipo_asistencia_id = request.POST.get(str(alumno.rut_alumno))
+                tipo_asistencia = tipoAsistencia.objects.get(pk=tipo_asistencia_id)
+
+                Asistencia.objects.create(
+                    tipo_asistencia=tipo_asistencia,
+                    fecha_asistencia=fecha_actual,
+                    alumno=alumno,
+                )
+
+            return redirect("asistencia_docente")
+
+        fecha_actual = date.today().strftime("%d/%m/%Y")
+        estados_asistencia = tipoAsistencia.objects.all()
+        curso = Curso.objects.get(docente_curso=docente)
+        alumnos = Alumno.objects.filter(curso_alumno=curso)
+
+        return render(
+            request,
+            "nuevoshorizontes/portal_docente/asistencia/agregar_asistencia.html",
+            {
+                "docente": docente,
+                "fecha_actual": fecha_actual,
+                "alumnos": alumnos,
+                "estados_asistencia": estados_asistencia,
+            },
+        )
+    else:
+        return redirect("login_docente")

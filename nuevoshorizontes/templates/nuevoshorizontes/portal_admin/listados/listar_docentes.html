@@ -42,7 +42,7 @@
         <div class="card">
             <div class="card-body">
                 <div class="table-responsive">
-                    {% if docente %}
+                    {% if docentes %}
                     <table class="table" style="background-color: white; border: 1px solid rgb(21, 20, 55); text-align: center;">
                         <thead>
                             <tr>
@@ -64,7 +64,6 @@
                                 <td>{{ docente.rut_docente }}</td>
                                 <td>{{ docente.nombre_docente }}</td>
                                 <td>{{ docente.appaterno_docente }} {{ docente.apmaterno_docente }}</td>
-                                </td>
                                 <td>{{ docente.direccion_docente }}</td>
                                 <td>{{ docente.telefono_docente }}</td>
                                 <td>{{ docente.correo_docente }}</td>

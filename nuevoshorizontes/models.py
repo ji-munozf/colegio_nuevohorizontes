@@ -42,13 +42,6 @@ class Sala(models.Model):
     def __str__(self):
         return self.nombre_sala
 
-class Asignatura(models.Model):
-    id_asignatura = models.CharField(max_length=6, primary_key=True, verbose_name="ID de la asignatura")
-    nombre_asignatura = models.CharField(max_length=30, verbose_name="Nombre de la asignatura")
-
-    def __str__(self):
-        return self.nombre_asignatura
-
 class Docente(models.Model):
     rut_docente = models.CharField(primary_key=True, max_length=12, verbose_name="Rut del docente")
     nombre_docente = models.CharField(max_length=15, verbose_name="Nombres del docente")
@@ -59,22 +52,32 @@ class Docente(models.Model):
     correo_docente = models.CharField(max_length=30, verbose_name="Correo electrónico del docente")
     password = models.CharField(max_length=125, verbose_name="Contraseña")
     sede_docente = models.ForeignKey(Sede, on_delete=models.CASCADE, verbose_name="Sede asignado")
-    asignaturas_docente = models.ManyToManyField(Asignatura, verbose_name="Asignaturas asignadas")
 
     def __str__(self):
-        return "RUT: " + self.rut_docente + " " + "Nombres: " + self.nombre_docente + " " + self.appaterno_docente
+        return "RUT: " + self.rut_docente + " " + "Nombre: " + self.nombre_docente + " " + self.appaterno_docente
+    
+    def nombre_completo(self):
+        return self.nombre_docente + " " + self.appaterno_docente
+
+class Asignatura(models.Model):
+    id_asignatura = models.CharField(max_length=9, primary_key=True, verbose_name="ID de la asignatura")
+    nombre_asignatura = models.CharField(max_length=30, verbose_name="Nombre de la asignatura")
+    profesor_asignatura = models.ForeignKey(Docente, on_delete=models.CASCADE, verbose_name="profesor de la asignatura" )
+
+    def __str__(self):
+        return self.nombre_asignatura
 
 class Curso(models.Model):
-    id_curso = models.IntegerField(primary_key=True, verbose_name="ID del curso")
+    id_curso = models.CharField(primary_key=True,max_length=10, verbose_name="ID del curso")
     nombre_curso = models.CharField(max_length=30, verbose_name="Nombre del curso")
     docente_curso = models.ForeignKey(Docente, on_delete=models.CASCADE, verbose_name="Docente asignado")
+    sala_curso = models.ForeignKey(Sala,on_delete=models.CASCADE, verbose_name="Sala del curso", null=True)
 
     def __str__(self):
         return self.nombre_curso
 
 class Horario(models.Model):
     id_horario = models.IntegerField(primary_key=True, verbose_name="ID del horario")
-    dia_horario = models.CharField(max_length=9, verbose_name="Días")
     curso_horario = models.ForeignKey(Curso, on_delete=models.CASCADE, verbose_name="Curso asignado")
 
     def __str__(self):
@@ -82,9 +85,9 @@ class Horario(models.Model):
 
 class Bloque(models.Model):
     id_bloque = models.IntegerField(primary_key=True, verbose_name="ID del bloque")
+    nombre_bloque = models.CharField(max_length=3, verbose_name="Nombre del bloque", null=True)
     horario_bloque = models.ForeignKey(Horario, on_delete=models.CASCADE, verbose_name="Horario del bloque")
     asignatura_bloque = models.ForeignKey(Asignatura, on_delete=models.CASCADE, verbose_name="Bloque de la asignatura")
-    sala_bloque = models.ForeignKey(Sala, on_delete=models.CASCADE, verbose_name="Bloque de la sala")
 
     def __str__(self):
         return self.id_bloque
@@ -117,7 +120,21 @@ class Alumno(models.Model):
 
     def __str__(self):
         return "RUT: " + self.rut_alumno + " " + "Nombres: " + self.nombre_alumno + " " + self.appaterno_alumno
+    
+class tipoAsistencia(models.Model):
+    id_estado_asistencia = models.AutoField(primary_key=True)
+    nombre_estado_asistencia = models.CharField(max_length=20, verbose_name="Ëstado asistencia") #Presente, ausente y justificado
 
+    def __str__(self):
+        return self.nombre_estado_asistencia
+    
+class Asistencia(models.Model):
+    tipo_asistencia = models.ForeignKey(tipoAsistencia, on_delete=models.CASCADE, verbose_name="Tipo asistencia")
+    fecha_asistencia = models.DateField(verbose_name="Fecha asistencia")
+    alumno = models.ForeignKey(Alumno, on_delete=models.CASCADE, verbose_name="Alumno")
+
+    def __str__(self):
+        return self.tipo_asistencia
 
 class Boleta(models.Model):
     id_boleta = models.IntegerField(primary_key=True, verbose_name="ID de la boleta")

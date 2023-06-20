@@ -28,37 +28,39 @@
     </h1>
 
     <div class="container">
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th style="color: #fff; text-align: center;">RUT</th>
-                    <th style="color: #fff; text-align: center;">Nombres</th>
-                    <th style="color: #fff; text-align: center;">Apellido paterno</th>
-                    <th style="color: #fff; text-align: center;">Apellido materno</th>
-                    <!-- ... Otros campos del modelo "Alumno" ... -->
-                </tr>
-            </thead>
-            <tbody>
-                {% for alumno in alumnos %}
-                <tr>
-                    <td style="color: #fff; text-align: center;">{{ alumno.rut_alumno }}</td>
-                    <td style="color: #fff; text-align: center;">{{ alumno.nombre_alumno }}</td>
-                    <td style="color: #fff; text-align: center;">{{ alumno.appaterno_alumno }}</td>
-                    <td style="color: #fff; text-align: center;">{{ alumno.apmaterno_alumno }}</td>
-                    <!-- ... Otros campos del modelo "Alumno" ... -->
-                </tr>
-                {% empty %}
-                <section class="parrafo" id="parrafo">
-                    <div class="row">
-                        <div class="content">
-                            <p style="text-align: center; font-size: 40px; color: #fff;">No tiene hijos asignados</p>
-                        </div>
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    {% if alumnos %}
+                    <div class="table">
+                        <thead>
+                            <tr>
+                                <th style="color: #fff; text-align: center;">RUT</th>
+                                <th style="color: #fff; text-align: center;">Nombres</th>
+                                <th style="color: #fff; text-align: center;">Apellido paterno</th>
+                                <th style="color: #fff; text-align: center;">Apellido materno</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for alumno in alumnos %}
+                            <tr>
+                                <td style="color: #fff; text-align: center;">{{ alumno.rut_alumno }}</td>
+                                <td style="color: #fff; text-align: center;">{{ alumno.nombre_alumno }}</td>
+                                <td style="color: #fff; text-align: center;">{{ alumno.appaterno_alumno }}</td>
+                                <td style="color: #fff; text-align: center;">{{ alumno.apmaterno_alumno }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
                     </div>
-                </section>
-                {% endfor %}
-            </tbody>
-        </table>
+                    {% else %}
+                    <p>No tiene alumnos asignados.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
     </div>
+
+    
 
 </body>
 

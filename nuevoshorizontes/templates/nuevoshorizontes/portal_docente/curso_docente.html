@@ -23,20 +23,61 @@
     {% include "nuevoshorizontes/portal_docente/navbar.html" %}
 
     <h1 class="heading" style="padding-top: 120px;">
-        <img class="title-img mx-2" src="{% static 'nuevoshorizontes/img/icons_navbar/periodico_blanco.png' %}" alt="agregar"
-            height="60">Curso asignado
+        <img class="title-img mx-2" src="{% static 'nuevoshorizontes/img/icons_navbar/periodico_blanco.png' %}"
+            alt="agregar" height="60">Curso asignado
     </h1>
 
-
-    <section class="parrafo" id="parrafo">
+    <div class="container">
         <div class="row">
             <div class="content">
-                <p style="text-align: center; font-size: 40px; color: #fff;">No hay información disponible</p>
+                {% if primer_alumno %}
+                    <p style="text-align: center; font-size: 35px; color: #fff;">Curso: {{ primer_alumno.curso_alumno.nombre_curso }}</p>
+                {% endif %}
             </div>
         </div>
-    </section>
-
     </div>
+    
+    <div class="container" style="margin-bottom: 20px;">
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    {% if alumnos %}
+                    <table class="table table-striped" style="background-color: white; border: 1px solid rgb(21, 20, 55); text-align: center;">
+                        <thead>
+                            <tr style="font-size: 15px;">
+                                <th>Rut</th>
+                                <th>Nombres</th>
+                                <th>Apellido paterno</th>
+                                <th>Apellido materno</th>
+                                <th>Teléfono</th>
+                                <th>Correo electrónico</th>
+                                <th>Sede asignado</th>
+                                <th>Apoderado asignado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for alumno in alumnos %}
+                            <tr>
+                                <td>{{ alumno.rut_alumno }}</td>
+                                <td>{{ alumno.nombre_alumno }}</td>
+                                <td>{{ alumno.appaterno_alumno }}</td>
+                                <td>{{ alumno.apmaterno_alumno }}</td>
+                                <td>{% if alumno.telefono_alumno %}{{ alumno.telefono_alumno }}{% else %}No posee{% endif %}</td>
+                                <td>{{ alumno.correo_alumno }}</td>
+                                <td>{{ alumno.sede_alumno }}</td>
+                                <td>{{ alumno.apoderado_alumno }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% else %}
+                    <p>No hay alumnos asignados en el curso.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
 </body>
 
 </html>

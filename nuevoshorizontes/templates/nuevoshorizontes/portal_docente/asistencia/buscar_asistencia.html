@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link rel="icon" href="{% static 'nuevoshorizontes/img/logo_blanco.png' %}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Asignaturas - Docente</title>
+    <title>Buscar asistencias - Docente</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
@@ -19,23 +19,27 @@
 </head>
 
 <body>
-
     {% include "nuevoshorizontes/portal_docente/navbar.html" %}
 
     <h1 class="heading" style="padding-top: 120px;">
-        <img class="title-img mx-2" src="{% static 'nuevoshorizontes/img/icons_admin/libro_blanco.png' %}" alt="agregar"
-            height="60">Lista de asignaturas 
+        <img class="title-img mx-2" src="{% static 'nuevoshorizontes/img/icons_admin/lupa-blanco.png' %}" alt="agregar"
+            height="60">Buscar asistencias
     </h1>
-
 
     <div class="container">
         <div class="row">
-            <div class="content">
-                <p style="text-align: center; font-size: 40px; color: #fff;">No hay información disponible</p>
+            <label class="form-label" style="color: #fff; font-size: 20px;">Seleccione una fecha</label>
+            <div class="col-md-6">
+                <input type="date" class="form-control" style="width: 100%;">
+                <button type="submit" class="btn btn-primary" style="margin-top: 15px;">Buscar asistencia</button>
             </div>
         </div>
     </div>
-    
+
+    <div class="container botones" style="text-align: center; align-items: center; margin-top: 30px;">
+        <a type="button" class="btn btn-lg btn-block" href="{% url 'asistencia_docente' %}" style="font-weight: 500;">Volver al menú asistencia</a>
+    </div>    
+
 </body>
 
 </html>

@@ -54,19 +54,11 @@ class AlumnoForm(forms.ModelForm):
         widget=forms.Select(attrs={"class": "form-control", "required": "required"}),
     )
 
-    def clean_field(self, field_name):
-        field_value = self.cleaned_data[field_name]
-        try:
-            Alumno.objects.get(**{field_name: field_value})
-            raise ValidationError(self.fields[field_name].error_messages["unique"])
-        except Alumno.DoesNotExist:
-            return field_value
-        
-    def clean_rut_alumno(self):
-        return self.clean_field("rut_alumno")
-    
     def clean_correo_alumno(self):
-        return self.clean_field("correo_alumno")
+        correo_alumno = self.cleaned_data['correo_alumno']
+        if not self.instance.pk and Alumno.objects.filter(correo_alumno=correo_alumno).exists():
+            raise forms.ValidationError("El correo del alumno ya existe.")
+        return correo_alumno
 
     class Meta:
         model = Alumno
@@ -114,26 +106,12 @@ class DocenteForm(forms.ModelForm):
         empty_label="Seleccione una sede",
         widget=forms.Select(attrs={"class": "form-control", "required": "required"}),
     )
-    asignaturas_docente = forms.ModelMultipleChoiceField(
-        queryset=Asignatura.objects.all(),
-        widget=forms.SelectMultiple(
-            attrs={"class": "form-control", "required": "required"}
-        ),
-    )
 
-    def clean_field(self, field_name):
-        field_value = self.cleaned_data[field_name]
-        try:
-            Docente.objects.get(**{field_name: field_value})
-            raise ValidationError(self.fields[field_name].error_messages["unique"])
-        except Docente.DoesNotExist:
-            return field_value
-        
-    def clean_rut_docente(self):
-        return self.clean_field("rut_docente")
-    
     def clean_correo_docente(self):
-        return self.clean_field("correo_docente")
+        correo_docente = self.cleaned_data['correo_docente']
+        if not self.instance.pk and Docente.objects.filter(correo_docente=correo_docente).exists():
+            raise forms.ValidationError("El correo del docente ya existe.")
+        return correo_docente
 
     class Meta:
         model = Docente
@@ -177,19 +155,11 @@ class ApoderadoForm(forms.ModelForm):
         )
     )
 
-    def clean_field(self, field_name):
-        field_value = self.cleaned_data[field_name]
-        try:
-            Apoderado.objects.get(**{field_name: field_value})
-            raise ValidationError(self.fields[field_name].error_messages["unique"])
-        except Apoderado.DoesNotExist:
-            return field_value
-        
-    def clean_rut_apoderado(self):
-        return self.clean_field("rut_apoderado")
-    
     def clean_correo_apoderado(self):
-        return self.clean_field("correo_apoderado")
+        correo_apoderado = self.cleaned_data['correo_apoderado']
+        if not self.instance.pk and Apoderado.objects.filter(correo_apoderado=correo_apoderado).exists():
+            raise forms.ValidationError("El correo del apoderado ya existe.")
+        return correo_apoderado
 
     class Meta:
         model = Apoderado
@@ -218,16 +188,11 @@ class AdminForm(forms.ModelForm):
         )
     )
 
-    def clean_field(self, field_name):
-        field_value = self.cleaned_data[field_name]
-        try:
-            Administrador.objects.get(**{field_name: field_value})
-            raise ValidationError(self.fields[field_name].error_messages["unique"])
-        except Administrador.DoesNotExist:
-            return field_value
-        
     def clean_correo_admin(self):
-        return self.clean_field("correo_admin")
+        correo_admin = self.cleaned_data['correo_admin']
+        if not self.instance.pk and Administrador.objects.filter(correo_admin=correo_admin).exists():
+            raise forms.ValidationError("El correo del admin ya existe.")
+        return correo_admin
 
     class Meta:
         model = Administrador
@@ -274,31 +239,30 @@ class SedeForm(forms.ModelForm):
 class AsignaturaForm(forms.ModelForm):
     id_asignatura = forms.CharField(
         widget=forms.TextInput(attrs={"class": "form-control", "required": "required"}),
-        max_length=6,
+        max_length=9,
         error_messages={
             "unique": "El ID de la asignatura ya existe.",
         },
     )
     nombre_asignatura = forms.CharField(
         widget=forms.TextInput(attrs={"class": "form-control", "required": "required"}),
+        max_length=30,
         error_messages={
             "unique": "El nombre de la asignatura ya existe.",
         },
     )
-
-    def clean_field(self, field_name):
-        field_value = self.cleaned_data[field_name]
-        try:
-            Asignatura.objects.get(**{field_name: field_value})
-            raise ValidationError(self.fields[field_name].error_messages["unique"])
-        except Asignatura.DoesNotExist:
-            return field_value
-
-    def clean_id_asignatura(self):
-        return self.clean_field("id_asignatura")
+    profesor_asignatura = forms.ModelChoiceField(
+        queryset=Docente.objects.all(),
+        empty_label="Seleccione al docente",
+        widget=forms.Select(attrs={"class": "form-control", "required": "required"}),
+    )
 
     def clean_nombre_asignatura(self):
-        return self.clean_field("nombre_asignatura")
+        nombre_asignatura = self.cleaned_data['nombre_asignatura']
+        if self.instance.pk is None and Asignatura.objects.filter(nombre_asignatura=nombre_asignatura).exists():
+            raise forms.ValidationError("El nombre de la asignatura ya existe.")
+        return nombre_asignatura
+
 
     class Meta:
         model = Asignatura
@@ -306,16 +270,18 @@ class AsignaturaForm(forms.ModelForm):
 
 
 class CursoForm(forms.ModelForm):
-    id_curso = forms.IntegerField(
-        widget=forms.NumberInput(
+    id_curso = forms.CharField(
+        widget=forms.TextInput(
             attrs={"class": "form-control", "required": "required"}
         ),
+        max_length=10,
         error_messages={
             "unique": "El ID del curso ya existe.",
         }
     )
     nombre_curso = forms.CharField(
         widget=forms.TextInput(attrs={"class": "form-control", "required": "required"}),
+        max_length=30,
         error_messages={
             "unique": "El nombre del curso ya existe.",
         },
@@ -328,23 +294,32 @@ class CursoForm(forms.ModelForm):
             "unique": "El docente seleccionado ya fue asignado a otro curso.",
         },
     )
-
-    def clean_field(self, field_name):
-        field_value = self.cleaned_data[field_name]
-        try:
-            Curso.objects.get(**{field_name: field_value})
-            raise ValidationError(self.fields[field_name].error_messages["unique"])
-        except Curso.DoesNotExist:
-            return field_value
-
-    def clean_id_curso(self):
-        return self.clean_field("id_curso")
+    sala_curso = forms.ModelChoiceField(
+        queryset=Sala.objects.all(),
+        empty_label="Seleccione la sala",
+        widget=forms.Select(attrs={"class": "form-control", "required": "required"}),
+        error_messages={
+            "unique": "La sala seleccionada ya fue asignada a otro curso.",
+        },
+    )
 
     def clean_nombre_curso(self):
-        return self.clean_field("nombre_curso")
-    
+        nombre_curso = self.cleaned_data['nombre_curso']
+        if self.instance.pk is None and Curso.objects.filter(nombre_curso=nombre_curso).exists():
+            raise forms.ValidationError("El nombre del curso ya existe.")
+        return nombre_curso
+
     def clean_docente_curso(self):
-        return self.clean_field("docente_curso")
+        docente_curso = self.cleaned_data['docente_curso']
+        if self.instance.pk is None and Curso.objects.filter(docente_curso=docente_curso).exists():
+            raise forms.ValidationError("El docente seleccionado ya fue asignado a otro curso.")
+        return docente_curso
+
+    def clean_sala_curso(self):
+        sala_curso = self.cleaned_data['sala_curso']
+        if self.instance.pk is None and Curso.objects.filter(sala_curso=sala_curso).exists():
+            raise forms.ValidationError("La sala seleccionada ya fue asignada a otro curso.")
+        return sala_curso
 
     class Meta:
         model = Curso
@@ -400,20 +375,6 @@ class SalaForm(forms.ModelForm):
         empty_label="Seleccione el tipo de sala",
         widget=forms.Select(attrs={"class": "form-control", "required": "required"}),
     )
-
-    def clean_field(self, field_name):
-        field_value = self.cleaned_data[field_name]
-        try:
-            Sala.objects.get(**{field_name: field_value})
-            raise ValidationError(self.fields[field_name].error_messages["unique"])
-        except Sala.DoesNotExist:
-            return field_value
-
-    def clean_id_sala(self):
-        return self.clean_field("id_sala")
-
-    def clean_nombre_sala(self):
-        return self.clean_field("nombre_sala")
 
     class Meta:
         model = Sala
