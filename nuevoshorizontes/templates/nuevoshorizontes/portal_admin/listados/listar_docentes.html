@@ -53,7 +53,6 @@
                                 <th>Teléfono</th>
                                 <th>Correo electrónico</th>
                                 <th>Sede asignada</th>
-                                <th>Asignaturas asignadas</th>
                                 <th>Acciones</th>
                                 <th>Cambiar contraseña</th>
                             </tr>
@@ -68,11 +67,6 @@
                                 <td>{{ docente.telefono_docente }}</td>
                                 <td>{{ docente.correo_docente }}</td>
                                 <td>{{ docente.sede_docente }}</td>
-                                <td>
-                                    {% for asignatura in docente.asignaturas_docente.all %}
-                                    {{ asignatura.nombre_asignatura }}<br>
-                                    {% endfor %}
-                                </td>
                                 <td>
                                     <a type="button" class="btn btn-success btn-block" href="{% url 'modificar_docente' docente.rut_docente %}" style="background-color: green; color: #fff;">Modificar</a>
                                     <a type="button" class="btn btn-danger btn-block" onclick="eliminarDocente('{{ docente.rut_docente }}')" style="background-color: #dc3545; color: #fff;">Eliminar</a>
