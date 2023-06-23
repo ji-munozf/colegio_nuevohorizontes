@@ -25,8 +25,6 @@
 
     {% include "nuevoshorizontes/portal_admin/navbar.html" %}
 
-    {% load crispy_forms_tags %}
-
     <h1 class="heading" style="padding-top: 120px;">
         <img class="title-img mx-2" src="{% static 'nuevoshorizontes/img/icons_admin/acceso_blanco.png' %}"
             alt="agregar" height="60">Modificar docente
@@ -42,11 +40,6 @@
                     <form action="" method="POST">
 
                         {% csrf_token %}
-
-                        <div class="form-group" style="margin-bottom: 15px;">
-                            <label class="form-label">Rut del docente:</label>
-                            {{ form.rut_docente }}
-                        </div>
 
                         <div class="form-group" style="margin-bottom: 15px;">
                             <label class="form-label">Nombre del docente:</label>
@@ -85,13 +78,6 @@
                             </div>
                         </div>
 
-                        <div class="form-group" style="margin-bottom: 15px;">
-                            <label class="form-label">Asignar asignatura/as al docente:</label>
-                            <div class="password-input-group">
-                                {{ form.asignaturas_docente }}
-                            </div>
-                        </div>
-
                         <div class="d-flex justify-content-end" style="padding-top: 20px; padding-bottom: 10px;">
                             <input type="submit" value="Modificar alumno" class="btn btn-primary">
                         </div>
@@ -109,9 +95,15 @@
 
     </div>
 
+    {% if form.errors %}
     <script>
-        document.getElementById("id_rut_docente").disabled = true;
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            html: "{% for field in form %}{% for error in field.errors %}{{ error }}<br>{% endfor %}{% endfor %}",
+        });
     </script>
+    {% endif %}
 
 </body>
 

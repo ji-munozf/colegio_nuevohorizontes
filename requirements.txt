@@ -1,5 +1,3 @@
 django
 pillow
 cx_Oracle
-bcrypt
-crispy-bootstrap5

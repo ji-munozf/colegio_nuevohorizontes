@@ -23,8 +23,6 @@
 
     {% include "nuevoshorizontes/portal_admin/navbar.html" %}
 
-    {% load crispy_forms_tags %}
-
     <h1 class="heading" style="padding-top: 120px;">
         <img class="title-img mx-2" src="{% static 'nuevoshorizontes/img/icons_admin/sede_blanco.png' %}" alt="agregar"
             height="60">Modificar asignatura
@@ -40,11 +38,6 @@
                     <form action="" method="POST" enctype="multipart/form-data">
 
                         {% csrf_token %}
-
-                        <div class="form-group" style="margin-bottom: 15px;">
-                            <label class="form-label">ID de la asignatura:</label>
-                            {{ form.id_asignatura }}
-                        </div>
 
                         <div class="form-group" style="margin-bottom: 15px;">
                             <label class="form-label">Nombre de la asignatura:</label>
@@ -73,9 +66,15 @@
 
     </div>
 
+    {% if form.errors %}
     <script>
-        document.getElementById("id_id_asignatura").disabled = true;
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            html: "{% for field in form %}{% for error in field.errors %}{{ error }}<br>{% endfor %}{% endfor %}",
+        });
     </script>
+    {% endif %}
 
 </body>
 

@@ -44,13 +44,13 @@ class Sala(models.Model):
 
 class Docente(models.Model):
     rut_docente = models.CharField(primary_key=True, max_length=12, verbose_name="Rut del docente")
-    nombre_docente = models.CharField(max_length=15, verbose_name="Nombres del docente")
-    appaterno_docente = models.CharField(max_length=30, verbose_name="Apellido paterno del docente")
-    apmaterno_docente = models.CharField(max_length=30, verbose_name="Apellido materno del docente")
+    nombre_docente = models.CharField(max_length=50, verbose_name="Nombres del docente")
+    appaterno_docente = models.CharField(max_length=50, verbose_name="Apellido paterno del docente")
+    apmaterno_docente = models.CharField(max_length=50, verbose_name="Apellido materno del docente")
     direccion_docente = models.CharField(max_length=30, verbose_name="Dirección del docente")
     telefono_docente = models.IntegerField(verbose_name="Teléfono del docente")
-    correo_docente = models.CharField(max_length=30, verbose_name="Correo electrónico del docente")
-    password = models.CharField(max_length=125, verbose_name="Contraseña")
+    correo_docente = models.CharField(max_length=50, verbose_name="Correo electrónico del docente")
+    password = models.CharField(max_length=128, verbose_name="Contraseña")
     sede_docente = models.ForeignKey(Sede, on_delete=models.CASCADE, verbose_name="Sede asignado")
 
     def __str__(self):
@@ -94,26 +94,24 @@ class Bloque(models.Model):
 
 class Apoderado(models.Model):
     rut_apoderado = models.CharField(primary_key=True, max_length=12, verbose_name="Rut")
-    nombre_apoderado = models.CharField(max_length=15, verbose_name="Nombres")
-    appaterno_apoderado = models.CharField(max_length=30, verbose_name="Apellido paterno")
-    apmaterno_apoderado = models.CharField(max_length=30, verbose_name="Apellido materno")
+    nombre_apoderado = models.CharField(max_length=50, verbose_name="Nombres")
+    appaterno_apoderado = models.CharField(max_length=50, verbose_name="Apellido paterno")
+    apmaterno_apoderado = models.CharField(max_length=50, verbose_name="Apellido materno")
     direccion_apoderado = models.CharField(max_length=30, verbose_name="Dirección")
     telefono_apoderado = models.IntegerField(verbose_name="Teléfono")
-    correo_apoderado = models.CharField(max_length=30, verbose_name="Correo electrónico")
-    password = models.CharField(max_length=125, verbose_name="Contraseña")
+    correo_apoderado = models.CharField(max_length=50, verbose_name="Correo electrónico")
+    password = models.CharField(max_length=128, verbose_name="Contraseña")
 
     def __str__(self):
         return "RUT: " + self.rut_apoderado + " " + "Nombre completo: " + self.nombre_apoderado + " " + self.appaterno_apoderado
 
 class Alumno(models.Model):
     rut_alumno = models.CharField(primary_key=True, max_length=12, verbose_name="Rut")
-    nombre_alumno = models.CharField(max_length=15, verbose_name="Nombres")
-    appaterno_alumno = models.CharField(max_length=30, verbose_name="Apellido paterno")
-    apmaterno_alumno = models.CharField(max_length=30, verbose_name="Apellido materno")
-    direccion_alumno = models.CharField(max_length=30, verbose_name="Dirección")
-    telefono_alumno = models.IntegerField(verbose_name="Teléfono", null=True, blank=True)
-    correo_alumno = models.CharField(max_length=30, verbose_name="Correo electrónico")
-    password = models.CharField(max_length=125, verbose_name="Contraseña")
+    nombre_alumno = models.CharField(max_length=50, verbose_name="Nombres")
+    appaterno_alumno = models.CharField(max_length=50, verbose_name="Apellido paterno")
+    apmaterno_alumno = models.CharField(max_length=50, verbose_name="Apellido materno")
+    correo_alumno = models.CharField(max_length=50, verbose_name="Correo electrónico")
+    password = models.CharField(max_length=128, verbose_name="Contraseña")
     sede_alumno = models.ForeignKey(Sede, on_delete=models.CASCADE, verbose_name="Sede del alumno")
     apoderado_alumno = models.ForeignKey(Apoderado, on_delete=models.CASCADE, verbose_name="Apoderado asignado")
     curso_alumno = models.ForeignKey(Curso, on_delete=models.CASCADE, verbose_name="Curso del alumno")
@@ -132,6 +130,8 @@ class Asistencia(models.Model):
     tipo_asistencia = models.ForeignKey(tipoAsistencia, on_delete=models.CASCADE, verbose_name="Tipo asistencia")
     fecha_asistencia = models.DateField(verbose_name="Fecha asistencia")
     alumno = models.ForeignKey(Alumno, on_delete=models.CASCADE, verbose_name="Alumno")
+    curso = models.ForeignKey(Curso, on_delete=models.CASCADE, verbose_name="Curso")
+    docente = models.ForeignKey(Docente, on_delete=models.CASCADE, verbose_name="Docente")
 
     def __str__(self):
         return self.tipo_asistencia
@@ -170,10 +170,10 @@ class Noticias(models.Model):
         return self.titulo
 
 class Administrador(models.Model):
-    nombre_admin = models.CharField(max_length=30, verbose_name="Nombres")
-    apellido_admin = models.CharField(max_length=30, verbose_name="Apellidos")
-    correo_admin = models.CharField(max_length=30, verbose_name="Correo electrónico")
-    password = models.CharField(max_length=125, verbose_name="Contraseña")
+    nombre_admin = models.CharField(max_length=50, verbose_name="Nombres")
+    apellido_admin = models.CharField(max_length=50, verbose_name="Apellidos")
+    correo_admin = models.CharField(max_length=50, verbose_name="Correo electrónico")
+    password = models.CharField(max_length=128, verbose_name="Contraseña")
     
     def __str__(self):
         return "Nombres: " + self.nombre_admin + " " + self.apellido_admin

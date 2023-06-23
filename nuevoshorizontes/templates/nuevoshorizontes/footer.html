@@ -4,21 +4,70 @@
         <div class="container">
             <footer class="py-3 my-4">
                 <ul class="nav justify-content-center border-bottom pb-3 mb-3">
-                    <li class="nav-item"><a href="{% url 'home' %}" class="nav-link px-2"><img
-                                src="{% static  'nuevoshorizontes/img/icons_navbar/hogar.png' %}" alt="home"> Inicio</a>
+                    <li class="nav-item">
+                        <a class="nav-link mx-2" href="{% url 'home' %}">
+                            <img src="{% static 'nuevoshorizontes/img/icons_navbar/hogar.png' %}" alt="home">
+                            Inicio
+                        </a>
                     </li>
-                    <li class="nav-item"><a href="{% url 'nosotros' %}" class="nav-link px-2"><img
-                                src="{% static  'nuevoshorizontes/img/icons_navbar/grupo.png' %}" alt="nosotros">
-                            Nosotros</a></li>
-                    <li class="nav-item"><a href="{% url 'portales' %}" class="nav-link px-2"><img
-                                src="{% static  'nuevoshorizontes/img/icons_navbar/monitor.png' %}" alt="portales">
-                            Portales</a></li>
-                    <li class="nav-item"><a href="{% url 'sedes' %}" class="nav-link px-2"><img
-                                src="{% static  'nuevoshorizontes/img/icons_navbar/sede.png' %}" alt="sede"> Sedes</a>
+                    <li class="nav-item">
+                        <a class="nav-link mx-2" href="{% url 'nosotros' %}">
+                            <img src="{% static 'nuevoshorizontes/img/icons_navbar/grupo.png' %}" alt="nosotros">
+                            Nosotros
+                        </a>
                     </li>
-                    <li class="nav-item"><a href="{% url 'noticias' %}" class="nav-link px-2"><img
-                                src="{% static  'nuevoshorizontes/img/icons_navbar/periodico.png' %}" alt="news">
-                            Noticias</a></li>
+                    {% if request.session.correo_admin %}
+                    <li class="nav-item">
+                        <a class="nav-link mx-2" href="{% url 'home_admin' %}">
+                            <img src="{% static 'nuevoshorizontes/img/icons_navbar/administrar.png' %}" alt="admin">
+                            Portal de administrador
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if request.session.correo_alumno %}
+                    <li class="nav-item">
+                        <a class="nav-link mx-2" href="{% url 'home_alumno' %}">
+                            <img src="{% static 'nuevoshorizontes/img/icons_navbar/alumno.png' %}" alt="alumno">
+                            Portal de alumno
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if request.session.correo_apoderado %}
+                    <li class="nav-item">
+                        <a class="nav-link mx-2" href="{% url 'home_apoderado' %}">
+                            <img src="{% static 'nuevoshorizontes/img/icons_navbar/padre-e-hijo.png' %}" alt="apoderado">
+                            Portal de apoderado
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if request.session.correo_docente %}
+                    <li class="nav-item">
+                        <a class="nav-link mx-2" href="{% url 'home_docente' %}">
+                            <img src="{% static 'nuevoshorizontes/img/icons_navbar/profesor.png' %}" alt="docente">
+                            Portal de docente
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if not request.session.correo_admin and not request.session.correo_alumno and not request.session.correo_apoderado and not request.session.correo_docente %}
+                    <li class="nav-item">
+                        <a class="nav-link mx-2" href="{% url 'portales' %}">
+                            <img src="{% static 'nuevoshorizontes/img/icons_navbar/monitor.png' %}" alt="portales">
+                            Portales
+                        </a>
+                    </li>
+                    {% endif %}
+                    <li class="nav-item">
+                        <a class="nav-link mx-2" href="{% url 'sedes' %}">
+                            <img src="{% static 'nuevoshorizontes/img/icons_navbar/sede.png' %}" alt="sede">
+                            Sedes
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link mx-2" href="{% url 'noticias' %}">
+                            <img src="{% static 'nuevoshorizontes/img/icons_navbar/periodico.png' %}" alt="news">
+                            Noticias
+                        </a>
+                    </li>
                 </ul>
                 <p class="text-center text-body-secondary">&copy; {% now "Y" %} Colegio Nuevos Horizontes</p>
                 <!-- {% now "Y" %} Es para obtener el año actual.-->

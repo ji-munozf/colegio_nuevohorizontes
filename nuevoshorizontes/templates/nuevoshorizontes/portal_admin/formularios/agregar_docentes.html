@@ -26,17 +26,13 @@
     {% include "nuevoshorizontes/portal_admin/navbar.html" %}
     {% include "nuevoshorizontes/portal_admin/mensajes.html" %}
 
-    {% load crispy_forms_tags %}
-
     <h1 class="heading" style="padding-top: 120px;">
         <img class="title-img mx-2" src="{% static 'nuevoshorizontes/img/icons_admin/acceso_blanco.png' %}"
             alt="agregar" height="60">Agregar docentes
     </h1>
 
-
-    <div class="row" style="padding-bottom: 80px;">
-        <div class="col-12 col-md-6 offset-md-3">
-
+    <div class="container">
+        <div class="row">
             <div class="card">
                 <div class="card-body">
 
@@ -91,29 +87,21 @@
                             {{ form.sede_docente }}
                         </div>
 
-                        <div class="form-group" style="margin-bottom: 15px;">
-                            <label class="form-label">Asignar asignatura/as al docente:</label>
-                            {{ form.asignaturas_docente }}
-                        </div>
-
                         <div class="d-flex justify-content-end" style="padding-top: 20px; padding-bottom: 10px;">
                             &nbsp;
-                            <input type="reset" value="Cancelar" class="btn btn-secondary">
+                            <input type="reset" value="Limpiar campos" class="btn btn-secondary">
                             <input type="submit" value="Guardar docente" class="btn btn-primary">
                         </div>
                     </form>
 
                 </div>
-
             </div>
 
             <div class="container botones" style="text-align: center; align-items: center; margin-top: 20px;">
-                <button type="button" class="btn btn-lg btn-block"><a href="{% url 'home_agregar' %}">Volver al menú
-                        agregar</a></button>
+                <a type="button" class="btn btn-lg btn-block" href="{% url 'home_agregar' %}">Volver al menú agregar</a>
             </div>
 
         </div>
-
     </div>
 
     {% if form.errors %}

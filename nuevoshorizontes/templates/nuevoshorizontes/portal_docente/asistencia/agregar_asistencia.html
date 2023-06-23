@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link rel="stylesheet" href="{% static 'nuevoshorizontes/css/navbar.css' %}">
     <link rel="stylesheet" href="{% static 'nuevoshorizontes/css/home_admin.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
@@ -23,25 +24,30 @@
     {% include "nuevoshorizontes/portal_docente/navbar.html" %}
 
     <h1 class="heading" style="padding-top: 120px;">
-        <img class="title-img mx-2" src="{% static 'nuevoshorizontes/img/icons_admin/boton-mas-blanco.png' %}" alt="agregar"
-            height="60">Agregar asistencia
+        <img class="title-img mx-2" src="{% static 'nuevoshorizontes/img/icons_admin/boton-mas-blanco.png' %}"
+            alt="agregar" height="60">Agregar asistencia
     </h1>
 
-    <div class="container">
-        <div class="row">
-            <div class="content">
-                <p style="text-align: center; font-size: 35px; color: #fff;">Fecha: {{ fecha_actual }}</p>
-            </div>
-        </div>
-    </div>
-    
+    {% if alumnos %}
     <div class="container" style="margin-bottom: 20px;">
         <div class="card">
             <div class="card-body">
                 <form method="POST">
                     {% csrf_token %}
                     <div class="table-responsive">
-                        <table class="table" style="background-color: white; border: 1px solid rgb(21, 20, 55); text-align: center;">
+                        <table class="table"
+                            style="background-color: white; border: 1px solid rgb(21, 20, 55); text-align: center;">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="content">
+                                        <label class="form-label" style="color: #000; font-size: 20px;">Seleccione una
+                                            fecha</label>
+                                        <input type="date" class="form-control"
+                                            style="width: 30%; margin-bottom: 20px; border-color: #000;" name="fecha"
+                                            required>
+                                    </div>
+                                </div>
+                            </div>
                             <thead>
                                 <tr>
                                     <th>Rut</th>
@@ -59,12 +65,15 @@
                                     <td>{{ alumno.appaterno_alumno }} {{ alumno.apmaterno_alumno }}</td>
                                     <td>{{ alumno.curso_alumno.nombre_curso }}</td>
                                     <td>
-                                        <select name="{{ alumno.rut_alumno }}" required>
+                                        <select name="{{ alumno.rut_alumno }}" class="form-control"
+                                            style="border-color: #000; text-align: center;" required>
                                             <option value="">Seleccione un estado de asistencia</option>
                                             {% for estado_asistencia in estados_asistencia %}
-                                                <option value="{{ estado_asistencia.id_estado_asistencia }}">
-                                                    {{ estado_asistencia.nombre_estado_asistencia }}
-                                                </option>
+                                            {% if estado_asistencia.id_estado_asistencia != 3 %}
+                                            <option value="{{ estado_asistencia.id_estado_asistencia }}">
+                                                {{ estado_asistencia.nombre_estado_asistencia }}
+                                            </option>
+                                            {% endif %}
                                             {% endfor %}
                                         </select>
                                     </td>
@@ -73,19 +82,48 @@
                             </tbody>
                         </table>
                     </div>
-                    
+
                     <div style="text-align: center; align-items: center;">
-                        <button type="submit" class="btn btn-lg btn-block" style="font-weight: 500;">Guardar Asistencia</button>
+                        <button type="submit" class="btn btn-lg btn-block" style="font-weight: 500;">Guardar
+                            Asistencia</button>
                     </div>
 
                 </form>
             </div>
         </div>
     </div>
+    {% else %}
+    <div class="container">
+        <div class="row">
+            <div class="content">
+                <p style="color: #fff; font-size: 25px; margin-top: 15px; text-align: center;"
+                    style="text-align: center; font-size: 20px;">Usted de momento no tiene un curso asignado.</p>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+
 
     <div class="container botones" style="text-align: center; align-items: center; margin-top: 30px;">
-        <a type="button" class="btn btn-lg btn-block" href="{% url 'asistencia_docente' %}" style="font-weight: 500;">Volver al menú asistencia</a>
+        <a type="button" class="btn btn-lg btn-block" href="{% url 'asistencia_docente' %}"
+            style="font-weight: 500;">Volver al menú asistencia</a>
     </div>
-    
+
+    {% if messages %}
+        {% for message in messages %}
+            {% if message.tags == 'error' %}
+                <script>
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: '{{ message }}'
+                    });
+                </script>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+
 </body>
+
 </html>

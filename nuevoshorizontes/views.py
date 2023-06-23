@@ -1,9 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
+from django.contrib.auth.hashers import make_password, check_password
 from .models import *
 from .forms import *
 from datetime import date, datetime
 from django.http import JsonResponse
+from django.db.models import Count, Case, When
 
 # Create your views here.
 
@@ -138,13 +140,18 @@ def noticias(request):
 
 def login_alumno(request):
     if request.method == "POST":
+        email = request.POST.get("email")
+        password = request.POST.get("password")
         try:
-            detalleAlumno = Alumno.objects.get(
-                correo_alumno=request.POST["email"], password=request.POST["password"]
-            )
-            request.session["correo_alumno"] = detalleAlumno.correo_alumno
-            return redirect("home_alumno")
-        except Alumno.DoesNotExist as e:
+            alumno = Alumno.objects.get(correo_alumno=email)
+            if check_password(password, alumno.password):
+                request.session["correo_alumno"] = alumno.correo_alumno
+                return redirect("home_alumno")
+            else:
+                messages.error(
+                    request, "El correo electrónico o la contraseña no son correctos"
+                )
+        except Alumno.DoesNotExist:
             messages.error(
                 request, "El correo electrónico o la contraseña no son correctos"
             )
@@ -154,13 +161,18 @@ def login_alumno(request):
 
 def login_docente(request):
     if request.method == "POST":
+        email = request.POST.get("email")
+        password = request.POST.get("password")
         try:
-            detalleDocente = Docente.objects.get(
-                correo_docente=request.POST["email"], password=request.POST["password"]
-            )
-            request.session["correo_docente"] = detalleDocente.correo_docente
-            return redirect("home_docente")
-        except Docente.DoesNotExist as e:
+            docente = Docente.objects.get(correo_docente=email)
+            if check_password(password, docente.password):
+                request.session["correo_docente"] = docente.correo_docente
+                return redirect("home_docente")
+            else:
+                messages.error(
+                    request, "El correo electrónico o la contraseña no son correctos"
+                )
+        except Docente.DoesNotExist:
             messages.error(
                 request, "El correo electrónico o la contraseña no son correctos"
             )
@@ -170,14 +182,18 @@ def login_docente(request):
 
 def login_apoderado(request):
     if request.method == "POST":
+        email = request.POST.get("email")
+        password = request.POST.get("password")
         try:
-            detalleApoderado = Apoderado.objects.get(
-                correo_apoderado=request.POST["email"],
-                password=request.POST["password"],
-            )
-            request.session["correo_apoderado"] = detalleApoderado.correo_apoderado
-            return redirect("home_apoderado")
-        except Apoderado.DoesNotExist as e:
+            apoderado = Apoderado.objects.get(correo_apoderado=email)
+            if check_password(password, apoderado.password):
+                request.session["correo_admin"] = apoderado.correo_apoderado
+                return redirect("home_apoderado")
+            else:
+                messages.error(
+                    request, "El correo electrónico o la contraseña no son correctos"
+                )
+        except Apoderado.DoesNotExist:
             messages.error(
                 request, "El correo electrónico o la contraseña no son correctos"
             )
@@ -187,14 +203,19 @@ def login_apoderado(request):
 
 def login_administrativo(request):
     if request.method == "POST":
+        email = request.POST.get("email")
+        password = request.POST.get("password")
         try:
-            detalleAdmin = Administrador.objects.get(
-                correo_admin=request.POST["email"], password=request.POST["password"]
-            )
-            request.session["correo_admin"] = detalleAdmin.correo_admin
-            return redirect("home_admin")
-        except Administrador.DoesNotExist as e:
-            messages.success(
+            administrador = Administrador.objects.get(correo_admin=email)
+            if check_password(password, administrador.password):
+                request.session["correo_admin"] = administrador.correo_admin
+                return redirect("home_admin")
+            else:
+                messages.error(
+                    request, "El correo electrónico o la contraseña no son correctos"
+                )
+        except Administrador.DoesNotExist:
+            messages.error(
                 request, "El correo electrónico o la contraseña no son correctos"
             )
 
@@ -275,7 +296,11 @@ def agregar_admins(request):
         if request.method == "POST":
             formulario = AdminForm(data=request.POST)
             if formulario.is_valid():
-                formulario.save()
+                administrador = formulario.save(commit=False)
+                administrador.password = make_password(
+                    formulario.cleaned_data["password"]
+                )  # Encriptar la contraseña
+                administrador.save()
                 messages.success(request, "Administrador agregado correctamente")
             else:
                 data["form"] = formulario
@@ -297,7 +322,9 @@ def agregar_alumnos(request):
         if request.method == "POST":
             formulario = AlumnoForm(data=request.POST)
             if formulario.is_valid():
-                formulario.save()
+                alumno = formulario.save(commit=False)
+                alumno.password = make_password(formulario.cleaned_data["password"])
+                alumno.save()
                 messages.success(request, "Alumno agregado correctamente")
             else:
                 data["form"] = formulario
@@ -320,7 +347,9 @@ def agregar_docentes(request):
         if request.method == "POST":
             formulario = DocenteForm(data=request.POST)
             if formulario.is_valid():
-                formulario.save()
+                docente = formulario.save(commit=False)
+                docente.password = make_password(formulario.cleaned_data["password"])
+                docente.save()
                 messages.success(request, "Docente agregado correctamente")
             else:
                 data["form"] = formulario
@@ -343,7 +372,9 @@ def agregar_apoderados(request):
         if request.method == "POST":
             formulario = ApoderadoForm(data=request.POST)
             if formulario.is_valid():
-                formulario.save()
+                apoderado = formulario.save(commit=False)
+                apoderado.password = make_password(formulario.cleaned_data["password"])
+                apoderado.save()
                 messages.success(request, "Apoderado agregado correctamente")
             else:
                 data["form"] = formulario
@@ -490,10 +521,10 @@ def listar_admins(request):
     correo_admin = request.session.get("correo_admin", None)
     if correo_admin:
         admin_actual = Administrador.objects.get(correo_admin=correo_admin)
-        admins = Administrador.objects.exclude(
-            id=1
-        )  # Excluir al administrador específico
-        admins = Administrador.objects.all()
+        if admin_actual.id != 1:
+            admins = Administrador.objects.exclude(id=1)
+        else:
+            admins = Administrador.objects.all()
         return render(
             request,
             "nuevoshorizontes/portal_admin/listados/listar_admins.html",
@@ -539,7 +570,9 @@ def cambiar_pass_admin(request, id):
                 messages.error(request, "Las contraseñas no coinciden")
             else:
                 if formulario.is_valid():
-                    administrador.password = nueva_contraseña
+                    administrador.password = make_password(
+                        nueva_contraseña
+                    )  # Encriptar la nueva contraseña
                     administrador.save()
                     messages.success(request, "Contraseña cambiada con éxito")
                     return redirect(to="listar_admins")
@@ -586,8 +619,6 @@ def cambiar_pass_alumno(request, id):
                     "nombre_alumno",
                     "appaterno_alumno",
                     "apmaterno_alumno",
-                    "direccion_alumno",
-                    "telefono_alumno",
                     "correo_alumno",
                     "sede_alumno",
                     "apoderado_alumno",
@@ -606,7 +637,9 @@ def cambiar_pass_alumno(request, id):
                 messages.error(request, "Las contraseñas no coinciden")
             else:
                 if formulario.is_valid():
-                    alumno.password = nueva_contraseña
+                    alumno.password = make_password(
+                        nueva_contraseña
+                    )  # Encriptar la nueva contraseña
                     alumno.save()
                     messages.success(request, "Contraseña cambiada con éxito")
                     return redirect(to="listar_alumnos")
@@ -676,7 +709,9 @@ def cambiar_pass_docente(request, id):
                 messages.error(request, "Las contraseñas no coinciden")
             else:
                 if formulario.is_valid():
-                    docente.password = nueva_contraseña
+                    docente.password = make_password(
+                        nueva_contraseña
+                    )  # Encriptar la nueva contraseña
                     docente.save()
                     messages.success(request, "Contraseña cambiada con éxito")
                     return redirect(to="listar_docentes")
@@ -744,7 +779,9 @@ def cambiar_pass_apoderado(request, id):
                 messages.error(request, "Las contraseñas no coinciden")
             else:
                 if formulario.is_valid():
-                    apoderado.password = nueva_contraseña
+                    apoderado.password = make_password(
+                        nueva_contraseña
+                    )  # Encriptar la nueva contraseña
                     apoderado.save()
                     messages.success(request, "Contraseña cambiada con éxito")
                     return redirect(to="listar_apoderados")
@@ -1245,33 +1282,68 @@ def miperfil_alumno(request):
         return redirect("login_alumno")
 
 
-def guardar_perfil_alumno(request):
-    if request.method == "POST":
-        correo_alumno = request.session.get("correo_alumno", None)
-        if correo_alumno:
-            alumno = Alumno.objects.get(correo_alumno=correo_alumno)
-            alumno.nombre_alumno = request.POST.get("nombre")
-            alumno.appaterno_alumno = request.POST.get("paterno")
-            alumno.apmaterno_alumno = request.POST.get("materno")
-            alumno.direccion_alumno = request.POST.get("direccion")
-            alumno.telefono_alumno = request.POST.get("telefono")
-            alumno.save()  # Guardar los cambios en el modelo
-            messages.success(request, "Los cambios se guardaron exitosamente.")
-        else:
-            messages.error(
-                request,
-                "No se pudo guardar los cambios. Por favor, intenta nuevamente.",
-            )
-
-    return redirect("miperfil_alumno")
-
-
 def notas_alumno(request):
-    return render(request, "nuevoshorizontes/portal_alumno/notas_alumno.html")
+    correo_alumno = request.session.get("correo_alumno", None)
+    if correo_alumno:
+        alumno = Alumno.objects.get(correo_alumno=correo_alumno)
+        return render(
+            request,
+            "nuevoshorizontes/portal_alumno/notas_alumno.html",
+            {"alumno": alumno},
+        )
+
+    else:
+        return redirect("login_alumno")
 
 
 def horario_alumno(request):
-    return render(request, "nuevoshorizontes/portal_alumno/horario_alumno.html")
+    correo_alumno = request.session.get("correo_alumno", None)
+    if correo_alumno:
+        alumno = Alumno.objects.get(correo_alumno=correo_alumno)
+        return render(
+            request,
+            "nuevoshorizontes/portal_alumno/horario_alumno.html",
+            {"alumno": alumno},
+        )
+
+    else:
+        return redirect("login_alumno")
+    
+
+def asistencia_alumno(request):
+    # Obtener el correo del alumno desde la sesión
+    correo_alumno = request.session.get("correo_alumno", None)
+
+    if correo_alumno:
+        # Obtener el objeto Alumno correspondiente al correo
+        alumno = Alumno.objects.get(correo_alumno=correo_alumno)
+
+        # Obtener el recuento de asistencias por tipo
+        asistencias = Asistencia.objects.filter(alumno=alumno).values('alumno').annotate(
+            presentes=Count(Case(When(tipo_asistencia_id=1, then=1))), # Esta línea cuenta el número de asistencias de tipo "presente" para el alumno actual.
+            ausentes=Count(Case(When(tipo_asistencia_id=2, then=1))), # Esta línea cuenta el número de asistencias de tipo "ausente" para el alumno actual.
+            justificados=Count(Case(When(tipo_asistencia_id=3, then=1))), # Esta línea cuenta el número de asistencias de tipo "justificado" para el alumno actual.
+        )
+
+        # Calcular el porcentaje de asistencia
+        total_asistencias = sum(a['presentes'] + a['ausentes'] + a['justificados'] for a in asistencias)
+        if total_asistencias > 0:
+            porcentaje_asistencia = (sum(a['presentes'] + a['justificados'] for a in asistencias) / total_asistencias) * 100
+        else:
+            porcentaje_asistencia = 0
+
+        return render(
+            request,
+            "nuevoshorizontes/portal_alumno/asistencia_alumno.html",
+            {
+                "alumno": alumno,  # Objeto Alumno
+                "asistencias": asistencias,  # Asistencias por tipo
+                "porcentaje_asistencia": porcentaje_asistencia,  # Porcentaje de asistencia
+            },
+        )
+    else:
+        return redirect("login_alumno")  # Redireccionar al inicio de sesión del alumno
+
 
 
 def home_apoderado(request):
@@ -1286,20 +1358,6 @@ def home_apoderado(request):
         )
     else:
         # El usuario no ha iniciado sesión, redirigir a la página de inicio de sesión
-        return redirect("login_apoderado")
-
-
-def miperfil_apoderado(request):
-    correo_apoderado = request.session.get("correo_apoderado", None)
-    if correo_apoderado:
-        apoderado = Apoderado.objects.get(correo_apoderado=correo_apoderado)
-        return render(
-            request,
-            "nuevoshorizontes/portal_apoderado/miperfil.html",
-            {"apoderado": apoderado},
-        )
-
-    else:
         return redirect("login_apoderado")
 
 
@@ -1387,28 +1445,6 @@ def miperfil_docente(request):
         return redirect("login_docente")
 
 
-def guardar_perfil_docente(request):
-    if request.method == "POST":
-        correo_docente = request.session.get("correo_docente", None)
-        if correo_docente:
-            docente = Docente.objects.get(correo_docente=correo_docente)
-            docente.nombre_docente = request.POST.get("nombre")
-            docente.appaterno_docente = request.POST.get("paterno")
-            docente.apmaterno_docente = request.POST.get("materno")
-            docente.direccion_docente = request.POST.get("direccion")
-            docente.telefono_docente = request.POST.get("telefono")
-            # Actualizar otros campos del modelo "Apoderado" según sea necesario
-            docente.save()  # Guardar los cambios en el modelo
-            messages.success(request, "Los cambios se guardaron exitosamente.")
-        else:
-            messages.error(
-                request,
-                "No se pudo guardar los cambios. Por favor, intenta nuevamente.",
-            )
-
-    return redirect("miperfil_docente")
-
-
 def curso_docente(request):
     # Obtiene el valor de la clave "correo_docente" de la sesión del objeto request
     correo_docente = request.session.get("correo_docente", None)
@@ -1462,7 +1498,9 @@ def buscar_asistencia(request):
             fecha = request.POST.get("fecha")
             if fecha:
                 fecha = datetime.strptime(fecha, "%Y-%m-%d").date()
-                asistencias = Asistencia.objects.filter(alumno__curso_alumno__docente_curso=docente, fecha_asistencia=fecha)
+                asistencias = Asistencia.objects.filter(
+                    alumno__curso_alumno__docente_curso=docente, fecha_asistencia=fecha
+                )
                 if asistencias:
                     return render(
                         request,
@@ -1484,18 +1522,37 @@ def buscar_asistencia(request):
         return redirect("login_docente")
 
 
-
 def agregar_asistencia(request):
     correo_docente = request.session.get("correo_docente", None)
     if correo_docente:
         docente = Docente.objects.get(correo_docente=correo_docente)
 
         if request.method == "POST":
-            fecha_actual = date.today()
+            fecha_ingresada = request.POST.get(
+                "fecha"
+            )  # Obtener la fecha ingresada desde el formulario
+            fecha_asistencia = datetime.strptime(
+                fecha_ingresada, "%Y-%m-%d"
+            ).date()  # Convertir la fecha a un objeto de tipo `date`
 
-            # Obtener la lista de alumnos del curso del docente
-            curso = Curso.objects.get(docente_curso=docente)
-            alumnos = Alumno.objects.filter(curso_alumno=curso)
+            # Verificar si ya se registró la asistencia en la fecha especificada
+            asistencia_existente = Asistencia.objects.filter(
+                fecha_asistencia=fecha_asistencia,
+                curso__docente_curso=docente,
+            ).exists()
+
+            if asistencia_existente:
+                # Mostrar mensaje de error usando SweetAlert2
+                messages.error(request, "Ya se realizó la asistencia en esta fecha.")
+                return redirect("agregar_asistencia")
+
+            # Obtener la lista de cursos del docente
+            cursos = Curso.objects.filter(docente_curso=docente)
+            if cursos.exists():
+                curso = cursos.first()
+                alumnos = Alumno.objects.filter(curso_alumno=curso)
+            else:
+                alumnos = []
 
             # Guardar la asistencia de cada alumno
             for alumno in alumnos:
@@ -1504,26 +1561,69 @@ def agregar_asistencia(request):
 
                 Asistencia.objects.create(
                     tipo_asistencia=tipo_asistencia,
-                    fecha_asistencia=fecha_actual,
+                    fecha_asistencia=fecha_asistencia,
                     alumno=alumno,
+                    curso=curso,  # Guardar el curso en el modelo de `Asistencia`
+                    docente=docente,  # Guardar el docente en el modelo de `Asistencia`
                 )
 
             messages.success(request, "Asistencia guardada exitosamente.")
             return redirect("asistencia_docente")
 
-        fecha_actual = date.today().strftime("%d/%m/%Y")
         estados_asistencia = tipoAsistencia.objects.all()
-        curso = Curso.objects.get(docente_curso=docente)
-        alumnos = Alumno.objects.filter(curso_alumno=curso)
+        cursos = Curso.objects.filter(docente_curso=docente)
+        if cursos.exists():
+            curso = cursos.first()
+            alumnos = Alumno.objects.filter(curso_alumno=curso)
+        else:
+            alumnos = []
 
         return render(
             request,
             "nuevoshorizontes/portal_docente/asistencia/agregar_asistencia.html",
             {
                 "docente": docente,
-                "fecha_actual": fecha_actual,
                 "alumnos": alumnos,
                 "estados_asistencia": estados_asistencia,
+            },
+        )
+    else:
+        return redirect("login_docente")
+
+
+def modificar_asistencia(request, rut_alumno):
+    correo_docente = request.session.get("correo_docente", None)
+    if correo_docente:
+        docente = Docente.objects.get(correo_docente=correo_docente)
+        if request.method == "POST":
+            tipo_asistencia_id = request.POST.get("tipo_asistencia")
+
+            alumno = Alumno.objects.get(rut_alumno=rut_alumno)
+            asistencia = Asistencia.objects.filter(alumno=alumno).first()
+
+            if asistencia:
+                asistencia.tipo_asistencia_id = tipo_asistencia_id
+                asistencia.save()
+
+                messages.success(
+                    request, "La asistencia del alumno se ha modificado correctamente."
+                )
+            else:
+                messages.error(request, "No se encontró la asistencia del alumno.")
+
+            return redirect("asistencia_docente")
+
+        alumno = Alumno.objects.get(rut_alumno=rut_alumno)
+        estados_asistencia = tipoAsistencia.objects.all()
+
+        return render(
+            request,
+            "nuevoshorizontes/portal_docente/asistencia/modificar_asistencia.html",
+            {
+                "docente": docente,
+                "alumno": alumno,
+                "estados_asistencia": estados_asistencia,
+                "asistencia_actual": alumno.asistencia_set.first(),
             },
         )
     else:

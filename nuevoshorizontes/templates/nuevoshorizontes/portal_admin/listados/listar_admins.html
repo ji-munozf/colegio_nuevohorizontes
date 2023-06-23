@@ -30,56 +30,61 @@
         Lista de administradores
     </h1>
 
-    <div class="container">
-        {% if admins %}
-        <table class="table table-striped"
-            style="background-color: white; border: 1px solid rgb(21, 20, 55); text-align: center;">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Nombres</th>
-                    <th>Apellidos</th>
-                    <th>Correo electrónico</th>
-                    <th>Acciones</th>
-                    <th>Cambiar contraseña</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for admin in admins %}
-                {% if admin.id != 1 %}
-                <tr>
-                    <td>{{ admin.id }}</td>
-                    <td>{{ admin.nombre_admin }}</td>
-                    <td>{{ admin.apellido_admin }}</td>
-                    <td>{{ admin.correo_admin }}</td>
-                    <td>
-                        {% if admin == admin_actual  %}
-                        <button type="button" class="btn btn-success btn-block" disabled>Modificar</button>
-                        <button type="button" class="btn btn-danger btn-block" disabled>Eliminar</button>
-                        {% else %}
-                        <a type="button" class="btn btn-success btn-block"
-                            href="{% url 'modificar_admins' admin.id %}"
-                            style="background-color: green; color: #fff;">Modificar</a>
-                        <a type="button" class="btn btn-danger btn-block"
-                            style="background-color: #dc3545; color: #fff;">Eliminar</a>
-                        {% endif %}
-                    </td>
-                    <td>
-                        {% if admin == admin_actual %}
-                        <button type="button" class="btn btn-primary" disabled>Cambiar contraseña</button>
-                        {% else %}
-                        <a type="button" class="btn btn-primary" onclick="cambiarPassword('{{ admin.id }}')"
-                            style="background-color: #0d6efd; color: #fff;">Cambiar contraseña</a>
-                        {% endif %}
-                    </td>
-                </tr>
-                {% endif %}
-                {% endfor %}
-            </tbody>
-        </table>
-        {% else %}
-        <p>No hay admins registrados.</p>
-        {% endif %}
+    <div class="container" style="margin-bottom: 20px;">
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    {% if admins %}
+                    <table class="table table-striped"
+                        style="background-color: white; border: 1px solid rgb(21, 20, 55); text-align: center;">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nombres</th>
+                                <th>Apellidos</th>
+                                <th>Correo electrónico</th>
+                                <th>Acciones</th>
+                                <th>Cambiar contraseña</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for admin in admins %}
+                                <tr>
+                                    <td>{{ admin.id }}</td>
+                                    <td>{{ admin.nombre_admin }}</td>
+                                    <td>{{ admin.apellido_admin }}</td>
+                                    <td>{{ admin.correo_admin }}</td>
+                                    <td>
+                                        {% if admin == admin_actual %}
+                                            <button type="button" class="btn btn-success btn-block" disabled>Modificar</button>
+                                            <button type="button" class="btn btn-danger btn-block" disabled>Eliminar</button>
+                                        {% else %}
+                                            <a type="button" class="btn btn-success btn-block"
+                                                href="{% url 'modificar_admins' admin.id %}"
+                                                style="background-color: green; color: #fff;">Modificar</a>
+                                            <a type="button" class="btn btn-danger btn-block"
+                                                onclick="eliminarAdmin('{{ admin.id }}')"
+                                                style="background-color: #dc3545; color: #fff;">Eliminar</a>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if admin == admin_actual %}
+                                            <button type="button" class="btn btn-primary" disabled>Cambiar contraseña</button>
+                                        {% else %}
+                                            <a type="button" class="btn btn-primary" onclick="cambiarPassword('{{ admin.id }}')"
+                                                style="background-color: #0d6efd; color: #fff;">Cambiar contraseña</a>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% else %}
+                    <p>No hay admins registrados.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="container botones" style="text-align: center; align-items: center;">
@@ -87,7 +92,7 @@
     </div>
 
     <script>
-        function eliminarAlumno(id) {
+        function eliminarAdmin(id) {
             Swal.fire({
                 "title": "¿Estas seguro?",
                 "text": "Esta acción no se puede deshacer",
@@ -100,7 +105,7 @@
             })
                 .then(function (result) {
                     if (result.isConfirmed) {
-                        window.location.href = "/eliminar_alumno/" + id + "/";
+                        window.location.href = "/eliminar_admin/" + id + "/";
                     }
                 })
         }

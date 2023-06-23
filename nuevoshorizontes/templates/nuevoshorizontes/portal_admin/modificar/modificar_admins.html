@@ -24,8 +24,8 @@
     {% include "nuevoshorizontes/portal_admin/navbar.html" %}
 
     <h1 class="heading" style="padding-top: 120px;">
-        <img class="title-img mx-2" src="{% static 'nuevoshorizontes/img/icons_admin/acceso_blanco.png' %}" alt="agregar"
-            height="60">Modificar administradores
+        <img class="title-img mx-2" src="{% static 'nuevoshorizontes/img/icons_admin/acceso_blanco.png' %}"
+            alt="agregar" height="60">Modificar administradores
     </h1>
 
 
@@ -64,16 +64,23 @@
             </div>
 
             <div class="container botones" style="text-align: center; align-items: center; margin-top: 20px;">
-                <a type="button" class="btn btn-lg btn-block" href="{% url 'listar_admins' %}">Volver al menú listar admins</a>
+                <a type="button" class="btn btn-lg btn-block" href="{% url 'listar_admins' %}">Volver al menú listar
+                    admins</a>
             </div>
-            
+
         </div>
 
     </div>
 
+    {% if form.errors %}
     <script>
-        document.getElementById("id_rut_admin").disabled = true;
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            html: "{% for field in form %}{% for error in field.errors %}{{ error }}<br>{% endfor %}{% endfor %}",
+        });
     </script>
+    {% endif %}
 
 </body>
 

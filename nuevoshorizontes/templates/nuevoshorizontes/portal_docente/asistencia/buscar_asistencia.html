@@ -61,7 +61,11 @@
                     <td>{{ asistencia.fecha_asistencia }}</td>
                     <td>{{ asistencia.tipo_asistencia.nombre_estado_asistencia }}</td>
                     <td>
-                        <button type="submit" class="btn btn-primary" style="background-color: green; color: #fff;">Modificar</button>
+                        {% if asistencia.alumno.rut_alumno %}
+                        <a type="submit" class="btn btn-primary"
+                            href="{% url 'modificar_asistencia' asistencia.alumno.rut_alumno %}"
+                            style="background-color: green; color: #fff;">Modificar</a>
+                        {% endif %}
                     </td>
                 </tr>
                 {% endfor %}
@@ -70,7 +74,7 @@
         {% elif no_asistencias %}
         <p style="color: #fff; font-size: 25px;">No se encontraron asistencias para la fecha seleccionada.</p>
         {% endif %}
-    </div>  
+    </div>
 
     <div class="container botones" style="text-align: center; align-items: center; margin-top: 30px;">
         <a type="button" class="btn btn-lg btn-block" href="{% url 'asistencia_docente' %}"
@@ -81,5 +85,7 @@
         {% endif %}
     </div>
 
+
 </body>
+
 </html>

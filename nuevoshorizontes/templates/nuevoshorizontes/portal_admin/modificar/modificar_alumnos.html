@@ -23,8 +23,6 @@
 
     {% include "nuevoshorizontes/portal_admin/navbar.html" %}
 
-    {% load crispy_forms_tags %}
-
     <h1 class="heading" style="padding-top: 120px;">
         <img class="title-img mx-2" src="{% static 'nuevoshorizontes/img/icons_admin/acceso_blanco.png' %}" alt="agregar"
             height="60">Agregar alumnos
@@ -42,11 +40,6 @@
                         {% csrf_token %}
 
                         <div class="form-group" style="margin-bottom: 15px;">
-                            <label class="form-label">Rut del alumno:</label>
-                            {{ form.rut_alumno }}
-                        </div>
-
-                        <div class="form-group" style="margin-bottom: 15px;">
                             <label class="form-label">Nombre del alumno:</label>
                             {{ form.nombre_alumno }}
                         </div>
@@ -59,16 +52,6 @@
                         <div class="form-group" style="margin-bottom: 15px;">
                             <label class="form-label">Apellido materno:</label>
                             {{ form.apmaterno_alumno }}
-                        </div>
-
-                        <div class="form-group" style="margin-bottom: 15px;">
-                            <label class="form-label">Dirección del alumno:</label>
-                            {{ form.direccion_alumno }}
-                        </div>
-
-                        <div class="form-group" style="margin-bottom: 15px;">
-                            <label class="form-label">Teléfono del alumno (opcional):</label>
-                            {{ form.telefono_alumno }}
                         </div>
 
                         <div class="form-group" style="margin-bottom: 15px;">
@@ -108,10 +91,15 @@
 
     </div>
 
+    {% if form.errors %}
     <script>
-        document.getElementById("id_rut_alumno").disabled = true;
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            html: "{% for field in form %}{% for error in field.errors %}{{ error }}<br>{% endfor %}{% endfor %}",
+        });
     </script>
-
+    {% endif %}
 
 </body>
 

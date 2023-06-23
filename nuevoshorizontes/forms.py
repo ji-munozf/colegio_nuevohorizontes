@@ -21,12 +21,6 @@ class AlumnoForm(forms.ModelForm):
     apmaterno_alumno = forms.CharField(
         widget=forms.TextInput(attrs={"class": "form-control", "required": "required"})
     )
-    direccion_alumno = forms.CharField(
-        widget=forms.TextInput(attrs={"class": "form-control", "required": "required"})
-    )
-    telefono_alumno = forms.IntegerField(
-        widget=forms.NumberInput(attrs={"class": "form-control"}), required=False
-    )
     correo_alumno = forms.EmailField(
         widget=forms.EmailInput(attrs={"class": "form-control", "required": "required"}),
         error_messages={
@@ -55,9 +49,16 @@ class AlumnoForm(forms.ModelForm):
     )
 
     def clean_correo_alumno(self):
-        correo_alumno = self.cleaned_data['correo_alumno']
-        if not self.instance.pk and Alumno.objects.filter(correo_alumno=correo_alumno).exists():
-            raise forms.ValidationError("El correo del alumno ya existe.")
+        correo_alumno = self.cleaned_data.get("correo_alumno")
+        instance = self.instance
+
+        if instance is None:  # Agregar nuevo apoderado
+            if Alumno.objects.filter(correo_alumno=correo_alumno).exists():
+                raise ValidationError("El correo del alumno ya existe.")
+        else:  # Modificar apoderado existente
+            if Alumno.objects.filter(correo_alumno=correo_alumno).exclude(rut_alumno=instance.rut_alumno).exists():
+                raise ValidationError("El correo del alumno ya existe para otro alumno.")
+        
         return correo_alumno
 
     class Meta:
@@ -108,9 +109,16 @@ class DocenteForm(forms.ModelForm):
     )
 
     def clean_correo_docente(self):
-        correo_docente = self.cleaned_data['correo_docente']
-        if not self.instance.pk and Docente.objects.filter(correo_docente=correo_docente).exists():
-            raise forms.ValidationError("El correo del docente ya existe.")
+        correo_docente = self.cleaned_data.get("correo_docente")
+        instance = self.instance
+
+        if instance is None:  # Agregar nuevo apoderado
+            if Docente.objects.filter(correo_docente=correo_docente).exists():
+                raise ValidationError("El correo del docente ya existe.")
+        else:  # Modificar apoderado existente
+            if Docente.objects.filter(correo_docente=correo_docente).exclude(rut_docente=instance.rut_docente).exists():
+                raise ValidationError("El correo del docente ya existe para otro docente.")
+        
         return correo_docente
 
     class Meta:
@@ -156,9 +164,16 @@ class ApoderadoForm(forms.ModelForm):
     )
 
     def clean_correo_apoderado(self):
-        correo_apoderado = self.cleaned_data['correo_apoderado']
-        if not self.instance.pk and Apoderado.objects.filter(correo_apoderado=correo_apoderado).exists():
-            raise forms.ValidationError("El correo del apoderado ya existe.")
+        correo_apoderado = self.cleaned_data.get("correo_apoderado")
+        instance = self.instance
+
+        if instance is None:  # Agregar nuevo apoderado
+            if Apoderado.objects.filter(correo_apoderado=correo_apoderado).exists():
+                raise ValidationError("El correo del apoderado ya existe.")
+        else:  # Modificar apoderado existente
+            if Apoderado.objects.filter(correo_apoderado=correo_apoderado).exclude(rut_apoderado=instance.rut_apoderado).exists():
+                raise ValidationError("El correo del apoderado ya existe para otro apoderado.")
+        
         return correo_apoderado
 
     class Meta:
@@ -189,9 +204,16 @@ class AdminForm(forms.ModelForm):
     )
 
     def clean_correo_admin(self):
-        correo_admin = self.cleaned_data['correo_admin']
-        if not self.instance.pk and Administrador.objects.filter(correo_admin=correo_admin).exists():
-            raise forms.ValidationError("El correo del admin ya existe.")
+        correo_admin = self.cleaned_data.get("correo_admin")
+        instance = self.instance
+
+        if instance is None:  # Agregar nuevo administrador
+            if Administrador.objects.filter(correo_admin=correo_admin).exists():
+                raise ValidationError("El correo del admin ya existe.")
+        else:  # Modificar administrador existente
+            if Administrador.objects.filter(correo_admin=correo_admin).exclude(id=instance.id).exists():
+                raise ValidationError("El correo del admin ya existe para otro administrador.")
+
         return correo_admin
 
     class Meta:
@@ -258,11 +280,17 @@ class AsignaturaForm(forms.ModelForm):
     )
 
     def clean_nombre_asignatura(self):
-        nombre_asignatura = self.cleaned_data['nombre_asignatura']
-        if self.instance.pk is None and Asignatura.objects.filter(nombre_asignatura=nombre_asignatura).exists():
-            raise forms.ValidationError("El nombre de la asignatura ya existe.")
-        return nombre_asignatura
+        nombre_asignatura = self.cleaned_data.get("nombre_asignatura")
+        instance = self.instance
 
+        if instance is None:  # Agregar nueva asignatura
+            if Asignatura.objects.filter(nombre_asignatura=nombre_asignatura).exists():
+                raise ValidationError("El nombre de la asignatura ya existe.")
+        else:  # Modificar asignatura existente
+            if Asignatura.objects.filter(nombre_asignatura=nombre_asignatura).exclude(id_asignatura=instance.id_asignatura).exists():
+                raise ValidationError("El nombre de la asignatura ya existe para otra asignatura.")
+        
+        return nombre_asignatura
 
     class Meta:
         model = Asignatura
@@ -304,21 +332,42 @@ class CursoForm(forms.ModelForm):
     )
 
     def clean_nombre_curso(self):
-        nombre_curso = self.cleaned_data['nombre_curso']
-        if self.instance.pk is None and Curso.objects.filter(nombre_curso=nombre_curso).exists():
-            raise forms.ValidationError("El nombre del curso ya existe.")
+        nombre_curso = self.cleaned_data.get("nombre_curso")
+        instance = self.instance
+
+        if instance is None:  # Agregar nuevo curso
+            if Curso.objects.filter(nombre_curso=nombre_curso).exists():
+                raise ValidationError("El nombre del curso ya existe.")
+        else:  # Modificar curso existente
+            if Curso.objects.filter(nombre_curso=nombre_curso).exclude(id_curso=instance.id_curso).exists():
+                raise ValidationError("El nombre del curso ya existe para otro curso.")
+        
         return nombre_curso
 
     def clean_docente_curso(self):
-        docente_curso = self.cleaned_data['docente_curso']
-        if self.instance.pk is None and Curso.objects.filter(docente_curso=docente_curso).exists():
-            raise forms.ValidationError("El docente seleccionado ya fue asignado a otro curso.")
+        docente_curso = self.cleaned_data.get("docente_curso")
+        instance = self.instance
+
+        if instance is None:  # Agregar nuevo curso
+            if Curso.objects.filter(docente_curso=docente_curso).exists():
+                raise ValidationError("El docente seleccionado ya fue asignado a otro curso.")
+        else:  # Modificar curso existente
+            if Curso.objects.filter(docente_curso=docente_curso).exclude(id_curso=instance.id_curso).exists():
+                raise ValidationError("El docente seleccionado ya fue asignado a otro curso.")
+        
         return docente_curso
 
     def clean_sala_curso(self):
-        sala_curso = self.cleaned_data['sala_curso']
-        if self.instance.pk is None and Curso.objects.filter(sala_curso=sala_curso).exists():
-            raise forms.ValidationError("La sala seleccionada ya fue asignada a otro curso.")
+        sala_curso = self.cleaned_data.get("sala_curso")
+        instance = self.instance
+
+        if instance is None:  # Agregar nuevo curso
+            if Curso.objects.filter(sala_curso=sala_curso).exists():
+                raise ValidationError("La sala seleccionada ya fue asignada a otro curso.")
+        else:  # Modificar curso existente
+            if Curso.objects.filter(sala_curso=sala_curso).exclude(id_curso=instance.id_curso).exists():
+                raise ValidationError("La sala seleccionada ya fue asignada a otro curso.")
+        
         return sala_curso
 
     class Meta:
@@ -375,6 +424,17 @@ class SalaForm(forms.ModelForm):
         empty_label="Seleccione el tipo de sala",
         widget=forms.Select(attrs={"class": "form-control", "required": "required"}),
     )
+
+    def clean_nombre_sala(self):
+        nombre_sala = self.cleaned_data.get("nombre_sala")
+        instance = self.instance
+
+        if instance is None:  # Agregar nueva sala
+            if Sala.objects.filter(nombre_sala=nombre_sala).exists():
+                raise ValidationError("El nombre de la sala ya existe.")
+        else:  # Modificar sala existente
+            if Sala.objects.filter(nombre_sala=nombre_sala).exclude(id_sala=instance.id_sala).exists():
+                raise ValidationError("El nombre de la sala ya existe para otra sala.")
 
     class Meta:
         model = Sala

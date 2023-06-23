@@ -48,16 +48,6 @@
                     value="{{ alumno.apmaterno_alumno }}" required disabled>
             </div>
             <div class="mb-3">
-                <label for="nombre" class="form-label" style="color: #fff;">Dirección</label>
-                <input type="text" class="form-control" id="direccion" name="direccion"
-                    value="{{ alumno.direccion_alumno }}" required disabled>
-            </div>
-            <div class="mb-3">
-                <label for="nombre" class="form-label" style="color: #fff;">Teléfono</label>
-                <input type="number" class="form-control" id="telefono" name="telefono"
-                    value="{{ alumno.telefono_alumno }}" required disabled>
-            </div>
-            <div class="mb-3">
                 <label for="nombre" class="form-label" style="color: #fff;">Sede</label>
                 <input type="text" class="form-control" id="rut" name="sede" value="{{ alumno.sede_alumno }}" required disabled>
             </div>
@@ -69,27 +59,8 @@
                 <label for="nombre" class="form-label" style="color: #fff;">Curso</label>
                 <input type="text" class="form-control" id="rut" name="curso"  value="{{ alumno.curso_alumno }}" required disabled>
             </div>
-
-            <button type="button" class="btn btn-primary" id="editarBtn" style="margin-top: 10px;">Editar perfil</button>
-            <button type="submit" class="btn btn-primary d-none" id="guardarBtn" style="margin-top: 10px; margin-right: 10px;">Guardar cambios</button>
-            <button type="button" class="btn btn-secondary d-none" id="cancelarBtn" style="margin-top: 10px;">Cancelar</button>
         </form>
     </div>
-
-    <div class="container" style="padding-bottom: 30px;">
-        {% if messages %}
-            <div class="messages">
-                {% for message in messages %}
-                    <div class="alert alert-{{ message.tags }}">
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            </div>
-        {% endif %}
-    </div>
-
-    <script src="{% static 'nuevoshorizontes/js/perfil_botones.js' %}"></script>
-    <script src="{% static 'nuevoshorizontes/js/duracion_msg.js' %}"></script>
-
+    
 </body>
 </html>

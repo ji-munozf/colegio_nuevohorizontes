@@ -24,21 +24,18 @@
     {% include "nuevoshorizontes/portal_admin/navbar.html" %}
     {% include "nuevoshorizontes/portal_admin/mensajes.html" %}
 
-    {% load crispy_forms_tags %}
-
     <h1 class="heading" style="padding-top: 120px;">
-        <img class="title-img mx-2" src="{% static 'nuevoshorizontes/img/icons_admin/acceso_blanco.png' %}" alt="agregar"
-            height="60">Agregar alumnos
+        <img class="title-img mx-2" src="{% static 'nuevoshorizontes/img/icons_admin/acceso_blanco.png' %}"
+            alt="agregar" height="60">Agregar alumnos
     </h1>
 
-
-    <div class="row" style="padding-bottom: 80px;">
-        <div class="col-12 col-md-6 offset-md-3">
+    <div class="container">
+        <div class="row">
 
             <div class="card">
                 <div class="card-body">
 
-                    <form action="" method="POST">  
+                    <form action="" method="POST">
 
                         {% csrf_token %}
 
@@ -60,16 +57,6 @@
                         <div class="form-group" style="margin-bottom: 15px;">
                             <label class="form-label">Apellido materno:</label>
                             {{ form.apmaterno_alumno }}
-                        </div>
-
-                        <div class="form-group" style="margin-bottom: 15px;">
-                            <label class="form-label">Dirección del alumno:</label>
-                            {{ form.direccion_alumno }}
-                        </div>
-
-                        <div class="form-group" style="margin-bottom: 15px;">
-                            <label class="form-label">Teléfono del alumno (opcional):</label>
-                            {{ form.telefono_alumno }}
                         </div>
 
                         <div class="form-group" style="margin-bottom: 15px;">
@@ -111,9 +98,8 @@
             <div class="container botones" style="text-align: center; align-items: center; margin-top: 20px;">
                 <a type="button" class="btn btn-lg btn-block" href="{% url 'home_agregar' %}">Volver al menú agregar</a>
             </div>
-            
-        </div>
 
+        </div>
     </div>
 
     {% if form.errors %}
