@@ -1,12 +1,13 @@
 {% if messages %}
-{% for m in messages %}
-<script>
-    Swal.fire({
-        "title": "Felicitaciones",
-        "text": "{{m}}",
-        "icon": "success",
-    })
-</script>
-{% endfor %}
+    {% for m in messages %}
+        <script>
+            Swal.fire({
+                "title": "{% if m.tags == 'success' %}Felicitaciones{% else %}Oops...{% endif %}",
+                "text": "{{ m }}",
+                "icon": "{% if m.tags == 'success' %}success{% else %}error{% endif %}",
+            })
+        </script>
+    {% endfor %}
 {% endif %}
+
 

@@ -60,6 +60,11 @@
                             {{ form.password }}
                         </div>
 
+                        <div class="form-group" style="margin-bottom: 15px;">
+                            <label class="form-label">Repetir contraseña:</label>
+                            <input type="password" class="form-control" name="repetir_contraseña" required>
+                        </div>
+
                         <div class="d-flex justify-content-end" style="padding-top: 20px; padding-bottom: 10px;">
                             &nbsp;
                             <input type="reset" value="Cancelar" class="btn btn-secondary">
@@ -84,7 +89,7 @@
         Swal.fire({
             icon: 'error',
             title: 'Oops...',
-            html: "{% for field in form %}{% for error in field.errors %}{{ error }}<br>{% endfor %}{% endfor %}",
+            html: '{% for field in form %}{% for error in field.errors %}{{ error }}<br>{% endfor %}{% endfor %}{% for message in messages %}{{ message }}<br>{% endfor %}',
         });
     </script>
     {% endif %}

@@ -24,6 +24,7 @@
 <body>
 
     {% include "nuevoshorizontes/portal_admin/navbar.html" %}
+    {% include "nuevoshorizontes/portal_admin/mensajes.html" %}
 
     <h1 class="heading" style="padding-top: 120px;">
         <img class="title-img mx-2" src="{% static 'nuevoshorizontes/img/icons_admin/acceso_blanco.png' %}"
@@ -66,18 +67,6 @@
         </div>
 
     </div>
-
-    {% if messages %}
-    {% for m in messages %}
-    <script>
-        Swal.fire({
-            "title": "Atención",
-            "text": "{{m}}",
-            "icon": "warning",
-        })
-    </script>
-    {% endfor %}
-    {% endif %}
 
 </body>
 

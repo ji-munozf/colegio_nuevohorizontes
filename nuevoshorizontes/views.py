@@ -346,13 +346,23 @@ def agregar_docentes(request):
 
         if request.method == "POST":
             formulario = DocenteForm(data=request.POST)
-            if formulario.is_valid():
-                docente = formulario.save(commit=False)
-                docente.password = make_password(formulario.cleaned_data["password"])
-                docente.save()
-                messages.success(request, "Docente agregado correctamente")
-            else:
+            nueva_contraseña = request.POST.get("password")
+            repetir_contraseña = request.POST.get("repetir_contraseña")
+
+            if len(nueva_contraseña) < 8:
+                messages.error(request, "La contraseña debe tener al menos 8 caracteres")
                 data["form"] = formulario
+            elif nueva_contraseña != repetir_contraseña:
+                messages.error(request, "Las contraseñas no coinciden")
+                data["form"] = formulario
+            else:
+                if formulario.is_valid():
+                    docente = formulario.save(commit=False)
+                    docente.password = make_password(nueva_contraseña)
+                    docente.save()
+                    messages.success(request, "Docente agregado correctamente")
+                else:
+                    data["form"] = formulario
 
         return render(
             request,
@@ -371,13 +381,25 @@ def agregar_apoderados(request):
 
         if request.method == "POST":
             formulario = ApoderadoForm(data=request.POST)
-            if formulario.is_valid():
-                apoderado = formulario.save(commit=False)
-                apoderado.password = make_password(formulario.cleaned_data["password"])
-                apoderado.save()
-                messages.success(request, "Apoderado agregado correctamente")
-            else:
+            nueva_contraseña = request.POST.get("password")
+            repetir_contraseña = request.POST.get("repetir_contraseña")
+
+            if len(nueva_contraseña) < 8:
+                messages.error(
+                    request, "La contraseña debe tener al menos 8 caracteres"
+                )
                 data["form"] = formulario
+            elif nueva_contraseña != repetir_contraseña:
+                messages.error(request, "Las contraseñas no coinciden")
+                data["form"] = formulario
+            else:
+                if formulario.is_valid():
+                    apoderado = formulario.save(commit=False)
+                    apoderado.password = make_password(nueva_contraseña)
+                    apoderado.save()
+                    messages.success(request, "Apoderado agregado correctamente")
+                else:
+                    data["form"] = formulario
 
         return render(
             request,
@@ -1308,7 +1330,7 @@ def horario_alumno(request):
 
     else:
         return redirect("login_alumno")
-    
+
 
 def asistencia_alumno(request):
     # Obtener el correo del alumno desde la sesión
@@ -1319,16 +1341,31 @@ def asistencia_alumno(request):
         alumno = Alumno.objects.get(correo_alumno=correo_alumno)
 
         # Obtener el recuento de asistencias por tipo
-        asistencias = Asistencia.objects.filter(alumno=alumno).values('alumno').annotate(
-            presentes=Count(Case(When(tipo_asistencia_id=1, then=1))), # Esta línea cuenta el número de asistencias de tipo "presente" para el alumno actual.
-            ausentes=Count(Case(When(tipo_asistencia_id=2, then=1))), # Esta línea cuenta el número de asistencias de tipo "ausente" para el alumno actual.
-            justificados=Count(Case(When(tipo_asistencia_id=3, then=1))), # Esta línea cuenta el número de asistencias de tipo "justificado" para el alumno actual.
+        asistencias = (
+            Asistencia.objects.filter(alumno=alumno)
+            .values("alumno")
+            .annotate(
+                presentes=Count(
+                    Case(When(tipo_asistencia_id=1, then=1))
+                ),  # Esta línea cuenta el número de asistencias de tipo "presente" para el alumno actual.
+                ausentes=Count(
+                    Case(When(tipo_asistencia_id=2, then=1))
+                ),  # Esta línea cuenta el número de asistencias de tipo "ausente" para el alumno actual.
+                justificados=Count(
+                    Case(When(tipo_asistencia_id=3, then=1))
+                ),  # Esta línea cuenta el número de asistencias de tipo "justificado" para el alumno actual.
+            )
         )
 
         # Calcular el porcentaje de asistencia
-        total_asistencias = sum(a['presentes'] + a['ausentes'] + a['justificados'] for a in asistencias)
+        total_asistencias = sum(
+            a["presentes"] + a["ausentes"] + a["justificados"] for a in asistencias
+        )
         if total_asistencias > 0:
-            porcentaje_asistencia = (sum(a['presentes'] + a['justificados'] for a in asistencias) / total_asistencias) * 100
+            porcentaje_asistencia = (
+                sum(a["presentes"] + a["justificados"] for a in asistencias)
+                / total_asistencias
+            ) * 100
         else:
             porcentaje_asistencia = 0
 
@@ -1343,7 +1380,6 @@ def asistencia_alumno(request):
         )
     else:
         return redirect("login_alumno")  # Redireccionar al inicio de sesión del alumno
-
 
 
 def home_apoderado(request):
@@ -1542,7 +1578,6 @@ def agregar_asistencia(request):
             ).exists()
 
             if asistencia_existente:
-                # Mostrar mensaje de error usando SweetAlert2
                 messages.error(request, "Ya se realizó la asistencia en esta fecha.")
                 return redirect("agregar_asistencia")
 
