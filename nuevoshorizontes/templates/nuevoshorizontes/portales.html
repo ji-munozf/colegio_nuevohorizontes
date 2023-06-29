@@ -29,51 +29,52 @@
             src="{% static 'nuevoshorizontes/img/icons_navbar/monitor.png' %}" alt="nosotros" height="60">Portales
     </h1>
 
-    <section class="parrafo" id="parrafo">
+    <div class="container">
         <div class="row">
-            <div class="col text-center">
-                <p style="font-size: 20px;">Si ya eres parte de nuestra familia, ingresa a tu portal correspondiente.</p>
-            </div>
-    </section>
+            <p style="font-size: 20px; margin-bottom: 25px;">Si ya eres parte de nuestra familia, ingresa a tu portal correspondiente.</p>
+        </div>
+    </div>
 
-    <div class="row row-cols-1 row-cols-md-2 g-4" style="padding-bottom: 20px;">
-        <div class="col col-md-6">
-            <div class="card text-center">
-                <center><img src="{% static 'nuevoshorizontes/img/icons_portales/alumno_blanco.png' %}" class="card-img-top"
-                        alt="logo_blanco" /></center>
-                <div class="card-body">
-                    <h5 class="card-title">Portal de alumnos</h5>
-                    <a href="{% url 'login_alumno' %}" class="btn btn-primary">Ingresar</a>
+    <div class="container">
+        <div class="row row-cols-1 row-cols-md-2 g-4" style="padding-bottom: 20px;">
+            <div class="col col-md-6">
+                <div class="card text-center">
+                    <center><img src="{% static 'nuevoshorizontes/img/icons_portales/alumno_blanco.png' %}"
+                            class="card-img-top" alt="logo_blanco" /></center>
+                    <div class="card-body">
+                        <h5 class="card-title">Portal de alumnos</h5>
+                        <a href="{% url 'login_alumno' %}" class="btn btn-primary">Ingresar</a>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col col-md-6">
-            <div class="card text-center">
-                <center><img src="{% static 'nuevoshorizontes/img/icons_portales/profesor_blanco.png' %}" class="card-img-top"
-                        alt="logo_blanco" /></center>
-                <div class="card-body">
-                    <h5 class="card-title">Portal de docentes</h5>
-                    <a href="{% url 'login_docente' %}" class="btn btn-primary">Ingresar</a>
+            <div class="col col-md-6">
+                <div class="card text-center">
+                    <center><img src="{% static 'nuevoshorizontes/img/icons_portales/profesor_blanco.png' %}"
+                            class="card-img-top" alt="logo_blanco" /></center>
+                    <div class="card-body">
+                        <h5 class="card-title">Portal de docentes</h5>
+                        <a href="{% url 'login_docente' %}" class="btn btn-primary">Ingresar</a>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col col-md-6">
-            <div class="card text-center">
-                <center><img src="{% static 'nuevoshorizontes/img/icons_portales/padre-e-hijo-blanco.png' %}" class="card-img-top"
-                        alt="logo_blanco" /></center>
-                <div class="card-body">
-                    <h5 class="card-title">Portal de apoderados</h5>
-                    <a href="{% url 'login_apoderado' %}" class="btn btn-primary">Ingresar</a>
+            <div class="col col-md-6">
+                <div class="card text-center">
+                    <center><img src="{% static 'nuevoshorizontes/img/icons_portales/padre-e-hijo-blanco.png' %}"
+                            class="card-img-top" alt="logo_blanco" /></center>
+                    <div class="card-body">
+                        <h5 class="card-title">Portal de apoderados</h5>
+                        <a href="{% url 'login_apoderado' %}" class="btn btn-primary">Ingresar</a>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col col-md-6">
-            <div class="card text-center">
-                <center><img src="{% static 'nuevoshorizontes/img/icons_portales/administrar_blanco.png' %}" class="card-img-top"
-                        alt="logo_blanco" /></center>
-                <div class="card-body">
-                    <h5 class="card-title">Portal administrativo</h5>
-                    <a href="{% url 'login_administrativo' %}" class="btn btn-primary">Ingresar</a>
+            <div class="col col-md-6">
+                <div class="card text-center">
+                    <center><img src="{% static 'nuevoshorizontes/img/icons_portales/administrar_blanco.png' %}"
+                            class="card-img-top" alt="logo_blanco" /></center>
+                    <div class="card-body">
+                        <h5 class="card-title">Portal administrativo</h5>
+                        <a href="{% url 'login_administrativo' %}" class="btn btn-primary">Ingresar</a>
+                    </div>
                 </div>
             </div>
         </div>

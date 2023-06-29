@@ -31,6 +31,7 @@ urlpatterns = [
     path('portal_admin/formularios/agregar_noticias', agregar_noticias, name="agregar_noticias"),
     path('portal_admin/formularios/agregar_salas', agregar_salas, name="agregar_salas"),
     path('portal_admin/formularios/agregar_sedes', agregar_sedes, name="agregar_sedes"),
+    path('portal_admin/formularios/agregar_pagos_colegio', agregar_pagos_colegio, name="agregar_pagos_colegio"),
 
     #Listado
     path('portal_admin/listados/listar_admins', listar_admins, name="listar_admins"),
@@ -72,6 +73,7 @@ urlpatterns = [
     path('eliminar_sede/<id>/', eliminar_sedes, name="eliminar_sedes"),
     path('eliminar_sala/<id>/', eliminar_salas, name="eliminar_salas"),
     path('eliminar_postulacion/<id>/', eliminar_postulacion, name="eliminar_postulacion"),
+    path('eliminar_pago/<id>/', eliminar_pagos, name="eliminar_pagos"),
     
     #Home alumno
     path('portal_alumno/home_alumno', home_alumno, name="home_alumno"),
@@ -82,12 +84,13 @@ urlpatterns = [
 
     #Home apoderado
     path('portal_apoderado/home_apoderado', home_apoderado, name="home_apoderado"),
-    path('portal_apoderado/guardar_perfil_apoderado/', guardar_perfil_apoderado, name='guardar_perfil_apoderado'),
+    path('portal_apoderado/mi_perfil', miperfil_apoderado, name="miperfil_apoderado"),
     path('portal_apoderado/lista_hijos', lista_hijos, name="lista_hijos"),
     path('portal_apoderado/horarios', horarios_apoderado, name="horarios_apoderado"),
     path('portal_apoderado/asistencias', asistencias_apoderado, name="asistencias_apoderado"),
     path('portal_apoderado/notas_apoderado', notas_apoderado, name="notas_apoderado"),
     path('portal_apoderado/pagos_apoderado', pagos_apoderado, name="pagos_apoderado"),
+    path('guardar_pago/', guardar_pago, name='guardar_pago'),
 
     #Home docente
     path('portal_docente/home_docente', home_docente, name="home_docente"),

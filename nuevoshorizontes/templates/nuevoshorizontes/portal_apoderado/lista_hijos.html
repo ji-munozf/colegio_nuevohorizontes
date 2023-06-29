@@ -27,38 +27,45 @@
             alt="agregar" height="60">Lista de alumnos
     </h1>
 
-    <div class="container">
+    <div class="container" style="margin-bottom: 20px;">
         <div class="card">
             <div class="card-body">
                 <div class="table-responsive">
                     {% if alumnos %}
-                    <div class="table">
+                    <table class="table table-striped" style="background-color: white; border: 1px solid rgb(21, 20, 55); text-align: center;">
                         <thead>
                             <tr>
-                                <th style="color: #fff; text-align: center;">RUT</th>
-                                <th style="color: #fff; text-align: center;">Nombres</th>
-                                <th style="color: #fff; text-align: center;">Apellido paterno</th>
-                                <th style="color: #fff; text-align: center;">Apellido materno</th>
+                                <th>Rut</th>
+                                <th>Nombres</th>
+                                <th>Apellidos</th>
+                                <th>Correo electrónico</th>
+                                <th>Sede asignado</th>
+                                <th>Apoderado asignado</th>
+                                <th>Curso asignado</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for alumno in alumnos %}
                             <tr>
-                                <td style="color: #fff; text-align: center;">{{ alumno.rut_alumno }}</td>
-                                <td style="color: #fff; text-align: center;">{{ alumno.nombre_alumno }}</td>
-                                <td style="color: #fff; text-align: center;">{{ alumno.appaterno_alumno }}</td>
-                                <td style="color: #fff; text-align: center;">{{ alumno.apmaterno_alumno }}</td>
+                                <td>{{ alumno.rut_alumno }}</td>
+                                <td>{{ alumno.nombre_alumno }}</td>
+                                <td>{{ alumno.appaterno_alumno }} {{ alumno.apmaterno_alumno }}</td>
+                                <td>{{ alumno.correo_alumno }}</td>
+                                <td>{{ alumno.sede_alumno }}</td>
+                                <td>{{ alumno.apoderado_alumno }}</td>
+                                <td>{{ alumno.curso_alumno }}</td>
                             </tr>
                             {% endfor %}
                         </tbody>
-                    </div>
+                    </table>
                     {% else %}
-                    <p>No tiene alumnos asignados.</p>
+                    <p>No hay alumnos asignados.</p>
                     {% endif %}
                 </div>
             </div>
         </div>
     </div>
+    
 
     
 

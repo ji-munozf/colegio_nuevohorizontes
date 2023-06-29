@@ -4,10 +4,10 @@ from django.contrib.auth.hashers import make_password, check_password
 from .models import *
 from .forms import *
 from datetime import date, datetime
+from django.utils import timezone
 from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Count, Case, When
-
-# Create your views here.
 
 
 def home(request):
@@ -187,7 +187,7 @@ def login_apoderado(request):
         try:
             apoderado = Apoderado.objects.get(correo_apoderado=email)
             if check_password(password, apoderado.password):
-                request.session["correo_admin"] = apoderado.correo_apoderado
+                request.session["correo_apoderado"] = apoderado.correo_apoderado
                 return redirect("home_apoderado")
             else:
                 messages.error(
@@ -278,12 +278,13 @@ def home_pagos(request):
     correo_admin = request.session.get("correo_admin", None)
     if correo_admin:
         admin = Administrador.objects.get(correo_admin=correo_admin)
-        # Puedes pasar el objeto 'apoderado' al contexto de renderizado
+        pagos = Pagos.objects.all()
         return render(
-            request, "nuevoshorizontes/portal_admin/pagos.html", {"admin": admin}
+            request,
+            "nuevoshorizontes/portal_admin/pagos.html",
+            {"admin": admin, "pagos": pagos},
         )
     else:
-        # El usuario no ha iniciado sesión, redirigir a la página de inicio de sesión
         return redirect("login_administrativo")
 
 
@@ -350,7 +351,9 @@ def agregar_docentes(request):
             repetir_contraseña = request.POST.get("repetir_contraseña")
 
             if len(nueva_contraseña) < 8:
-                messages.error(request, "La contraseña debe tener al menos 8 caracteres")
+                messages.error(
+                    request, "La contraseña debe tener al menos 8 caracteres"
+                )
                 data["form"] = formulario
             elif nueva_contraseña != repetir_contraseña:
                 messages.error(request, "Las contraseñas no coinciden")
@@ -404,6 +407,29 @@ def agregar_apoderados(request):
         return render(
             request,
             "nuevoshorizontes/portal_admin/formularios/agregar_apoderados.html",
+            data,
+        )
+    else:
+        return redirect("login_administrativo")
+
+
+def agregar_pagos_colegio(request):
+    correo_admin = request.session.get("correo_admin", None)
+    if correo_admin:
+        admin = Administrador.objects.get(correo_admin=correo_admin)
+        data = {"admin": admin, "form": PagosColegioForm()}
+
+        if request.method == "POST":
+            formulario = PagosColegioForm(data=request.POST)
+            if formulario.is_valid():
+                formulario.save()
+                messages.success(request, "Pago colegio agregado correctamente")
+            else:
+                data["form"] = formulario
+
+        return render(
+            request,
+            "nuevoshorizontes/portal_admin/formularios/agregar_pagos_colegio.html",
             data,
         )
     else:
@@ -1277,6 +1303,13 @@ def eliminar_postulacion(request, id):
     return redirect(to="listar_postulaciones")
 
 
+def eliminar_pagos(request, id):
+    pagos = get_object_or_404(Pagos, id_pago=id)
+    pagos.delete()
+    messages.success(request, "Pago eliminad correctamente")
+    return redirect(to="eliminar_pagos")
+
+
 def home_alumno(request):
     correo_alumno = request.session.get("correo_alumno", None)
     if correo_alumno:
@@ -1397,26 +1430,18 @@ def home_apoderado(request):
         return redirect("login_apoderado")
 
 
-def guardar_perfil_apoderado(request):
-    if request.method == "POST":
-        correo_apoderado = request.session.get("correo_apoderado", None)
-        if correo_apoderado:
-            apoderado = Apoderado.objects.get(correo_apoderado=correo_apoderado)
-            apoderado.nombre_apoderado = request.POST.get("nombre")
-            apoderado.appaterno_apoderado = request.POST.get("paterno")
-            apoderado.apmaterno_apoderado = request.POST.get("materno")
-            apoderado.direccion_apoderado = request.POST.get("direccion")
-            apoderado.telefono_apoderado = request.POST.get("telefono")
-            # Actualizar otros campos del modelo "Apoderado" según sea necesario
-            apoderado.save()  # Guardar los cambios en el modelo
-            messages.success(request, "Los cambios se guardaron exitosamente.")
-        else:
-            messages.error(
-                request,
-                "No se pudo guardar los cambios. Por favor, intenta nuevamente.",
-            )
+def miperfil_apoderado(request):
+    correo_apoderado = request.session.get("correo_apoderado", None)
+    if correo_apoderado:
+        apoderado = Apoderado.objects.get(correo_apoderado=correo_apoderado)
+        return render(
+            request,
+            "nuevoshorizontes/portal_apoderado/miperfil.html",
+            {"apoderado": apoderado},
+        )
 
-    return redirect("miperfil_apoderado")
+    else:
+        return redirect("login_docente")
 
 
 def lista_hijos(request):
@@ -1449,7 +1474,51 @@ def notas_apoderado(request):
 
 
 def pagos_apoderado(request):
-    return render(request, "nuevoshorizontes/portal_apoderado/pagos_apoderado.html")
+    correo_apoderado = request.session.get("correo_apoderado", None)
+    if correo_apoderado:
+        apoderado = Apoderado.objects.get(correo_apoderado=correo_apoderado)
+        pagos = Pagos_colegio.objects.all()
+        return render(
+            request,
+            "nuevoshorizontes/portal_apoderado/pagos_apoderado.html",
+            {"apoderado": apoderado, "pagos": pagos},
+        )
+
+    else:
+        return redirect("login_apoderado")
+
+
+@csrf_exempt
+def guardar_pago(request):
+    if request.method == "POST":
+        id_pago = request.POST.get("id_pago")
+        monto_pago = request.POST.get("monto_pago")
+        tipo_pago_colegio = request.POST.get("tipo_pago_colegio")
+
+        # Obtener el apoderado que realizó el pago
+        correo_apoderado = request.session.get("correo_apoderado", None)
+        apoderado = Apoderado.objects.get(correo_apoderado=correo_apoderado)
+
+        fecha_pago = date.today()
+
+        # Obtener el objeto Tipo_pago_colegio
+        tipo_pago_colegio_obj = Tipo_pago_colegio.objects.get(nombre_pago_colegio=tipo_pago_colegio)
+
+        # Guardar el pago en la base de datos
+        pago = Pagos(
+            id_pago=id_pago,
+            fecha_pago=fecha_pago,
+            monto_pago=monto_pago,
+            apoderado=apoderado,
+            tipo_pago_colegio=tipo_pago_colegio_obj
+        )
+        pago.save()
+
+        messages.success(request, 'Pago realizado exitosamente')
+
+        return redirect('pagos_apoderado')
+    else:
+        return JsonResponse({"error": "Método no permitido."}, status=405)
 
 
 def home_docente(request):
@@ -1482,14 +1551,13 @@ def miperfil_docente(request):
 
 
 def curso_docente(request):
-    # Obtiene el valor de la clave "correo_docente" de la sesión del objeto request
     correo_docente = request.session.get("correo_docente", None)
-    if correo_docente:  # Verifica si correo_docente tiene un valor
+    if correo_docente:
         # Busca un objeto Docente en la base de datos con correo_docente igual al valor obtenido anteriormente
         docente = Docente.objects.get(correo_docente=correo_docente)
         # Obtiene el primer curso relacionado con el docente
         curso = docente.curso_set.first()
-        if curso:  # Verifica si curso tiene un valor
+        if curso:
             # Obtiene todos los objetos Alumno de la base de datos con curso_alumno igual al valor de curso
             alumnos = Alumno.objects.filter(curso_alumno=curso)
             # Obtiene el primer alumno de la lista de alumnos
@@ -1497,14 +1565,12 @@ def curso_docente(request):
         else:
             alumnos = []  # Establece una lista vacía
             primer_alumno = None  # Establece primer_alumno como None
-        # Devuelve una respuesta de renderizado utilizando la plantilla y pasando un diccionario de contexto
         return render(
             request,
             "nuevoshorizontes/portal_docente/curso_docente.html",
             {"docente": docente, "alumnos": alumnos, "primer_alumno": primer_alumno},
         )
     else:
-        # Devuelve una respuesta de redirección a la vista con nombre "login_docente"
         return redirect("login_docente")
 
 
@@ -1592,7 +1658,7 @@ def agregar_asistencia(request):
             # Guardar la asistencia de cada alumno
             for alumno in alumnos:
                 tipo_asistencia_id = request.POST.get(str(alumno.rut_alumno))
-                tipo_asistencia = tipoAsistencia.objects.get(pk=tipo_asistencia_id)
+                tipo_asistencia = Tipo_asis.objects.get(pk=tipo_asistencia_id)
 
                 Asistencia.objects.create(
                     tipo_asistencia=tipo_asistencia,
@@ -1605,7 +1671,7 @@ def agregar_asistencia(request):
             messages.success(request, "Asistencia guardada exitosamente.")
             return redirect("asistencia_docente")
 
-        estados_asistencia = tipoAsistencia.objects.all()
+        estados_asistencia = Tipo_asis.objects.all()
         cursos = Curso.objects.filter(docente_curso=docente)
         if cursos.exists():
             curso = cursos.first()
@@ -1649,7 +1715,7 @@ def modificar_asistencia(request, rut_alumno):
             return redirect("asistencia_docente")
 
         alumno = Alumno.objects.get(rut_alumno=rut_alumno)
-        estados_asistencia = tipoAsistencia.objects.all()
+        estados_asistencia = Tipo_asis.objects.all()
 
         return render(
             request,

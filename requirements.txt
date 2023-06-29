@@ -1,3 +1,4 @@
-django
+django == 4.1
 pillow
 cx_Oracle
+mercadopago

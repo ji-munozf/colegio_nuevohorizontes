@@ -13,6 +13,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
         crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link rel="stylesheet" href="{% static 'nuevoshorizontes/css/navbar.css' %}">
     <link rel="stylesheet" href="{% static 'nuevoshorizontes/css/home_admin.css' %}">
@@ -21,24 +22,73 @@
 <body>
 
     {% include "nuevoshorizontes/portal_admin/navbar.html" %}
+    {% include "nuevoshorizontes/portal_admin/mensajes.html" %}
 
     <h1 class="heading" style="padding-top: 120px;">
         <img class="title-img mx-2" src="{% static 'nuevoshorizontes/img/ingresos_blanco.png' %}" alt="agregar"
-            height="60">Información de pagos
+            height="60">Pagos realizados
     </h1>
+    
+    {% load humanize %}
 
-
-    <section class="parrafo" id="parrafo">
-        <div class="row">
-            <div class="content">
-                <p style="text-align: center; font-size: 40px; color: #fff;">No se han realizado pagos</p>
+    <div class="container" style="margin-bottom: 20px;">
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    {% if pagos %}
+                    <table class="table table-striped" style="background-color: white; border: 1px solid rgb(21, 20, 55); text-align: center;">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Fecha del pago</th>
+                                <th>Monto pagado</th>
+                                <th>Apoderado</th>
+                                <th>Tipo</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for pago in pagos %}
+                            <tr>
+                                <td>{{ pago.id_pago }}</td>
+                                <td>{{ pago.fecha_pago }}</td>
+                                <td>${{ pago.monto_pago | intcomma }}</td>
+                                <td>{{ pago.apoderado }}</td>
+                                <td>{{ pago.tipo_pago_colegio }}</td>
+                                <td>
+                                    <a type="button" class="btn btn-danger btn-block" onclick="eliminarPago('{{ pago.id_pago }}')" style="background-color: #dc3545; color: #fff;">Eliminar</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% else %}
+                    <p>No se han realizado pagos</p>
+                    {% endif %}
+                </div>
             </div>
         </div>
-    </section>
-
-    <div class="container botones" style="text-align: center; align-items: center;">
-        <a type="button" class="btn btn-lg btn-block" href="{% url 'home_admin' %}">Volver al menú principal</a>
     </div>
+
+    <script>
+        function eliminarPago(id) {
+            Swal.fire({
+                "title": "¿Estas seguro?",
+                "text": "Esta acción no se puede deshacer",
+                "icon": "question",
+                "showCancelButton": true,
+                "cancelButtonText": "No, cancelar",
+                "confirmButtonText": "Si, eliminar",
+                "confirmButtonColor": "green",
+                "cancelButtonColor": "#dc3545"
+            })
+            .then(function(result) {
+                if(result.isConfirmed) {
+                    window.location.href = "/eliminar_pago/" + id + "/";
+                }
+            })
+        }
+    </script>
 
 </body>
 

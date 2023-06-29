@@ -2,7 +2,6 @@ from django import forms
 from .models import *
 from datetime import date
 from django.core.exceptions import ValidationError
-import re
 
 
 class AlumnoForm(forms.ModelForm):
@@ -397,6 +396,37 @@ class NoticiaForm(forms.ModelForm):
                 attrs={"class": "form-control", "required": "required"}
             ),
             "foto_noticia": forms.ClearableFileInput(attrs={"class": "form-control"}),
+        }
+
+
+class PagosColegioForm(forms.ModelForm):
+    nombre_pago_colegio = forms.CharField(
+        widget=forms.TextInput(
+            attrs={"class": "form-control", "required": "required"}
+        ),
+    )
+    monto = forms.IntegerField(
+        widget=forms.NumberInput(attrs={"class": "form-control", "required": "required"})
+    )
+    tipo_pago_colegio = forms.ModelChoiceField(
+        queryset=Tipo_pago_colegio.objects.all(),
+        empty_label="Seleccione el tipo pago colegio",
+        widget=forms.Select(attrs={"class": "form-control", "required": "required"})
+    )
+
+    class Meta:
+        model = Pagos_colegio
+        fields = "__all__"
+        widgets = {
+            "fecha_vencimiento": forms.SelectDateWidget(
+                attrs={
+                    "class": "form-control",
+                    "style": "width:auto; display:inline-block;",
+                },
+                years=range(
+                    date.today().year, date.today().year + 20
+                ),  # Cambia el rango de años aquí
+            )
         }
 
 
