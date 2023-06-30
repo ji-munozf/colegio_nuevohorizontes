@@ -1541,7 +1541,9 @@ def asistencias_apoderado(request):
             total_asistencias = presentes + ausentes + justificados
 
             if total_asistencias > 0:
-                porcentaje_asistencia = ((presentes + justificados) / total_asistencias) * 100
+                porcentaje_asistencia = (
+                    (presentes + justificados) / total_asistencias
+                ) * 100
             else:
                 porcentaje_asistencia = 0
 
@@ -1857,73 +1859,157 @@ def modificar_asistencia(request, rut_alumno):
         )
     else:
         return redirect("login_docente")
-    
+
 
 def agregar_horariocurso(request):
+    correo_admin = request.session.get("correo_admin", None)
+    if correo_admin:
+        admin = Administrador.objects.get(correo_admin=correo_admin)
+        # Puedes pasar el objeto 'admin' al contexto de renderizado
+        nombres_bloque_html = [
+            "lun_block1",
+            "mar_block1",
+            "mie_block1",
+            "jue_block1",
+            "vie_block1",
+            "lun_block2",
+            "mar_block2",
+            "mie_block2",
+            "jue_block2",
+            "vie_block2",
+            "lun_block3",
+            "mar_block3",
+            "mie_block3",
+            "jue_block3",
+            "vie_block3",
+            "lun_block4",
+            "mar_block4",
+            "mie_block4",
+            "jue_block4",
+            "vie_block4",
+            "lun_block5",
+            "mar_block5",
+            "mie_block5",
+            "jue_block5",
+            "vie_block5",
+            "lun_block6",
+            "mar_block6",
+            "mie_block6",
+            "jue_block6",
+            "vie_block6",
+            "lun_block7",
+            "mar_block7",
+            "mie_block7",
+            "jue_block7",
+            "vie_block7",
+            "lun_block8",
+            "mar_block8",
+            "mie_block8",
+            "jue_block8",
+            "vie_block8",
+            "lun_block9",
+            "mar_block9",
+            "mie_block9",
+            "jue_block9",
+            "vie_block9",
+        ]
 
-    nombres_bloque_html = ['lun_block1','mar_block1','mie_block1','jue_block1','vie_block1',
-                           'lun_block2','mar_block2','mie_block2','jue_block2','vie_block2',
-                           'lun_block3','mar_block3','mie_block3','jue_block3','vie_block3',
-                           'lun_block4','mar_block4','mie_block4','jue_block4','vie_block4',
-                           'lun_block5','mar_block5','mie_block5','jue_block5','vie_block5',
-                           'lun_block6','mar_block6','mie_block6','jue_block6','vie_block6',
-                           'lun_block7','mar_block7','mie_block7','jue_block7','vie_block7',
-                           'lun_block8','mar_block8','mie_block8','jue_block8','vie_block8',
-                           'lun_block9','mar_block9','mie_block9','jue_block9','vie_block9']
-    
-    nombres_bloques = ['L01','M01','X01','J01','V01',
-                       'L02','M02','X02','J02','V02',
-                       'L03','M03','X03','J03','V03',
-                       'L04','M04','X04','J04','V04',
-                       'L05','M05','X05','J05','V05',
-                       'L06','M06','X06','J06','V06',
-                       'L07','M07','X07','J07','V07',
-                       'L08','M08','X08','J08','V08',
-                       'L09','M09','X09','J09','V09']
+        nombres_bloques = [
+            "L01",
+            "M01",
+            "X01",
+            "J01",
+            "V01",
+            "L02",
+            "M02",
+            "X02",
+            "J02",
+            "V02",
+            "L03",
+            "M03",
+            "X03",
+            "J03",
+            "V03",
+            "L04",
+            "M04",
+            "X04",
+            "J04",
+            "V04",
+            "L05",
+            "M05",
+            "X05",
+            "J05",
+            "V05",
+            "L06",
+            "M06",
+            "X06",
+            "J06",
+            "V06",
+            "L07",
+            "M07",
+            "X07",
+            "J07",
+            "V07",
+            "L08",
+            "M08",
+            "X08",
+            "J08",
+            "V08",
+            "L09",
+            "M09",
+            "X09",
+            "J09",
+            "V09",
+        ]
 
-    if request.method == 'POST':
+        if request.method == "POST":
+            curso_id = request.POST.get("curso")
 
-        curso_id = request.POST.get("curso")
+            if not curso_id:
+                messages.error(request, "Debes seleccionar un curso.")
+                return redirect("agregar_horariocurso")
 
-        if not curso_id:
-            messages.error(request, "Debes seleccionar un curso.")
-            return redirect('agregar_horariocurso')
-        
-        if Bloque.objects.filter(curso_bloque=curso_id).exists():
-            messages.error(request, "Ya existe un horario creado para este curso")
-            return redirect('agregar_horariocurso')  
+            if Bloque.objects.filter(curso_bloque=curso_id).exists():
+                messages.error(request, "Ya existe un horario creado para este curso")
+                return redirect("agregar_horariocurso")
 
-        curso = Curso.objects.get(id_curso = curso_id)
+            curso = Curso.objects.get(id_curso=curso_id)
 
-        for i in range(len(nombres_bloque_html)): 
-            asignatura_id = request.POST.get(nombres_bloque_html[i])
-            if asignatura_id:
+            for i in range(len(nombres_bloque_html)):
+                asignatura_id = request.POST.get(nombres_bloque_html[i])
+                if asignatura_id:
+                    asignatura = Asignatura.objects.get(id_asignatura=asignatura_id)
+                    docente = asignatura.profesor_asignatura
 
-                asignatura = Asignatura.objects.get(id_asignatura = asignatura_id)
-                docente = asignatura.profesor_asignatura
+                    Bloque.objects.create(
+                        nombre_bloque=nombres_bloques[i],
+                        curso_bloque=curso,
+                        asignatura_bloque=asignatura,
+                        docente_bloque=docente,
+                    )
+                else:
+                    Bloque.objects.create(
+                        nombre_bloque=nombres_bloques[i],
+                        curso_bloque=curso,
+                        asignatura_bloque=None,
+                        docente_bloque=None,
+                    )
 
-                Bloque.objects.create(
-                    nombre_bloque = nombres_bloques[i],
-                    curso_bloque = curso ,
-                    asignatura_bloque = asignatura,
-                    docente_bloque = docente,
-                )
-            else:
-                Bloque.objects.create(
-                    nombre_bloque = nombres_bloques[i],
-                    curso_bloque = curso ,
-                    asignatura_bloque = None,
-                    docente_bloque = None,
-                )
+            messages.success(request, "Horario guardado exitosamente.")
 
-        messages.error(request, "Horario guardado exitosamente.")
+        data = {
+            "cursos": Curso.objects.order_by("nombre_curso"),
+            "salas": Sala.objects.order_by("nombre_sala"),
+            "asignaturas": Asignatura.objects.order_by("nombre_asignatura"),
+            "profesores": Docente.objects.all(),
+            "admin": admin,
+        }
 
-    data = {
-        'cursos': Curso.objects.order_by('nombre_curso'),
-        'salas': Sala.objects.order_by('nombre_sala'),
-        'asignaturas': Asignatura.objects.order_by('nombre_asignatura'),
-        'profesores': Docente.objects.all(),
-    }
-
-    return render(request, 'nuevoshorizontes/portal_admin/formularios/agregar_horariocurso.html',data)
-
+        return render(
+            request,
+            "nuevoshorizontes/portal_admin/formularios/agregar_horariocurso.html",
+            data,
+        )
+    else:
+        # El usuario no ha iniciado sesión, redirigir a la página de inicio de sesión
+        return redirect("login_administrativo")

@@ -3,7 +3,7 @@
 
 <head>
 
-  <title>Horario escolar</title>
+  <title>Horario escolar  - Administrador</title>
 
   {% load static %}
 
@@ -68,6 +68,17 @@
     .dropdown:hover .dropdown-content {
       display: block;
     }
+
+    .curso {
+      width: 40%;
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 767px) {
+      .curso {
+        width: 100%;
+      }
+    }
   </style>
 </head>
 
@@ -75,437 +86,479 @@
 
   {% include "nuevoshorizontes/portal_admin/navbar.html" %}
   {% include "nuevoshorizontes/portal_admin/mensajes.html" %}
-  {% load crispy_forms_tags %}
 
   <h1 class="heading" style="padding-top: 120px;">
     <img class="title-img mx-2" src="{% static 'nuevoshorizontes/img/icons_admin/acceso_blanco.png' %}" alt="agregar"
       height="60">Ingresar Horario
   </h1>
 
-
-  <div class="row" style="padding-bottom: 80px;">
-    <div>
+  <div class="container-fluid" style="padding-bottom: 80px;">
+    <div class="row">
 
       <div class="card">
         <div class="card-body">
-
-          
-
           <form method="POST">
-            {% csrf_token %}       
+            {% csrf_token %}
             <div class="card">
               <div class="card-body">
                 <h4>Curso:</h4>
-                <select name="curso" id="curso">
-                  <option value="" >Seleccionar Curso</option>
+                <select name="curso" id="curso" class="form-select curso">
+                  <option value="">Seleccionar Curso</option>
                   {% for curso in cursos %}
-                    <option value="{{ curso.id_curso }}" >{{ curso.nombre_curso }}</option>
+                  <option value="{{ curso.id_curso }}">{{ curso.nombre_curso }}</option>
                   {% endfor %}
                 </select>
+                <div class="table-responsive">
+                  <table>
+                    <tr>
+                      <th>Hora</th>
+                      <th>Lunes</th>
+                      <th>Martes</th>
+                      <th>Miercoles</th>
+                      <th>Jueves</th>
+                      <th>Viernes</th>
+                    </tr>
+                    <tr>
+                      <td>08:00 - 08:45</td>
+                      <td>
+                        <select name="lun_block1" id="lun_block1" class="form-select">
+                          <option value="">Seleccionar Asignatura y Profesor</option>
+                          {% for asignatura in asignaturas %}
+                          <option value="{{ asignatura.id_asignatura }}">{{ asignatura.nombre_asignatura }} -
+                            {{asignatura.profesor_asignatura.nombre_completo}} </option>
+                          {% endfor %}
+                        </select>
+                      </td>
+                      <td>
+                        <select name="mar_block1" id="mar_block1" class="form-select">
+                          <option value="">Seleccionar Asignatura y Profesor</option>
+                          {% for asignatura in asignaturas %}
+                          <option value="{{ asignatura.id_asignatura }}">{{ asignatura.nombre_asignatura }} -
+                            {{asignatura.profesor_asignatura.nombre_completo}} </option>
+                          {% endfor %}
+                        </select>
+                      </td>
+                      <td>
+                        <select name="mie_block1" id="mie_block1" class="form-select">
+                          <option value="">Seleccionar Asignatura y Profesor</option>
+                          {% for asignatura in asignaturas %}
+                          <option value="{{ asignatura.id_asignatura }}">{{ asignatura.nombre_asignatura }} -
+                            {{asignatura.profesor_asignatura.nombre_completo}} </option>
+                          {% endfor %}
+                        </select>
+                      </td>
+                      <td>
+                        <select name="jue_block1" id="jue_block1" class="form-select">
+                          <option value="">Seleccionar Asignatura y Profesor</option>
+                          {% for asignatura in asignaturas %}
+                          <option value="{{ asignatura.id_asignatura }}">{{ asignatura.nombre_asignatura }} -
+                            {{asignatura.profesor_asignatura.nombre_completo}} </option>
+                          {% endfor %}
+                        </select>
+                      </td>
+                      <td>
+                        <select name="vie_block1" id="vie_block1" class="form-select">
+                          <option value="">Seleccionar Asignatura y Profesor</option>
+                          {% for asignatura in asignaturas %}
+                          <option value="{{ asignatura.id_asignatura }}">{{ asignatura.nombre_asignatura }} -
+                            {{asignatura.profesor_asignatura.nombre_completo}} </option>
+                          {% endfor %}
+                        </select>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>08:45 - 09:30</td>
+                      <td>
+                        <select name="lun_block2" id="lun_block2" class="form-select">
+                          <option value="">Seleccionar Asignatura y Profesor</option>
+                          {% for asignatura in asignaturas %}
+                          <option value="{{ asignatura.id_asignatura }}">{{ asignatura.nombre_asignatura }} -
+                            {{asignatura.profesor_asignatura.nombre_completo}} </option>
+                          {% endfor %}
+                        </select>
+                      </td>
+                      <td>
+                        <select name="mar_block2" id="mar_block2" class="form-select">
+                          <option value="">Seleccionar Asignatura y Profesor</option>
+                          {% for asignatura in asignaturas %}
+                          <option value="{{ asignatura.id_asignatura }}">{{ asignatura.nombre_asignatura }} -
+                            {{asignatura.profesor_asignatura.nombre_completo}} </option>
+                          {% endfor %}
+                        </select>
+                      </td>
+                      <td>
+                        <select name="mie_block2" id="mie_block2" class="form-select">
+                          <option value="">Seleccionar Asignatura y Profesor</option>
+                          {% for asignatura in asignaturas %}
+                          <option value="{{ asignatura.id_asignatura }}">{{ asignatura.nombre_asignatura }} -
+                            {{asignatura.profesor_asignatura.nombre_completo}} </option>
+                          {% endfor %}
+                        </select>
+                      </td>
+                      <td>
+                        <select name="jue_block2" id="jue_block2" class="form-select">
+                          <option value="">Seleccionar Asignatura y Profesor</option>
+                          {% for asignatura in asignaturas %}
+                          <option value="{{ asignatura.id_asignatura }}">{{ asignatura.nombre_asignatura }} -
+                            {{asignatura.profesor_asignatura.nombre_completo}} </option>
+                          {% endfor %}
+                        </select>
+                      </td>
+                      <td>
+                        <select name="vie_block2" id="vie_block2" class="form-select">
+                          <option value="">Seleccionar Asignatura y Profesor</option>
+                          {% for asignatura in asignaturas %}
+                          <option value="{{ asignatura.id_asignatura }}">{{ asignatura.nombre_asignatura }} -
+                            {{asignatura.profesor_asignatura.nombre_completo}} </option>
+                          {% endfor %}
+                        </select>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>09:45 - 10:30</td>
+                      <td>
+                        <select name="lun_block3" id="lun_block3" class="form-select">
+                          <option value="">Seleccionar Asignatura y Profesor</option>
+                          {% for asignatura in asignaturas %}
+                          <option value="{{ asignatura.id_asignatura }}">{{ asignatura.nombre_asignatura }} -
+                            {{asignatura.profesor_asignatura.nombre_completo}} </option>
+                          {% endfor %}
+                        </select>
+                      </td>
+                      <td>
+                        <select name="mar_block3" id="mar_block3" class="form-select">
+                          <option value="">Seleccionar Asignatura y Profesor</option>
+                          {% for asignatura in asignaturas %}
+                          <option value="{{ asignatura.id_asignatura }}">{{ asignatura.nombre_asignatura }} -
+                            {{asignatura.profesor_asignatura.nombre_completo}} </option>
+                          {% endfor %}
+                        </select>
+                      </td>
+                      <td>
+                        <select name="mie_block3" id="mie_block3" class="form-select">
+                          <option value="">Seleccionar Asignatura y Profesor</option>
+                          {% for asignatura in asignaturas %}
+                          <option value="{{ asignatura.id_asignatura }}">{{ asignatura.nombre_asignatura }} -
+                            {{asignatura.profesor_asignatura.nombre_completo}} </option>
+                          {% endfor %}
+                        </select>
+                      </td>
+                      <td>
+                        <select name="jue_block3" id="jue_block3" class="form-select">
+                          <option value="">Seleccionar Asignatura y Profesor</option>
+                          {% for asignatura in asignaturas %}
+                          <option value="{{ asignatura.id_asignatura }}">{{ asignatura.nombre_asignatura }} -
+                            {{asignatura.profesor_asignatura.nombre_completo}} </option>
+                          {% endfor %}
+                        </select>
+                      </td>
+                      <td>
+                        <select name="vie_block3" id="vie_block3" class="form-select">
+                          <option value="">Seleccionar Asignatura y Profesor</option>
+                          {% for asignatura in asignaturas %}
+                          <option value="{{ asignatura.id_asignatura }}">{{ asignatura.nombre_asignatura }} -
+                            {{asignatura.profesor_asignatura.nombre_completo}} </option>
+                          {% endfor %}
+                        </select>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>10:30 - 11:15</td>
+                      <td>
+                        <select name="lun_block4" id="lun_block4" class="form-select">
+                          <option value="">Seleccionar Asignatura y Profesor</option>
+                          {% for asignatura in asignaturas %}
+                          <option value="{{ asignatura.id_asignatura }}">{{ asignatura.nombre_asignatura }} -
+                            {{asignatura.profesor_asignatura.nombre_completo}} </option>
+                          {% endfor %}
+                        </select>
+                      </td>
+                      <td>
+                        <select name="mar_block4" id="mar_block4" class="form-select">
+                          <option value="">Seleccionar Asignatura y Profesor</option>
+                          {% for asignatura in asignaturas %}
+                          <option value="{{ asignatura.id_asignatura }}">{{ asignatura.nombre_asignatura }} -
+                            {{asignatura.profesor_asignatura.nombre_completo}} </option>
+                          {% endfor %}
+                        </select>
+                      </td>
+                      <td>
+                        <select name="mie_block4" id="mie_block4" class="form-select">
+                          <option value="">Seleccionar Asignatura y Profesor</option>
+                          {% for asignatura in asignaturas %}
+                          <option value="{{ asignatura.id_asignatura }}">{{ asignatura.nombre_asignatura }} -
+                            {{asignatura.profesor_asignatura.nombre_completo}} </option>
+                          {% endfor %}
+                        </select>
+                      </td>
+                      <td>
+                        <select name="jue_block4" id="jue_block4" class="form-select">
+                          <option value="">Seleccionar Asignatura y Profesor</option>
+                          {% for asignatura in asignaturas %}
+                          <option value="{{ asignatura.id_asignatura }}">{{ asignatura.nombre_asignatura }} -
+                            {{asignatura.profesor_asignatura.nombre_completo}} </option>
+                          {% endfor %}
+                        </select>
+                      </td>
+                      <td>
+                        <select name="vie_block4" id="vie_block4" class="form-select">
+                          <option value="">Seleccionar Asignatura y Profesor</option>
+                          {% for asignatura in asignaturas %}
+                          <option value="{{ asignatura.id_asignatura }}">{{ asignatura.nombre_asignatura }} -
+                            {{asignatura.profesor_asignatura.nombre_completo}} </option>
+                          {% endfor %}
+                        </select>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>11:30 - 12:15</td>
+                      <td>
+                        <select name="lun_block5" id="lun_block5" class="form-select">
+                          <option value="">Seleccionar Asignatura y Profesor</option>
+                          {% for asignatura in asignaturas %}
+                          <option value="{{ asignatura.id_asignatura }}">{{ asignatura.nombre_asignatura }} -
+                            {{asignatura.profesor_asignatura.nombre_completo}} </option>
+                          {% endfor %}
+                        </select>
+                      </td>
+                      <td>
+                        <select name="mar_block5" id="mar_block5" class="form-select">
+                          <option value="">Seleccionar Asignatura y Profesor</option>
+                          {% for asignatura in asignaturas %}
+                          <option value="{{ asignatura.id_asignatura }}">{{ asignatura.nombre_asignatura }} -
+                            {{asignatura.profesor_asignatura.nombre_completo}} </option>
+                          {% endfor %}
+                        </select>
+                      </td>
+                      <td>
+                        <select name="mie_block5" id="mie_block5" class="form-select">
+                          <option value="">Seleccionar Asignatura y Profesor</option>
+                          {% for asignatura in asignaturas %}
+                          <option value="{{ asignatura.id_asignatura }}">{{ asignatura.nombre_asignatura }} -
+                            {{asignatura.profesor_asignatura.nombre_completo}} </option>
+                          {% endfor %}
+                        </select>
+                      </td>
+                      <td>
+                        <select name="jue_block5" id="jue_block5" class="form-select">
+                          <option value="">Seleccionar Asignatura y Profesor</option>
+                          {% for asignatura in asignaturas %}
+                          <option value="{{ asignatura.id_asignatura }}">{{ asignatura.nombre_asignatura }} -
+                            {{asignatura.profesor_asignatura.nombre_completo}} </option>
+                          {% endfor %}
+                        </select>
+                      </td>
+                      <td>
+                        <select name="vie_block5" id="vie_block5" class="form-select">
+                          <option value="">Seleccionar Asignatura y Profesor</option>
+                          {% for asignatura in asignaturas %}
+                          <option value="{{ asignatura.id_asignatura }}">{{ asignatura.nombre_asignatura }} -
+                            {{asignatura.profesor_asignatura.nombre_completo}} </option>
+                          {% endfor %}
+                        </select>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>12:15 - 13:00</td>
+                      <td>
+                        <select name="lun_block6" id="lun_block6" class="form-select">
+                          <option value="">Seleccionar Asignatura y Profesor</option>
+                          {% for asignatura in asignaturas %}
+                          <option value="{{ asignatura.id_asignatura }}">{{ asignatura.nombre_asignatura }} -
+                            {{asignatura.profesor_asignatura.nombre_completo}} </option>
+                          {% endfor %}
+                        </select>
+                      </td>
+                      <td>
+                        <select name="mar_block6" id="mar_block6" class="form-select">
+                          <option value="">Seleccionar Asignatura y Profesor</option>
+                          {% for asignatura in asignaturas %}
+                          <option value="{{ asignatura.id_asignatura }}">{{ asignatura.nombre_asignatura }} -
+                            {{asignatura.profesor_asignatura.nombre_completo}} </option>
+                          {% endfor %}
+                        </select>
+                      </td>
+                      <td>
+                        <select name="mie_block6" id="mie_block6" class="form-select">
+                          <option value="">Seleccionar Asignatura y Profesor</option>
+                          {% for asignatura in asignaturas %}
+                          <option value="{{ asignatura.id_asignatura }}">{{ asignatura.nombre_asignatura }} -
+                            {{asignatura.profesor_asignatura.nombre_completo}} </option>
+                          {% endfor %}
+                        </select>
+                      </td>
+                      <td>
+                        <select name="jue_block6" id="jue_block6" class="form-select">
+                          <option value="">Seleccionar Asignatura y Profesor</option>
+                          {% for asignatura in asignaturas %}
+                          <option value="{{ asignatura.id_asignatura }}">{{ asignatura.nombre_asignatura }} -
+                            {{asignatura.profesor_asignatura.nombre_completo}} </option>
+                          {% endfor %}
+                        </select>
+                      </td>
+                      <td>
+                        <select name="vie_block6" id="vie_block6" class="form-select">
+                          <option value="">Seleccionar Asignatura y Profesor</option>
+                          {% for asignatura in asignaturas %}
+                          <option value="{{ asignatura.id_asignatura }}">{{ asignatura.nombre_asignatura }} -
+                            {{asignatura.profesor_asignatura.nombre_completo}} </option>
+                          {% endfor %}
+                        </select>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>14:00 - 14:45</td>
+                      <td>
+                        <select name="lun_block7" id="lun_block7" class="form-select">
+                          <option value="">Seleccionar Asignatura y Profesor</option>
+                          {% for asignatura in asignaturas %}
+                          <option value="{{ asignatura.id_asignatura }}">{{ asignatura.nombre_asignatura }} -
+                            {{asignatura.profesor_asignatura.nombre_completo}} </option>
+                          {% endfor %}
+                        </select>
+                      </td>
+                      <td>
+                        <select name="mar_block7" id="mar_block7" class="form-select">
+                          <option value="">Seleccionar Asignatura y Profesor</option>
+                          {% for asignatura in asignaturas %}
+                          <option value="{{ asignatura.id_asignatura }}">{{ asignatura.nombre_asignatura }} -
+                            {{asignatura.profesor_asignatura.nombre_completo}} </option>
+                          {% endfor %}
+                        </select>
+                      </td>
+                      <td>
+                        <select name="mie_block7" id="mie_block7" class="form-select">
+                          <option value="">Seleccionar Asignatura y Profesor</option>
+                          {% for asignatura in asignaturas %}
+                          <option value="{{ asignatura.id_asignatura }}">{{ asignatura.nombre_asignatura }} -
+                            {{asignatura.profesor_asignatura.nombre_completo}} </option>
+                          {% endfor %}
+                        </select>
+                      </td>
+                      <td>
+                        <select name="jue_block7" id="jue_block7" class="form-select">
+                          <option value="">Seleccionar Asignatura y Profesor</option>
+                          {% for asignatura in asignaturas %}
+                          <option value="{{ asignatura.id_asignatura }}">{{ asignatura.nombre_asignatura }} -
+                            {{asignatura.profesor_asignatura.nombre_completo}} </option>
+                          {% endfor %}
+                        </select>
+                      </td>
+                      <td>
+                        <select name="vie_block7" id="vie_block7" class="form-select">
+                          <option value="">Seleccionar Asignatura y Profesor</option>
+                          {% for asignatura in asignaturas %}
+                          <option value="{{ asignatura.id_asignatura }}">{{ asignatura.nombre_asignatura }} -
+                            {{asignatura.profesor_asignatura.nombre_completo}} </option>
+                          {% endfor %}
+                        </select>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>14:45 - 15:30</td>
+                      <td>
+                        <select name="lun_block8" id="lun_block8" class="form-select">
+                          <option value="">Seleccionar Asignatura y Profesor</option>
+                          {% for asignatura in asignaturas %}
+                          <option value="{{ asignatura.id_asignatura }}">{{ asignatura.nombre_asignatura }} -
+                            {{asignatura.profesor_asignatura.nombre_completo}} </option>
+                          {% endfor %}
+                        </select>
+                      </td>
+                      <td>
+                        <select name="mar_block8" id="mar_block8" class="form-select">
+                          <option value="">Seleccionar Asignatura y Profesor</option>
+                          {% for asignatura in asignaturas %}
+                          <option value="{{ asignatura.id_asignatura }}">{{ asignatura.nombre_asignatura }} -
+                            {{asignatura.profesor_asignatura.nombre_completo}} </option>
+                          {% endfor %}
+                        </select>
+                      </td>
+                      <td>
+                        <select name="mie_block8" id="mie_block8" class="form-select">
+                          <option value="">Seleccionar Asignatura y Profesor</option>
+                          {% for asignatura in asignaturas %}
+                          <option value="{{ asignatura.id_asignatura }}">{{ asignatura.nombre_asignatura }} -
+                            {{asignatura.profesor_asignatura.nombre_completo}} </option>
+                          {% endfor %}
+                        </select>
+                      </td>
+                      <td>
+                        <select name="jue_block8" id="jue_block8" class="form-select">
+                          <option value="">Seleccionar Asignatura y Profesor</option>
+                          {% for asignatura in asignaturas %}
+                          <option value="{{ asignatura.id_asignatura }}">{{ asignatura.nombre_asignatura }} -
+                            {{asignatura.profesor_asignatura.nombre_completo}} </option>
+                          {% endfor %}
+                        </select>
+                      </td>
+                      <td>
+                        <select name="vie_block8" id="vie_block8" class="form-select">
+                          <option value="">Seleccionar Asignatura y Profesor</option>
+                          {% for asignatura in asignaturas %}
+                          <option value="{{ asignatura.id_asignatura }}">{{ asignatura.nombre_asignatura }} -
+                            {{asignatura.profesor_asignatura.nombre_completo}} </option>
+                          {% endfor %}
+                        </select>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>15:40 - 16:25</td>
+                      <td>
+                        <select name="lun_block9" id="lun_block9" class="form-select">
+                          <option value="">Seleccionar Asignatura y Profesor</option>
+                          {% for asignatura in asignaturas %}
+                          <option value="{{ asignatura.id_asignatura }}">{{ asignatura.nombre_asignatura }} -
+                            {{asignatura.profesor_asignatura.nombre_completo}} </option>
+                          {% endfor %}
+                        </select>
+                      </td>
+                      <td>
+                        <select name="mar_block9" id="mar_block9" class="form-select">
+                          <option value="">Seleccionar Asignatura y Profesor</option>
+                          {% for asignatura in asignaturas %}
+                          <option value="{{ asignatura.id_asignatura }}">{{ asignatura.nombre_asignatura }} -
+                            {{asignatura.profesor_asignatura.nombre_completo}} </option>
+                          {% endfor %}
+                        </select>
+                      </td>
+                      <td>
+                        <select name="mie_block9" id="mie_block9" class="form-select">
+                          <option value="">Seleccionar Asignatura y Profesor</option>
+                          {% for asignatura in asignaturas %}
+                          <option value="{{ asignatura.id_asignatura }}">{{ asignatura.nombre_asignatura }} -
+                            {{asignatura.profesor_asignatura.nombre_completo}} </option>
+                          {% endfor %}
+                        </select>
+                      </td>
+                      <td>
+                        <select name="jue_block9" id="jue_block9" class="form-select">
+                          <option value="">Seleccionar Asignatura y Profesor</option>
+                          {% for asignatura in asignaturas %}
+                          <option value="{{ asignatura.id_asignatura }}">{{ asignatura.nombre_asignatura }} -
+                            {{asignatura.profesor_asignatura.nombre_completo}} </option>
+                          {% endfor %}
+                        </select>
+                      </td>
+                      <td>
+                        <select name="vie_block9" id="vie_block9" class="form-select">
+                          <option value="">Seleccionar Asignatura y Profesor</option>
+                          {% for asignatura in asignaturas %}
+                          <option value="{{ asignatura.id_asignatura }}">{{ asignatura.nombre_asignatura }} -
+                            {{asignatura.profesor_asignatura.nombre_completo}} </option>
+                          {% endfor %}
+                        </select>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
               </div>
-            </div>          
-            <table>
-              <tr>
-                <th>Hora</th>
-                <th>Lunes</th>
-                <th>Martes</th>
-                <th>Miercoles</th>
-                <th>Jueves</th>
-                <th>Viernes</th>
-              </tr>
-              <tr>
-                <td>08:00 - 08:45</td>
-                <td>
-                  <select name="lun_block1" id="lun_block1" class="form-select" >
-                    <option value="" >Seleccionar Asignatura y Profesor</option>
-                      {% for asignatura in asignaturas %}
-                        <option value="{{ asignatura.id_asignatura }}" >{{ asignatura.nombre_asignatura }} - {{asignatura.profesor_asignatura.nombre_completo}} </option>
-                      {% endfor %}
-                  </select>
-                </td>
-                <td>
-                  <select name="mar_block1" id="mar_block1" class="form-select">
-                    <option value="" >Seleccionar Asignatura y Profesor</option>
-                    {% for asignatura in asignaturas %}
-                      <option value="{{ asignatura.id_asignatura }}" >{{ asignatura.nombre_asignatura }} - {{asignatura.profesor_asignatura.nombre_completo}} </option>
-                    {% endfor %}
-                  </select>
-                </td>
-                <td>
-                  <select name="mie_block1" id="mie_block1" class="form-select">
-                    <option value="" >Seleccionar Asignatura y Profesor</option>
-                    {% for asignatura in asignaturas %}
-                      <option value="{{ asignatura.id_asignatura }}" >{{ asignatura.nombre_asignatura }} - {{asignatura.profesor_asignatura.nombre_completo}} </option>
-                    {% endfor %}
-                  </select>
-                </td>
-                <td>
-                  <select name="jue_block1" id="jue_block1" class="form-select">
-                    <option value="" >Seleccionar Asignatura y Profesor</option>
-                    {% for asignatura in asignaturas %}
-                      <option value="{{ asignatura.id_asignatura }}" >{{ asignatura.nombre_asignatura }} - {{asignatura.profesor_asignatura.nombre_completo}} </option>
-                    {% endfor %}
-                  </select>
-                </td>
-                <td>
-                  <select name="vie_block1" id="vie_block1" class="form-select">
-                    <option value="" >Seleccionar Asignatura y Profesor</option>
-                    {% for asignatura in asignaturas %}
-                      <option value="{{ asignatura.id_asignatura }}" >{{ asignatura.nombre_asignatura }} - {{asignatura.profesor_asignatura.nombre_completo}} </option>
-                    {% endfor %}
-                  </select>
-                </td>
-              </tr>
-              <tr>
-                <td>08:45 - 09:30</td>
-                <td>
-                  <select name="lun_block2" id="lun_block2" class="form-select">
-                    <option value="" >Seleccionar Asignatura y Profesor</option>
-                    {% for asignatura in asignaturas %}
-                      <option value="{{ asignatura.id_asignatura }}" >{{ asignatura.nombre_asignatura }} - {{asignatura.profesor_asignatura.nombre_completo}} </option>
-                    {% endfor %}
-                  </select>
-                </td>
-                <td>
-                  <select name="mar_block2" id="mar_block2" class="form-select">
-                    <option value="" >Seleccionar Asignatura y Profesor</option>
-                    {% for asignatura in asignaturas %}
-                      <option value="{{ asignatura.id_asignatura }}" >{{ asignatura.nombre_asignatura }} - {{asignatura.profesor_asignatura.nombre_completo}} </option>
-                    {% endfor %}
-                  </select>
-                </td>
-                <td>
-                  <select name="mie_block2" id="mie_block2" class="form-select">
-                    <option value="" >Seleccionar Asignatura y Profesor</option>
-                    {% for asignatura in asignaturas %}
-                      <option value="{{ asignatura.id_asignatura }}" >{{ asignatura.nombre_asignatura }} - {{asignatura.profesor_asignatura.nombre_completo}} </option>
-                    {% endfor %}
-                  </select>
-                </td>
-                <td>
-                  <select name="jue_block2" id="jue_block2" class="form-select">
-                    <option value="" >Seleccionar Asignatura y Profesor</option>
-                    {% for asignatura in asignaturas %}
-                      <option value="{{ asignatura.id_asignatura }}" >{{ asignatura.nombre_asignatura }} - {{asignatura.profesor_asignatura.nombre_completo}} </option>
-                    {% endfor %}
-                  </select>
-                </td>
-                <td>
-                  <select name="vie_block2" id="vie_block2" class="form-select">
-                    <option value="" >Seleccionar Asignatura y Profesor</option>
-                    {% for asignatura in asignaturas %}
-                      <option value="{{ asignatura.id_asignatura }}" >{{ asignatura.nombre_asignatura }} - {{asignatura.profesor_asignatura.nombre_completo}} </option>
-                    {% endfor %}
-                  </select>
-                </td>
-              </tr>
-              <tr>
-                <td>09:45 - 10:30</td>
-                <td>
-                  <select name="lun_block3" id="lun_block3" class="form-select">
-                    <option value="" >Seleccionar Asignatura y Profesor</option>
-                    {% for asignatura in asignaturas %}
-                      <option value="{{ asignatura.id_asignatura }}" >{{ asignatura.nombre_asignatura }} - {{asignatura.profesor_asignatura.nombre_completo}} </option>
-                    {% endfor %}
-                  </select>
-                </td>
-                <td>
-                  <select name="mar_block3" id="mar_block3" class="form-select">
-                    <option value="" >Seleccionar Asignatura y Profesor</option>
-                    {% for asignatura in asignaturas %}
-                      <option value="{{ asignatura.id_asignatura }}" >{{ asignatura.nombre_asignatura }} - {{asignatura.profesor_asignatura.nombre_completo}} </option>
-                    {% endfor %}
-                  </select>
-                </td>
-                <td>
-                  <select name="mie_block3" id="mie_block3" class="form-select">
-                    <option value="" >Seleccionar Asignatura y Profesor</option>
-                    {% for asignatura in asignaturas %}
-                      <option value="{{ asignatura.id_asignatura }}" >{{ asignatura.nombre_asignatura }} - {{asignatura.profesor_asignatura.nombre_completo}} </option>
-                    {% endfor %}
-                  </select>
-                </td>
-                <td>
-                  <select name="jue_block3" id="jue_block3" class="form-select">
-                    <option value="" >Seleccionar Asignatura y Profesor</option>
-                    {% for asignatura in asignaturas %}
-                      <option value="{{ asignatura.id_asignatura }}" >{{ asignatura.nombre_asignatura }} - {{asignatura.profesor_asignatura.nombre_completo}} </option>
-                    {% endfor %}
-                  </select>
-                </td>
-                <td>
-                  <select name="vie_block3" id="vie_block3" class="form-select">
-                    <option value="" >Seleccionar Asignatura y Profesor</option>
-                    {% for asignatura in asignaturas %}
-                      <option value="{{ asignatura.id_asignatura }}" >{{ asignatura.nombre_asignatura }} - {{asignatura.profesor_asignatura.nombre_completo}} </option>
-                    {% endfor %}
-                  </select>
-                </td>
-              </tr>
-              <tr>
-                <td>10:30 - 11:15</td>
-                <td>
-                  <select name="lun_block4" id="lun_block4" class="form-select">
-                    <option value="" >Seleccionar Asignatura y Profesor</option>
-                    {% for asignatura in asignaturas %}
-                      <option value="{{ asignatura.id_asignatura }}" >{{ asignatura.nombre_asignatura }} - {{asignatura.profesor_asignatura.nombre_completo}} </option>
-                    {% endfor %}
-                  </select>
-                </td>
-                <td>
-                  <select name="mar_block4" id="mar_block4" class="form-select">
-                    <option value="" >Seleccionar Asignatura y Profesor</option>
-                    {% for asignatura in asignaturas %}
-                      <option value="{{ asignatura.id_asignatura }}" >{{ asignatura.nombre_asignatura }} - {{asignatura.profesor_asignatura.nombre_completo}} </option>
-                    {% endfor %}
-                  </select>
-                </td>
-                <td>
-                  <select name="mie_block4" id="mie_block4" class="form-select">
-                    <option value="" >Seleccionar Asignatura y Profesor</option>
-                    {% for asignatura in asignaturas %}
-                      <option value="{{ asignatura.id_asignatura }}" >{{ asignatura.nombre_asignatura }} - {{asignatura.profesor_asignatura.nombre_completo}} </option>
-                    {% endfor %}
-                  </select>
-                </td>
-                <td>
-                  <select name="jue_block4" id="jue_block4" class="form-select">
-                    <option value="" >Seleccionar Asignatura y Profesor</option>
-                    {% for asignatura in asignaturas %}
-                      <option value="{{ asignatura.id_asignatura }}" >{{ asignatura.nombre_asignatura }} - {{asignatura.profesor_asignatura.nombre_completo}} </option>
-                    {% endfor %}
-                  </select>
-                </td>
-                <td>
-                  <select name="vie_block4" id="vie_block4" class="form-select">
-                    <option value="" >Seleccionar Asignatura y Profesor</option>
-                    {% for asignatura in asignaturas %}
-                      <option value="{{ asignatura.id_asignatura }}" >{{ asignatura.nombre_asignatura }} - {{asignatura.profesor_asignatura.nombre_completo}} </option>
-                    {% endfor %}
-                  </select>
-                </td>
-              </tr>
-              <tr>
-                <td>11:30 - 12:15</td>
-                <td>
-                  <select name="lun_block5" id="lun_block5" class="form-select">
-                    <option value="" >Seleccionar Asignatura y Profesor</option>
-                    {% for asignatura in asignaturas %}
-                      <option value="{{ asignatura.id_asignatura }}" >{{ asignatura.nombre_asignatura }} - {{asignatura.profesor_asignatura.nombre_completo}} </option>
-                    {% endfor %}
-                  </select>
-                </td>
-                <td>
-                  <select name="mar_block5" id="mar_block5" class="form-select">
-                    <option value="" >Seleccionar Asignatura y Profesor</option>
-                    {% for asignatura in asignaturas %}
-                      <option value="{{ asignatura.id_asignatura }}" >{{ asignatura.nombre_asignatura }} - {{asignatura.profesor_asignatura.nombre_completo}} </option>
-                    {% endfor %}
-                  </select>
-                </td>
-                <td>
-                  <select name="mie_block5" id="mie_block5" class="form-select">
-                    <option value="" >Seleccionar Asignatura y Profesor</option>
-                    {% for asignatura in asignaturas %}
-                      <option value="{{ asignatura.id_asignatura }}" >{{ asignatura.nombre_asignatura }} - {{asignatura.profesor_asignatura.nombre_completo}} </option>
-                    {% endfor %}
-                  </select>
-                </td>
-                <td>
-                  <select name="jue_block5" id="jue_block5" class="form-select">
-                    <option value="" >Seleccionar Asignatura y Profesor</option>
-                    {% for asignatura in asignaturas %}
-                      <option value="{{ asignatura.id_asignatura }}" >{{ asignatura.nombre_asignatura }} - {{asignatura.profesor_asignatura.nombre_completo}} </option>
-                    {% endfor %}
-                  </select>
-                </td>
-                <td>
-                  <select name="vie_block5" id="vie_block5" class="form-select">
-                    <option value="" >Seleccionar Asignatura y Profesor</option>
-                    {% for asignatura in asignaturas %}
-                      <option value="{{ asignatura.id_asignatura }}" >{{ asignatura.nombre_asignatura }} - {{asignatura.profesor_asignatura.nombre_completo}} </option>
-                    {% endfor %}
-                  </select>
-                </td>
-              </tr>
-              <tr>
-                <td>12:15 - 13:00</td>
-                <td>
-                  <select name="lun_block6" id="lun_block6" class="form-select">
-                    <option value="" >Seleccionar Asignatura y Profesor</option>
-                    {% for asignatura in asignaturas %}
-                      <option value="{{ asignatura.id_asignatura }}" >{{ asignatura.nombre_asignatura }} - {{asignatura.profesor_asignatura.nombre_completo}} </option>
-                    {% endfor %}
-                  </select>
-                </td>
-                <td>
-                  <select name="mar_block6" id="mar_block6" class="form-select">
-                    <option value="" >Seleccionar Asignatura y Profesor</option>
-                    {% for asignatura in asignaturas %}
-                      <option value="{{ asignatura.id_asignatura }}" >{{ asignatura.nombre_asignatura }} - {{asignatura.profesor_asignatura.nombre_completo}} </option>
-                    {% endfor %}
-                  </select>
-                </td>
-                <td>
-                  <select name="mie_block6" id="mie_block6" class="form-select">
-                    <option value="" >Seleccionar Asignatura y Profesor</option>
-                    {% for asignatura in asignaturas %}
-                      <option value="{{ asignatura.id_asignatura }}" >{{ asignatura.nombre_asignatura }} - {{asignatura.profesor_asignatura.nombre_completo}} </option>
-                    {% endfor %}
-                  </select>
-                </td>
-                <td>
-                  <select name="jue_block6" id="jue_block6" class="form-select">
-                    <option value="" >Seleccionar Asignatura y Profesor</option>
-                    {% for asignatura in asignaturas %}
-                      <option value="{{ asignatura.id_asignatura }}" >{{ asignatura.nombre_asignatura }} - {{asignatura.profesor_asignatura.nombre_completo}} </option>
-                    {% endfor %}
-                  </select>
-                </td>
-                <td>
-                  <select name="vie_block6" id="vie_block6" class="form-select">
-                    <option value="" >Seleccionar Asignatura y Profesor</option>
-                    {% for asignatura in asignaturas %}
-                      <option value="{{ asignatura.id_asignatura }}" >{{ asignatura.nombre_asignatura }} - {{asignatura.profesor_asignatura.nombre_completo}} </option>
-                    {% endfor %}
-                  </select>
-                </td>
-              </tr>
-              <tr>
-                <td>14:00 - 14:45</td>
-                <td>
-                  <select name="lun_block7" id="lun_block7" class="form-select">
-                    <option value="" >Seleccionar Asignatura y Profesor</option>
-                    {% for asignatura in asignaturas %}
-                      <option value="{{ asignatura.id_asignatura }}" >{{ asignatura.nombre_asignatura }} - {{asignatura.profesor_asignatura.nombre_completo}} </option>
-                    {% endfor %}
-                  </select>
-                </td>
-                <td>
-                  <select name="mar_block7" id="mar_block7" class="form-select">
-                    <option value="" >Seleccionar Asignatura y Profesor</option>
-                    {% for asignatura in asignaturas %}
-                      <option value="{{ asignatura.id_asignatura }}" >{{ asignatura.nombre_asignatura }} - {{asignatura.profesor_asignatura.nombre_completo}} </option>
-                    {% endfor %}
-                  </select>
-                </td>
-                <td>
-                  <select name="mie_block7" id="mie_block7" class="form-select">
-                    <option value="" >Seleccionar Asignatura y Profesor</option>
-                    {% for asignatura in asignaturas %}
-                      <option value="{{ asignatura.id_asignatura }}" >{{ asignatura.nombre_asignatura }} - {{asignatura.profesor_asignatura.nombre_completo}} </option>
-                    {% endfor %}
-                  </select>
-                </td>
-                <td>
-                  <select name="jue_block7" id="jue_block7" class="form-select">
-                    <option value="" >Seleccionar Asignatura y Profesor</option>
-                    {% for asignatura in asignaturas %}
-                      <option value="{{ asignatura.id_asignatura }}" >{{ asignatura.nombre_asignatura }} - {{asignatura.profesor_asignatura.nombre_completo}} </option>
-                    {% endfor %}
-                  </select>
-                </td>
-                <td>
-                  <select name="vie_block7" id="vie_block7" class="form-select">
-                    <option value="" >Seleccionar Asignatura y Profesor</option>
-                    {% for asignatura in asignaturas %}
-                      <option value="{{ asignatura.id_asignatura }}" >{{ asignatura.nombre_asignatura }} - {{asignatura.profesor_asignatura.nombre_completo}} </option>
-                    {% endfor %}
-                  </select>
-                </td>
-              </tr>
-              <tr>
-                <td>14:45 - 15:30</td>
-                <td>
-                  <select name="lun_block8" id="lun_block8" class="form-select">
-                    <option value="" >Seleccionar Asignatura y Profesor</option>
-                    {% for asignatura in asignaturas %}
-                      <option value="{{ asignatura.id_asignatura }}" >{{ asignatura.nombre_asignatura }} - {{asignatura.profesor_asignatura.nombre_completo}} </option>
-                    {% endfor %}
-                  </select>
-                </td>
-                <td>
-                  <select name="mar_block8" id="mar_block8" class="form-select">
-                    <option value="" >Seleccionar Asignatura y Profesor</option>
-                    {% for asignatura in asignaturas %}
-                      <option value="{{ asignatura.id_asignatura }}" >{{ asignatura.nombre_asignatura }} - {{asignatura.profesor_asignatura.nombre_completo}} </option>
-                    {% endfor %}
-                  </select>
-                </td>
-                <td>
-                  <select name="mie_block8" id="mie_block8" class="form-select">
-                    <option value="" >Seleccionar Asignatura y Profesor</option>
-                    {% for asignatura in asignaturas %}
-                      <option value="{{ asignatura.id_asignatura }}" >{{ asignatura.nombre_asignatura }} - {{asignatura.profesor_asignatura.nombre_completo}} </option>
-                    {% endfor %}
-                  </select>
-                </td>
-                <td>
-                  <select name="jue_block8" id="jue_block8" class="form-select">
-                    <option value="" >Seleccionar Asignatura y Profesor</option>
-                    {% for asignatura in asignaturas %}
-                      <option value="{{ asignatura.id_asignatura }}" >{{ asignatura.nombre_asignatura }} - {{asignatura.profesor_asignatura.nombre_completo}} </option>
-                    {% endfor %}
-                  </select>
-                </td>
-                <td>
-                  <select name="vie_block8" id="vie_block8" class="form-select">
-                    <option value="" >Seleccionar Asignatura y Profesor</option>
-                    {% for asignatura in asignaturas %}
-                      <option value="{{ asignatura.id_asignatura }}" >{{ asignatura.nombre_asignatura }} - {{asignatura.profesor_asignatura.nombre_completo}} </option>
-                    {% endfor %}
-                  </select>
-                </td>
-              </tr>
-              <tr>
-                <td>15:40 - 16:25</td>
-                <td>
-                  <select name="lun_block9" id="lun_block9" class="form-select">
-                    <option value="" >Seleccionar Asignatura y Profesor</option>
-                    {% for asignatura in asignaturas %}
-                      <option value="{{ asignatura.id_asignatura }}" >{{ asignatura.nombre_asignatura }} - {{asignatura.profesor_asignatura.nombre_completo}} </option>
-                    {% endfor %}
-                  </select>
-                </td>
-                <td>
-                  <select name="mar_block9" id="mar_block9" class="form-select">
-                    <option value="" >Seleccionar Asignatura y Profesor</option>
-                    {% for asignatura in asignaturas %}
-                      <option value="{{ asignatura.id_asignatura }}" >{{ asignatura.nombre_asignatura }} - {{asignatura.profesor_asignatura.nombre_completo}} </option>
-                    {% endfor %}
-                  </select>
-                </td>
-                <td>
-                  <select name="mie_block9" id="mie_block9" class="form-select">
-                    <option value="" >Seleccionar Asignatura y Profesor</option>
-                    {% for asignatura in asignaturas %}
-                      <option value="{{ asignatura.id_asignatura }}" >{{ asignatura.nombre_asignatura }} - {{asignatura.profesor_asignatura.nombre_completo}} </option>
-                    {% endfor %}
-                  </select>
-                </td>
-                <td>
-                  <select name="jue_block9" id="jue_block9" class="form-select">
-                    <option value="" >Seleccionar Asignatura y Profesor</option>
-                    {% for asignatura in asignaturas %}
-                      <option value="{{ asignatura.id_asignatura }}" >{{ asignatura.nombre_asignatura }} - {{asignatura.profesor_asignatura.nombre_completo}} </option>
-                    {% endfor %}
-                  </select>
-                </td>
-                <td>
-                  <select name="vie_block9" id="vie_block9" class="form-select">
-                    <option value="" >Seleccionar Asignatura y Profesor</option>
-                    {% for asignatura in asignaturas %}
-                      <option value="{{ asignatura.id_asignatura }}" >{{ asignatura.nombre_asignatura }} - {{asignatura.profesor_asignatura.nombre_completo}} </option>
-                    {% endfor %}
-                  </select>
-                </td>
-              </tr>
-            </table>
-
-            <div class="container botones" style="text-align: center; align-items: center; margin-top: 20px;">
-              <input type="submit" value="Submit">
             </div>
-      
+
+            <div style="text-align: center; align-items: center; margin-top: 10px;">
+              <button type="submit" class="btn btn-lg btn-block" style="font-weight: 500;">Agregar horario</button>
+            </div>
+
           </form>
         </div>
 
@@ -513,14 +566,15 @@
 
       <Br></Br>
 
-      
+
       <div class="container botones" style="text-align: center; align-items: center; margin-top: 20px;">
         <a type="button" class="btn btn-lg btn-block" href="{% url 'home_agregar' %}">Volver al menú agregar</a>
       </div>
 
     </div>
-
   </div>
+
+
 
 </body>
 
