@@ -76,18 +76,11 @@ class Curso(models.Model):
     def __str__(self):
         return self.nombre_curso
 
-class Horario(models.Model):
-    id_horario = models.IntegerField(primary_key=True, verbose_name="ID del horario")
-    curso_horario = models.ForeignKey(Curso, on_delete=models.CASCADE, verbose_name="Curso asignado")
-
-    def __str__(self):
-        return self.dia_horario
-
 class Bloque(models.Model):
-    id_bloque = models.IntegerField(primary_key=True, verbose_name="ID del bloque")
     nombre_bloque = models.CharField(max_length=3, verbose_name="Nombre del bloque", null=True)
-    horario_bloque = models.ForeignKey(Horario, on_delete=models.CASCADE, verbose_name="Horario del bloque")
-    asignatura_bloque = models.ForeignKey(Asignatura, on_delete=models.CASCADE, verbose_name="Bloque de la asignatura")
+    curso_bloque = models.ForeignKey(Curso, on_delete=models.CASCADE, verbose_name="Curso del bloque", null=True)
+    asignatura_bloque = models.ForeignKey(Asignatura, on_delete=models.CASCADE, verbose_name="Asignatura del bloque", null=True)
+    docente_bloque = models.ForeignKey(Docente, on_delete=models.CASCADE, verbose_name="Docente del bloque", null=True)
 
     def __str__(self):
         return self.id_bloque

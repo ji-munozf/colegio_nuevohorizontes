@@ -32,6 +32,7 @@ urlpatterns = [
     path('portal_admin/formularios/agregar_salas', agregar_salas, name="agregar_salas"),
     path('portal_admin/formularios/agregar_sedes', agregar_sedes, name="agregar_sedes"),
     path('portal_admin/formularios/agregar_pagos_colegio', agregar_pagos_colegio, name="agregar_pagos_colegio"),
+    path('portal_admin/formularios/agregar_horariocurso', agregar_horariocurso, name="agregar_horariocurso"),
 
     #Listado
     path('portal_admin/listados/listar_admins', listar_admins, name="listar_admins"),
