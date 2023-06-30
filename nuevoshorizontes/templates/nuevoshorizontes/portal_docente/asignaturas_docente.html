@@ -24,17 +24,39 @@
 
     <h1 class="heading" style="padding-top: 120px;">
         <img class="title-img mx-2" src="{% static 'nuevoshorizontes/img/icons_admin/libro_blanco.png' %}" alt="agregar"
-            height="60">Lista de asignaturas 
+            height="60">Asignaturas asignadas
     </h1>
 
-
-    <div class="container">
-        <div class="row">
-            <div class="content">
-                <p style="text-align: center; font-size: 40px; color: #fff;">No hay información disponible</p>
+    
+    <div class="container" style="margin-bottom: 20px;">
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    {% if asignaturas %}
+                    <table class="table table-striped" style="background-color: white; border: 1px solid rgb(21, 20, 55); text-align: center;">
+                        <thead>
+                            <tr>
+                                <th>ID de la asignatura</th>
+                                <th>Nombre asignatura</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for asignaturas in asignaturas %}
+                            <tr>
+                                <td>{{ asignaturas.id_asignatura }}</td>
+                                <td>{{ asignaturas.nombre_asignatura }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% else %}
+                    <p>No tiene asignaturas asignadas en estos momentos.</p>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </div>
+    
     
 </body>
 

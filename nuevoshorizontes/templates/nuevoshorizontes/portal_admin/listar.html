@@ -29,7 +29,7 @@
 
     <div class="container">
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <div class="card">
                     <img src="{% static 'nuevoshorizontes/img/icons_listar/alumno.png' %}" class="card-img-top" alt="Imagen 1">
                     <div class="card-body">
@@ -38,7 +38,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <div class="card">
                     <img src="{% static 'nuevoshorizontes/img/icons_listar/profesor.png' %}" class="card-img-top" alt="Imagen 2">
                     <div class="card-body">
@@ -47,7 +47,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <div class="card">
                     <img src="{% static 'nuevoshorizontes/img/icons_listar/padre-e-hijo.png' %}" class="card-img-top" alt="Imagen 3">
                     <div class="card-body">
@@ -56,7 +56,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <div class="card">
                     <img src="{% static 'nuevoshorizontes/img/icons_listar/administrar.png' %}" class="card-img-top" alt="Imagen 4">
                     <div class="card-body">
@@ -65,7 +65,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <div class="card">
                     <img src="{% static 'nuevoshorizontes/img/icons_navbar/sede.png' %}" class="card-img-top" alt="Imagen 5">
                     <div class="card-body">
@@ -74,7 +74,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <div class="card">
                     <img src="{% static 'nuevoshorizontes/img/icons_navbar/periodico.png' %}" class="card-img-top" alt="Imagen 6">
                     <div class="card-body">
@@ -83,7 +83,26 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-6">
+                <div class="card">
+                    <img src="{% static 'nuevoshorizontes/img/ingresos.png' %}" class="card-img-top"
+                        alt="Imagen 9">
+                    <div class="card-body">
+                        <h3 class="card-title">Pagos colegio</h3>
+                        <a href="{% url 'listar_pago_colegio' %}" class="btn btn-primary align-self-center">Mostrar lista</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <img src="{% static 'nuevoshorizontes/img/icons_listar/libro.png' %}" class="card-img-top" alt="Imagen 9">
+                    <div class="card-body">
+                        <h3 class="card-title">Asignaturas</h3>
+                        <a href="{% url 'listar_asignaturas' %}" class="btn btn-primary align-self-center">Mostrar lista</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
                 <div class="card">
                     <img src="{% static 'nuevoshorizontes/img/icons_listar/graduados.png' %}" class="card-img-top" alt="Imagen 7">
                     <div class="card-body">
@@ -92,21 +111,12 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <div class="card">
                     <img src="{% static 'nuevoshorizontes/img/icons_listar/aula.png' %}" class="card-img-top" alt="Imagen 8">
                     <div class="card-body">
                         <h3 class="card-title">Salas</h3>
                         <a href="{% url 'listar_salas' %}" class="btn btn-primary align-self-center">Mostrar lista</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card">
-                    <img src="{% static 'nuevoshorizontes/img/icons_listar/libro.png' %}" class="card-img-top" alt="Imagen 9">
-                    <div class="card-body">
-                        <h3 class="card-title">Asignaturas</h3>
-                        <a href="{% url 'listar_asignaturas' %}" class="btn btn-primary align-self-center">Mostrar lista</a>
                     </div>
                 </div>
             </div>

@@ -47,6 +47,7 @@
                             <tr>
                                 <th>ID</th>
                                 <th>Nombre asignatura</th>
+                                <th>Docente asignado</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
@@ -55,6 +56,7 @@
                             <tr>
                                 <td>{{ asignaturas.id_asignatura }}</td>
                                 <td>{{ asignaturas.nombre_asignatura }}</td>
+                                <td>{{ asignaturas.profesor_asignatura }}</td>
                                 <td>
                                     <a type="button" class="btn btn-success btn-block" href="{% url 'modificar_asignaturas' asignaturas.id_asignatura %}" style="background-color: green; color: #fff;">Modificar</a>
                                     <a type="button" class="btn btn-danger btn-block" onclick="eliminarAsignatura('{{ asignaturas.id_asignatura }}')" style="background-color: #dc3545; color: #fff;">Eliminar</a>

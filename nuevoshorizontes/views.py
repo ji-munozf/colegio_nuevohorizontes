@@ -6,7 +6,6 @@ from .forms import *
 from datetime import date, datetime
 from django.utils import timezone
 from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Count, Case, When
 
 
@@ -928,6 +927,20 @@ def listar_postulaciones(request):
         return redirect("login_administrativo")
 
 
+def listar_pago_colegio(request):
+    correo_admin = request.session.get("correo_admin", None)
+    if correo_admin:
+        admin = Administrador.objects.get(correo_admin=correo_admin)
+        pago_colegio = Pagos_colegio.objects.all()
+        return render(
+            request,
+            "nuevoshorizontes/portal_admin/listados/listar_pagos_colegio.html",
+            {"pago_colegio": pago_colegio, "admin": admin},
+        )
+    else:
+        return redirect("login_administrativo")
+
+
 def modificar_alumnos(request, id):
     correo_admin = request.session.get("correo_admin", None)
     if correo_admin:
@@ -1233,6 +1246,39 @@ def modificar_salas(request, id):
         return redirect("login_administrativo")
 
 
+def modificar_pago_colegio(request, id):
+    correo_admin = request.session.get("correo_admin", None)
+    if correo_admin:
+        admin = Administrador.objects.get(correo_admin=correo_admin)
+        pago_colegio = get_object_or_404(Pagos_colegio, id_pago_colegio=id)
+        data = {"form": PagosColegioForm(instance=pago_colegio), "admin": admin}
+
+        if request.method == "POST":
+            formulario = PagosColegioForm(data=request.POST, instance=pago_colegio)
+            [
+                formulario.fields.pop(
+                    field, None
+                )  # Elimina el campo 'field' del diccionario 'formulario.fields'
+                for field in [  # Itera sobre cada campo de la lista
+                    "id_sala",
+                ]
+            ]
+            if formulario.is_valid():
+                formulario.save()
+                messages.success(request, "Pago colegio modificado correctamente")
+                return redirect(to="listar_pago_colegio")
+            else:
+                data["form"] = formulario
+
+        return render(
+            request,
+            "nuevoshorizontes/portal_admin/modificar/modificar_pagos_colegio.html",
+            data,
+        )
+    else:
+        return redirect("login_administrativo")
+
+
 def eliminar_alumno(request, id):
     alumno = get_object_or_404(Alumno, rut_alumno=id)
     alumno.delete()
@@ -1303,11 +1349,18 @@ def eliminar_postulacion(request, id):
     return redirect(to="listar_postulaciones")
 
 
+def eliminar_pagos_colegio(request, id):
+    pago_colegio = get_object_or_404(Pagos_colegio, id_pago_colegio=id)
+    pago_colegio.delete()
+    messages.success(request, "Pago colegio eliminado correctamente")
+    return redirect(to="listar_pago_colegio")
+
+
 def eliminar_pagos(request, id):
     pagos = get_object_or_404(Pagos, id_pago=id)
     pagos.delete()
-    messages.success(request, "Pago eliminad correctamente")
-    return redirect(to="eliminar_pagos")
+    messages.success(request, "Pago eliminado correctamente")
+    return redirect(to="home_pagos")
 
 
 def home_alumno(request):
@@ -1460,17 +1513,69 @@ def lista_hijos(request):
 
 
 def horarios_apoderado(request):
-    return render(request, "nuevoshorizontes/portal_apoderado/horarios_apoderado.html")
+    correo_apoderado = request.session.get("correo_apoderado", None)
+    if correo_apoderado:
+        apoderado = Apoderado.objects.get(correo_apoderado=correo_apoderado)
+        return render(
+            request,
+            "nuevoshorizontes/portal_apoderado/horarios_apoderado.html",
+            {"apoderado": apoderado},
+        )
+
+    else:
+        return redirect("login_apoderado")
 
 
 def asistencias_apoderado(request):
-    return render(
-        request, "nuevoshorizontes/portal_apoderado/asistencias_apoderado.html"
-    )
+    correo_apoderado = request.session.get("correo_apoderado", None)
+    if correo_apoderado:
+        apoderado = Apoderado.objects.get(correo_apoderado=correo_apoderado)
+        alumnos = Alumno.objects.filter(apoderado_alumno=apoderado)
+
+        asistencias_alumnos = []
+        for alumno in alumnos:
+            asistencias = Asistencia.objects.filter(alumno=alumno)
+            presentes = asistencias.filter(tipo_asistencia_id=1).count()
+            ausentes = asistencias.filter(tipo_asistencia_id=2).count()
+            justificados = asistencias.filter(tipo_asistencia_id=3).count()
+            total_asistencias = presentes + ausentes + justificados
+
+            if total_asistencias > 0:
+                porcentaje_asistencia = ((presentes + justificados) / total_asistencias) * 100
+            else:
+                porcentaje_asistencia = 0
+
+            asistencias_alumnos.append(
+                {
+                    "alumno": alumno,
+                    "presentes": presentes,
+                    "ausentes": ausentes,
+                    "justificados": justificados,
+                    "porcentaje_asistencia": porcentaje_asistencia,
+                }
+            )
+
+        return render(
+            request,
+            "nuevoshorizontes/portal_apoderado/asistencias_apoderado.html",
+            {"apoderado": apoderado, "asistencias_alumnos": asistencias_alumnos},
+        )
+    else:
+        return redirect("login_apoderado")
 
 
 def notas_apoderado(request):
-    return render(request, "nuevoshorizontes/portal_apoderado/notas_apoderado.html")
+    correo_apoderado = request.session.get("correo_apoderado", None)
+    if correo_apoderado:
+        apoderado = Apoderado.objects.get(correo_apoderado=correo_apoderado)
+        return render(
+            request,
+            "nuevoshorizontes/portal_apoderado/notas_apoderado.html",
+            {"apoderado": apoderado},
+        )
+
+    else:
+        return redirect("login_apoderado")
 
 
 def pagos_apoderado(request):
@@ -1478,47 +1583,55 @@ def pagos_apoderado(request):
     if correo_apoderado:
         apoderado = Apoderado.objects.get(correo_apoderado=correo_apoderado)
         pagos = Pagos_colegio.objects.all()
+        alumnos = Alumno.objects.filter(apoderado_alumno=apoderado)
+
+        # Obtener los ID de los pagos realizados por el apoderado
+        pagos_realizados = Pagos.objects.filter(apoderado=apoderado).values_list(
+            "nombre_pago_colegio__id_pago_colegio", flat=True
+        )
+
         return render(
             request,
             "nuevoshorizontes/portal_apoderado/pagos_apoderado.html",
-            {"apoderado": apoderado, "pagos": pagos},
+            {
+                "apoderado": apoderado,
+                "alumnos": alumnos,
+                "pagos": pagos,
+                "pagos_realizados": pagos_realizados,
+            },
         )
-
     else:
         return redirect("login_apoderado")
 
 
-@csrf_exempt
-def guardar_pago(request):
-    if request.method == "POST":
-        id_pago = request.POST.get("id_pago")
-        monto_pago = request.POST.get("monto_pago")
-        tipo_pago_colegio = request.POST.get("tipo_pago_colegio")
+def realizar_pago(request, id_pago):
+    pago = Pagos_colegio.objects.get(id_pago_colegio=id_pago)
+    apoderado = Apoderado.objects.get(
+        correo_apoderado=request.session.get("correo_apoderado")
+    )
+    alumno = Alumno.objects.get(apoderado_alumno=apoderado)
 
-        # Obtener el apoderado que realizó el pago
-        correo_apoderado = request.session.get("correo_apoderado", None)
-        apoderado = Apoderado.objects.get(correo_apoderado=correo_apoderado)
+    # Obtener la fecha actual
+    fecha_pago = timezone.now().date()
 
-        fecha_pago = date.today()
+    # Crear una instancia de Pagos con los datos del pago
+    pago_realizado = Pagos(
+        fecha_pago=fecha_pago,
+        monto_pago=pago.monto,
+        apoderado=apoderado,
+        alumno=alumno,
+        nombre_pago_colegio=pago,
+    )
+    pago_realizado.save()
 
-        # Obtener el objeto Tipo_pago_colegio
-        tipo_pago_colegio_obj = Tipo_pago_colegio.objects.get(nombre_pago_colegio=tipo_pago_colegio)
+    # Agregar el ID del pago a la lista de pagos realizados por el apoderado
+    pago_realizado_ids = request.session.get("pago_realizado_ids", [])
+    pago_realizado_ids.append(id_pago)
+    request.session["pago_realizado_ids"] = pago_realizado_ids
 
-        # Guardar el pago en la base de datos
-        pago = Pagos(
-            id_pago=id_pago,
-            fecha_pago=fecha_pago,
-            monto_pago=monto_pago,
-            apoderado=apoderado,
-            tipo_pago_colegio=tipo_pago_colegio_obj
-        )
-        pago.save()
+    messages.success(request, "El pago se realizó correctamente")
 
-        messages.success(request, 'Pago realizado exitosamente')
-
-        return redirect('pagos_apoderado')
-    else:
-        return JsonResponse({"error": "Método no permitido."}, status=405)
+    return redirect("pagos_apoderado")
 
 
 def home_docente(request):
@@ -1575,7 +1688,22 @@ def curso_docente(request):
 
 
 def asignaturas_docente(request):
-    return render(request, "nuevoshorizontes/portal_docente/asignaturas_docente.html")
+    correo_docente = request.session.get("correo_docente", None)
+    if correo_docente:
+        docente = Docente.objects.get(correo_docente=correo_docente)
+        asignaturas = (
+            docente.asignatura_set.all()
+        )  # Obtener todas las asignaturas del docente
+        return render(
+            request,
+            "nuevoshorizontes/portal_docente/asignaturas_docente.html",
+            {
+                "docente": docente,
+                "asignaturas": asignaturas,
+            },  # Pasar las asignaturas al template
+        )
+    else:
+        return redirect("login_docente")
 
 
 def asistencia_docente(request):

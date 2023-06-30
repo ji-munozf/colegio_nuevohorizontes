@@ -414,6 +414,19 @@ class PagosColegioForm(forms.ModelForm):
         widget=forms.Select(attrs={"class": "form-control", "required": "required"})
     )
 
+    def clean_nombre_pago_colegio(self):
+        nombre_pago_colegio = self.cleaned_data.get("nombre_pago_colegio")
+        instance = self.instance
+
+        if instance is None:  # Agregar nueva sala
+            if Pagos_colegio.objects.filter(nombre_pago_colegio=nombre_pago_colegio).exists():
+                raise ValidationError("El nombre del pago colegio ya existe.")
+        else:  # Modificar sala existente
+            if Pagos_colegio.objects.filter(nombre_pago_colegio=nombre_pago_colegio).exclude(id_pago_colegio=instance.id_pago_colegio).exists():
+                raise ValidationError("El nombre del pago colegio ya existe para otro pago colegio.")
+            
+        return nombre_pago_colegio
+
     class Meta:
         model = Pagos_colegio
         fields = "__all__"
@@ -466,6 +479,8 @@ class SalaForm(forms.ModelForm):
         else:  # Modificar sala existente
             if Sala.objects.filter(nombre_sala=nombre_sala).exclude(id_sala=instance.id_sala).exists():
                 raise ValidationError("El nombre de la sala ya existe para otra sala.")
+            
+        return nombre_sala
 
     class Meta:
         model = Sala

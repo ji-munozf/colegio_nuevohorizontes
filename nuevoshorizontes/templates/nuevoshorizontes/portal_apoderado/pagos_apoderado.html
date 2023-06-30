@@ -22,8 +22,9 @@
 <body>
 
     <style>
-        .custom-button:hover {
-            color: rgb(21, 20, 50);
+        td {
+            text-align: center;
+            vertical-align: middle;
         }
     </style>
 
@@ -43,103 +44,48 @@
                 <form id="pago-form" method="POST" action="">
                     {% csrf_token %}
                     <div class="table-responsive">
+                        {% if alumnos %}
+                        {% for alumno in alumnos %}
+                        <p>Nombre del alumno: {{ alumno.nombre_alumno }} {{ alumno.appaterno_alumno }} {{ alumno.apmaterno_alumno }}</p>
                         {% if pagos %}
-                        <table class="table table-striped"
-                            style="background-color: white; border: 1px solid rgb(21, 20, 55); text-align: center;">
+                        <table class="table table-striped" style="background-color: white; border: 1px solid rgb(21, 20, 55); text-align: center;">
                             <thead>
                                 <tr>
-                                    <th>Seleccionar</th>
                                     <th>ID</th>
+                                    <th>Nombre</th>
                                     <th>Monto a pagar</th>
                                     <th>Fecha de vencimiento</th>
                                     <th>Tipo</th>
+                                    <th>Acción</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for pago in pagos %}
+                                {% if pago.id_pago_colegio not in pagos_realizados %}
                                 <tr>
-                                    <td>
-                                        <input type="checkbox" class="form-check-input" id="checkbox_{{ pago.id_pago }}"
-                                            data-monto="{{ pago.monto }}" data-id-pago="{{ pago.id_pago }}"
-                                            onclick="calcularTotal()" style="border-color: #000;">
-                                    </td>
-                                    <td>{{ pago.id_pago }}</td>
+                                    <td>{{ pago.id_pago_colegio }}</td>
+                                    <td>{{ pago.nombre_pago_colegio }}</td>
                                     <td>${{ pago.monto | intcomma }}</td>
                                     <td>{{ pago.fecha_vencimiento }}</td>
-                                    <td data-tipo-pago="{{ pago.tipo_pago_colegio }}">{{ pago.tipo_pago_colegio }}</td>
+                                    <td>{{ pago.tipo_pago_colegio }}</td>
+                                    <td><a type="button" class="btn btn-success btn-block" href="{% url 'realizar_pago' pago.id_pago_colegio %}" style="background-color: green; color: #fff;">Pagar</a></td>
                                 </tr>
+                                {% endif %}
                                 {% endfor %}
                             </tbody>
-                        </table>
+                        </table>                        
                         {% else %}
                         <p>No hay pagos de colegio registrados.</p>
                         {% endif %}
+                        {% endfor %}
+                        {% else %}
+                        <p>No tiene alumnos asignados.</p>
+                        {% endif %}
                     </div>
-                    {% if pagos %}
-                    <div class="container">
-                        <div class="row">
-                            <input type="hidden" id="monto-total" name="monto_pago">
-                            <p style="font-size: 20px;" id="total-pagar">Total a pagar: $0</p>
-                            <button type="submit" class="btn btn-primary custom-button" style="width: 10%;"
-                                onclick="realizarPago()">Pagar</button>
-                        </div>
-                    </div>
-                    {% endif %}
                 </form>
             </div>
         </div>
     </div>
-
-    <script>
-        function calcularTotal() {
-            var checkboxes = document.querySelectorAll('input[type="checkbox"]');
-            var total = 0;
-            for (var i = 0; i < checkboxes.length; i++) {
-                if (checkboxes[i].checked) {
-                    var monto = checkboxes[i].getAttribute('data-monto');
-                    total += parseInt(monto);
-                }
-            }
-
-            document.getElementById('monto-total').value = total; // Actualiza el valor del campo oculto
-            document.getElementById('total-pagar').textContent = "Total a pagar: $" + total.toLocaleString(); // Actualiza el elemento <p>
-        }
-    </script>
-
-    <script>
-        function realizarPago() {
-            const checkbox = document.querySelector('input[type="checkbox"]:checked');
-            if (!checkbox) {
-                Swal.fire({
-                    title: 'Atención',
-                    text: 'Debes seleccionar al menos un pago',
-                    icon: 'warning'
-                });
-                event.preventDefault(); // Detiene la acción del formulario (envío)
-            } else {
-                const form = document.getElementById('pago-form');
-                form.action = "{% url 'guardar_pago' %}";
-
-                // Agrega el valor del campo oculto al formulario antes de enviarlo
-                const montoTotal = document.getElementById('monto-total').value;
-                const inputMontoTotal = document.createElement('input');
-                inputMontoTotal.type = 'hidden';
-                inputMontoTotal.name = 'monto_pago';
-                inputMontoTotal.value = montoTotal;
-                form.appendChild(inputMontoTotal);
-
-                // Agrega el valor del tipo de pago al formulario antes de enviarlo
-                const tipoPagoColegio = checkbox.parentNode.parentNode.querySelector('td[data-tipo-pago]').getAttribute('data-tipo-pago');
-                const inputTipoPagoColegio = document.createElement('input');
-                inputTipoPagoColegio.type = 'hidden';
-                inputTipoPagoColegio.name = 'tipo_pago_colegio';
-                inputTipoPagoColegio.value = tipoPagoColegio;
-                form.appendChild(inputTipoPagoColegio);
-
-                form.submit();
-            }
-        }
-    </script>
 
 </body>
 

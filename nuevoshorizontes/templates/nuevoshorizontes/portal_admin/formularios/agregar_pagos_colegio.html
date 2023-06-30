@@ -25,7 +25,7 @@
     {% include "nuevoshorizontes/portal_admin/mensajes.html" %}
 
     <h1 class="heading" style="padding-top: 120px;">
-        <img class="title-img mx-2" src="{% static 'nuevoshorizontes/img/icons_admin/sede_blanco.png' %}" alt="agregar"
+        <img class="title-img mx-2" src="{% static 'nuevoshorizontes/img/ingresos_blanco.png' %}" alt="agregar"
             height="60">Agregar pagos colegio
     </h1>
 
@@ -80,7 +80,15 @@
         </div>
     </div>
 
-
+    {% if form.errors %}
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            html: '{% for field in form %}{% for error in field.errors %}{{ error }}<br>{% endfor %}{% endfor %}{% for message in messages %}{{ message }}<br>{% endfor %}',
+        });
+    </script>
+    {% endif %}
 
 </body>
 

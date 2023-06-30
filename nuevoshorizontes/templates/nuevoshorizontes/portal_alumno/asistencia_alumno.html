@@ -23,8 +23,8 @@
     {% include "nuevoshorizontes/portal_alumno/navbar.html" %}
 
     <h1 class="heading" style="padding-top: 120px;">
-        <img class="title-img mx-2" src="{% static 'nuevoshorizontes/img/icons_admin/periodico_blanco.png' %}" alt="agregar"
-            height="60">Asistencia
+        <img class="title-img mx-2" src="{% static 'nuevoshorizontes/img/icons_admin/periodico_blanco.png' %}"
+            alt="agregar" height="60">Asistencia
     </h1>
 
     <div class="container">
@@ -32,46 +32,47 @@
             <div class="card-body">
                 <div class="table-responsive">
                     {% if asistencias %}
-    <table class="table table-striped" style="background-color: white; border: 1px solid rgb(21, 20, 55); text-align: center;">
-        <thead>
-            <tr>
-                <th>Nombre completo</th>
-                <th>Presentes</th>
-                <th>Ausentes</th>
-                <th>Justificados</th>
-                <th>Porcentaje de asistencia</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>{{ alumno.nombre_alumno }} {{ alumno.appaterno_alumno }} {{ alumno.apmaterno_alumno }}</td>
-                <td>
-                    {% for asistencia in asistencias %}
-                        {{ asistencia.presentes }}
-                    {% endfor %}
-                </td>
-                <td>
-                    {% for asistencia in asistencias %}
-                        {{ asistencia.ausentes }}
-                    {% endfor %}
-                </td>
-                <td>
-                    {% for asistencia in asistencias %}
-                        {{ asistencia.justificados }}
-                    {% endfor %}
-                </td>
-                <td>{{ porcentaje_asistencia | floatformat:0 }}%</td>
-            </tr>
-        </tbody>
-    </table>
-    {% else %}
-        <p>No hay asistencias registradas para este alumno.</p>
-    {% endif %}
+                    <table class="table table-striped"
+                        style="background-color: white; border: 1px solid rgb(21, 20, 55); text-align: center;">
+                        <thead>
+                            <tr>
+                                <th>Nombre completo</th>
+                                <th>Presentes</th>
+                                <th>Ausentes</th>
+                                <th>Justificados</th>
+                                <th>Porcentaje de asistencia</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{ alumno.nombre_alumno }} {{ alumno.appaterno_alumno }} {{ alumno.apmaterno_alumno }}</td>
+                                <td>
+                                    {% for asistencia in asistencias %}
+                                    {{ asistencia.presentes }}
+                                    {% endfor %}
+                                </td>
+                                <td>
+                                    {% for asistencia in asistencias %}
+                                    {{ asistencia.ausentes }}
+                                    {% endfor %}
+                                </td>
+                                <td>
+                                    {% for asistencia in asistencias %}
+                                    {{ asistencia.justificados }}
+                                    {% endfor %}
+                                </td>
+                                <td>{{ porcentaje_asistencia | floatformat:0 }}%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    {% else %}
+                    <p>No hay asistencias registradas para este alumno.</p>
+                    {% endif %}
                 </div>
             </div>
         </div>
     </div>
-    
+
 </body>
 
 </html>

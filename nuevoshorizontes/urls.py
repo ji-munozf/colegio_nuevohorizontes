@@ -44,6 +44,7 @@ urlpatterns = [
     path('portal_admin/listados/listar_sedes', listar_sedes_admin, name="listar_sedes"),
     path('portal_admin/listados/listar_salas', listar_salas, name="listar_salas"),
     path('portal_admin/listados/listar_postulaciones', listar_postulaciones, name="listar_postulaciones"),
+    path('portal_admin/listados/listar_pago_colegio', listar_pago_colegio, name="listar_pago_colegio"),
 
     #Cambiar contraseñas
     path('portal_admin/listados/listar_docentes/cambiar_pass_docente/<id>/', cambiar_pass_docente, name="cambiar_pass_docente"),
@@ -61,6 +62,7 @@ urlpatterns = [
     path('portal_admin/listados/listar_cursos/modificar_curso/<id>/', modificar_cursos, name="modificar_cursos"),
     path('portal_admin/listados/listar_sedes/modificar_sede/<id>/', modificar_sedes, name="modificar_sedes"),
     path('portal_admin/listados/listar_salas/modificar_salas/<id>/', modificar_salas, name="modificar_salas"),
+    path('portal_admin/listados/listar_salas/modificar_pago_colegio/<id>/', modificar_pago_colegio, name="modificar_pago_colegio"),
 
     #Eliminar
     path('eliminar_alumno/<id>/', eliminar_alumno, name="eliminar_alumno"),
@@ -74,6 +76,7 @@ urlpatterns = [
     path('eliminar_sala/<id>/', eliminar_salas, name="eliminar_salas"),
     path('eliminar_postulacion/<id>/', eliminar_postulacion, name="eliminar_postulacion"),
     path('eliminar_pago/<id>/', eliminar_pagos, name="eliminar_pagos"),
+    path('eliminar_pagos_colegio/<id>/', eliminar_pagos_colegio, name="eliminar_pagos_colegio"),
     
     #Home alumno
     path('portal_alumno/home_alumno', home_alumno, name="home_alumno"),
@@ -90,7 +93,7 @@ urlpatterns = [
     path('portal_apoderado/asistencias', asistencias_apoderado, name="asistencias_apoderado"),
     path('portal_apoderado/notas_apoderado', notas_apoderado, name="notas_apoderado"),
     path('portal_apoderado/pagos_apoderado', pagos_apoderado, name="pagos_apoderado"),
-    path('guardar_pago/', guardar_pago, name='guardar_pago'),
+    path('realizar_pago/<int:id_pago>/', realizar_pago, name='realizar_pago'),
 
     #Home docente
     path('portal_docente/home_docente', home_docente, name="home_docente"),

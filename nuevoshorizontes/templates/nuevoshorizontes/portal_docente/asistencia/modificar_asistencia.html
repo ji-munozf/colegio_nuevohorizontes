@@ -54,15 +54,14 @@
                                         <select name="tipo_asistencia" class="form-control" style="border-color: #000; text-align: center;" required>
                                             <option value="">Seleccione un estado de asistencia</option>
                                             {% for estado_asistencia in estados_asistencia %}
-                                                <option value="{{ estado_asistencia.id_estado_asistencia }}"
-                                                    {% if asistencia_actual and estado_asistencia.id_estado_asistencia == asistencia_actual.tipo_asistencia_id %}
+                                                <option value="{{ estado_asistencia.id_tipo_asistencia }}"
+                                                    {% if asistencia_actual and estado_asistencia.id_tipo_asistencia == asistencia_actual.tipo_asistencia.id_tipo_asistencia %}
                                                         selected
-                                                    {% endif %}
-                                                >
-                                                    {{ estado_asistencia.nombre_estado_asistencia }}
+                                                    {% endif %}>
+                                                    {{ estado_asistencia.tipo_asistencia }}
                                                 </option>
                                             {% endfor %}
-                                        </select>
+                                        </select>                                        
                                     </td>
                                 </tr>
                             </tbody>

@@ -41,9 +41,10 @@
                             <tr>
                                 <th>ID</th>
                                 <th>Fecha del pago</th>
-                                <th>Monto pagado</th>
+                                <th>Monto</th>
                                 <th>Apoderado</th>
-                                <th>Tipo</th>
+                                <th>Alumno</th>
+                                <th>Nombre pago colegio</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
@@ -54,7 +55,8 @@
                                 <td>{{ pago.fecha_pago }}</td>
                                 <td>${{ pago.monto_pago | intcomma }}</td>
                                 <td>{{ pago.apoderado }}</td>
-                                <td>{{ pago.tipo_pago_colegio }}</td>
+                                <td>{{ pago.alumno }}</td>
+                                <td>{{ pago.nombre_pago_colegio }}</td>
                                 <td>
                                     <a type="button" class="btn btn-danger btn-block" onclick="eliminarPago('{{ pago.id_pago }}')" style="background-color: #dc3545; color: #fff;">Eliminar</a>
                                 </td>

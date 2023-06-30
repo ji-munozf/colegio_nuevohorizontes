@@ -23,6 +23,18 @@
 
 <body>
 
+    <style>
+        @media (max-width: 767px) {
+            .contenedor {
+                margin-top: -80px;
+            }
+            .row {
+                justify-content: center;
+                margin-bottom: 80px;
+            }
+        }
+    </style>
+
     {% include "nuevoshorizontes/navbar.html" %}
 
     <h1 class="heading" style="padding-top: 120px;"><img class="title-img mx-2"
@@ -36,7 +48,7 @@
             </div>
     </section>
 
-    <div class="container">
+    <div class="container contenedor">
         <div class="row">
             {% for noticia in noticias %}
             <div class="card" style="width: 30rem; margin-right: 20px; background-color: #1a1944;">
@@ -44,7 +56,7 @@
                 <div class="card-body">
                     <h5 class="card-title" style="color: #fff;">{{ noticia.titulo }}</h5>
                     <p class="card-text" style="color: #fff;">{{ noticia.descripcion }}</p>
-                    <p class="card-text"><small class="text-light">{{ noticia.fecha_publi | date:"d F Y" }}</small>
+                    <p class="card-text"><small class="text-light">{{ noticia.fecha_publi | date:"d F Y" }}</small></p>
                 </div>
             </div>
             {% empty %}
@@ -59,6 +71,7 @@
         </div>
     </div>
     
+    {% include "nuevoshorizontes/footer.html" %}
 
 </body>
 

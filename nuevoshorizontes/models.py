@@ -137,27 +137,28 @@ class Asistencia(models.Model):
         return self.tipo_asistencia
     
 class Tipo_pago_colegio(models.Model):
-    nombre_pago_colegio = models.CharField(max_length=20, verbose_name="tipo de valor")
+    nombre_tipo_pago_colegio = models.CharField(max_length=20, verbose_name="tipo de valor")
 
     def __str__(self):
-        return self.nombre_pago_colegio
+        return self.nombre_tipo_pago_colegio
     
 class Pagos_colegio(models.Model):
-    id_pago = models.AutoField(primary_key=True, verbose_name="ID del valor")
+    id_pago_colegio = models.AutoField(primary_key=True, verbose_name="ID del valor")
     nombre_pago_colegio = models.CharField(max_length=50, verbose_name="Nombre del pago colegio")
     monto = models.IntegerField(verbose_name="Monto del valor")
     fecha_vencimiento = models.DateField(verbose_name="Fecha de vencimiento")
     tipo_pago_colegio = models.ForeignKey(Tipo_pago_colegio, on_delete=models.CASCADE, verbose_name="Tipo pago colegio")
 
     def __str__(self):
-        return str(self.id_pago)
+        return self.nombre_pago_colegio
     
 class Pagos(models.Model):
     id_pago = models.AutoField(primary_key=True, verbose_name="ID del pago")
     fecha_pago = models.DateField(verbose_name="Fecha")
     monto_pago = models.IntegerField(verbose_name="Monto")
     apoderado = models.ForeignKey(Apoderado, on_delete=models.CASCADE, verbose_name="Apoderado que pagó")
-    tipo_pago_colegio = models.ForeignKey(Tipo_pago_colegio, on_delete=models.CASCADE, verbose_name="Tipo pago colegio") 
+    alumno = models.ForeignKey(Alumno, on_delete=models.CASCADE, verbose_name="Alumno")
+    nombre_pago_colegio = models.ForeignKey(Pagos_colegio, on_delete=models.CASCADE, verbose_name="Nombre pago colegio")
 
     def __str__(self):
         return str(self.id_pago)

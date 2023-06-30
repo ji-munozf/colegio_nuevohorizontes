@@ -40,8 +40,7 @@
                             <div class="container">
                                 <div class="row">
                                     <div class="content">
-                                        <label class="form-label" style="color: #000; font-size: 20px;">Seleccione una
-                                            fecha</label>
+                                        <label class="form-label" style="color: #000; font-size: 20px;">Seleccione una fecha</label>
                                         <input type="date" class="form-control"
                                             style="width: 30%; margin-bottom: 20px; border-color: #000;" name="fecha"
                                             required>
@@ -65,15 +64,14 @@
                                     <td>{{ alumno.appaterno_alumno }} {{ alumno.apmaterno_alumno }}</td>
                                     <td>{{ alumno.curso_alumno.nombre_curso }}</td>
                                     <td>
-                                        <select name="{{ alumno.rut_alumno }}" class="form-control"
-                                            style="border-color: #000; text-align: center;" required>
+                                        <select name="{{ alumno.rut_alumno }}" class="form-control" style="border-color: #000; text-align: center;" required>
                                             <option value="">Seleccione un estado de asistencia</option>
                                             {% for estado_asistencia in estados_asistencia %}
-                                            {% if estado_asistencia.id_estado_asistencia != 3 %}
-                                            <option value="{{ estado_asistencia.id_estado_asistencia }}">
-                                                {{ estado_asistencia.nombre_estado_asistencia }}
-                                            </option>
-                                            {% endif %}
+                                                {% if estado_asistencia.id_tipo_asistencia != 3 %}
+                                                    <option value="{{ estado_asistencia.id_tipo_asistencia }}">
+                                                        {{ estado_asistencia.tipo_asistencia }}
+                                                    </option>
+                                                {% endif %}
                                             {% endfor %}
                                         </select>
                                     </td>
