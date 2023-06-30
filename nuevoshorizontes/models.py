@@ -83,7 +83,7 @@ class Bloque(models.Model):
     docente_bloque = models.ForeignKey(Docente, on_delete=models.CASCADE, verbose_name="Docente del bloque", null=True)
 
     def __str__(self):
-        return self.id_bloque
+        return "Curso: " + self.curso_bloque.nombre_curso + " Bloque: " + self.nombre_bloque 
 
 class Apoderado(models.Model):
     rut_apoderado = models.CharField(primary_key=True, max_length=12, verbose_name="Rut")
