@@ -1408,14 +1408,134 @@ def horario_alumno(request):
     correo_alumno = request.session.get("correo_alumno", None)
     if correo_alumno:
         alumno = Alumno.objects.get(correo_alumno=correo_alumno)
+        
+        # Obtener los bloques del alumno
+        bloques = Bloque.objects.filter(curso_bloque=alumno.curso_alumno)
+        
+        # Crear un diccionario para mapear los nombres de bloque del HTML con los nombres de la base de datos
+        nombres_bloque_html = [
+            "lun_block1",
+            "mar_block1",
+            "mie_block1",
+            "jue_block1",
+            "vie_block1",
+            "lun_block2",
+            "mar_block2",
+            "mie_block2",
+            "jue_block2",
+            "vie_block2",
+            "lun_block3",
+            "mar_block3",
+            "mie_block3",
+            "jue_block3",
+            "vie_block3",
+            "lun_block4",
+            "mar_block4",
+            "mie_block4",
+            "jue_block4",
+            "vie_block4",
+            "lun_block5",
+            "mar_block5",
+            "mie_block5",
+            "jue_block5",
+            "vie_block5",
+            "lun_block6",
+            "mar_block6",
+            "mie_block6",
+            "jue_block6",
+            "vie_block6",
+            "lun_block7",
+            "mar_block7",
+            "mie_block7",
+            "jue_block7",
+            "vie_block7",
+            "lun_block8",
+            "mar_block8",
+            "mie_block8",
+            "jue_block8",
+            "vie_block8",
+            "lun_block9",
+            "mar_block9",
+            "mie_block9",
+            "jue_block9",
+            "vie_block9",
+        ]
+        
+        nombres_bloques = [
+            "L01",
+            "M01",
+            "X01",
+            "J01",
+            "V01",
+            "L02",
+            "M02",
+            "X02",
+            "J02",
+            "V02",
+            "L03",
+            "M03",
+            "X03",
+            "J03",
+            "V03",
+            "L04",
+            "M04",
+            "X04",
+            "J04",
+            "V04",
+            "L05",
+            "M05",
+            "X05",
+            "J05",
+            "V05",
+            "L06",
+            "M06",
+            "X06",
+            "J06",
+            "V06",
+            "L07",
+            "M07",
+            "X07",
+            "J07",
+            "V07",
+            "L08",
+            "M08",
+            "X08",
+            "J08",
+            "V08",
+            "L09",
+            "M09",
+            "X09",
+            "J09",
+            "V09",
+        ]
+        
+        # Obtener los nombres de asignatura y docente para cada bloque
+        horarios = []
+        for i, bloque in enumerate(bloques):
+            nombre_bloque_html = nombres_bloque_html[i]
+            nombre_bloque_db = nombres_bloques[i]
+            asignatura = bloque.asignatura_bloque.nombre_asignatura if bloque.asignatura_bloque else None
+            docente = bloque.docente_bloque.nombre_completo() if bloque.docente_bloque else None
+            horarios.append((nombre_bloque_html, nombre_bloque_db, asignatura, docente))
+        
+        # Crear un diccionario con los horarios para pasar a la plantilla
+        horarios_dict = {}
+        for horario in horarios:
+            horarios_dict[horario[0]] = {
+                "nombre_bloque_db": horario[1],
+                "asignatura": horario[2],
+                "docente": horario[3],
+            }
+        
         return render(
             request,
             "nuevoshorizontes/portal_alumno/horario_alumno.html",
-            {"alumno": alumno},
+            {"alumno": alumno, "horarios": horarios_dict, "bloques": bloques},
         )
 
     else:
         return redirect("login_alumno")
+
 
 
 def asistencia_alumno(request):

@@ -20,6 +20,52 @@
 
 <body>
 
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border: 1px solid black;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            padding: 12px 16px;
+            z-index: 1;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .curso {
+            width: 40%;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 767px) {
+            .curso {
+                width: 100%;
+            }
+        }
+    </style>
+
     {% include "nuevoshorizontes/portal_alumno/navbar.html" %}
 
     <h1 class="heading" style="padding-top: 120px;">
@@ -27,13 +73,735 @@
             height="60">Horario
     </h1>
 
-    <section class="parrafo" id="parrafo">
+    <div class="container-fluid" style="padding-bottom: 80px;">
         <div class="row">
-            <div class="content">
-                <p style="text-align: center; font-size: 40px; color: #fff;">No hay información disponible</p>
+            <div class="card">
+                <div class="card-body">
+                    <h4 style="text-align: center; margin-bottom: 18px;">Curso: {{ alumno.curso_alumno.nombre_curso }}
+                    </h4>
+                    <div class="table-responsive">
+                        {% if bloques %}
+                        <table class="table table-striped"
+                            style="background-color: white; border: 1px solid rgb(21, 20, 55); text-align: center;">
+                            <tr>
+                                <th>Hora</th>
+                                <th>Lunes</th>
+                                <th>Martes</th>
+                                <th>Miercoles</th>
+                                <th>Jueves</th>
+                                <th>Viernes</th>
+                            </tr>
+                            <tr>
+                                <td>08:00 - 08:45</td>
+                                <td>
+                                    {% if horarios.lun_block1 %}
+                                    <p name="lun_block1" id="lun_block1">
+                                        {% if horarios.lun_block1.asignatura and horarios.lun_block1.docente %}
+                                        {{ horarios.lun_block1.asignatura }} - {{ horarios.lun_block1.docente }}
+                                        {% else %}
+                                        
+                                        {% endif %}
+                                    </p>
+                                    {% else %}
+                                    <p name="lun_block1" id="lun_block1">
+                                        No hay asignatura asignada
+                                    </p>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if horarios.mar_block1 %}
+                                    <p name="mar_block1" id="mar_block1">
+                                        {% if horarios.mar_block1.asignatura and horarios.mar_block1.docente %}
+                                        {{ horarios.mar_block1.asignatura }} - {{ horarios.mar_block1.docente }}
+                                        {% else %}
+                                        
+                                        {% endif %}
+                                    </p>
+                                    {% else %}
+                                    <p name="mar_block1" id="mar_block1">
+                                        No hay asignatura asignada
+                                    </p>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if horarios.mie_block1 %}
+                                    <p name="mie_block1" id="mie_block1">
+                                        {% if horarios.mie_block1.asignatura and horarios.mie_block1.docente %}
+                                        {{ horarios.mie_block1.asignatura }} - {{ horarios.mie_block1.docente }}
+                                        {% else %}
+                                        
+                                        {% endif %}
+                                    </p>
+                                    {% else %}
+                                    <p name="mie_block1" id="mie_block1">
+                                        No hay asignatura asignada
+                                    </p>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if horarios.jue_block1 %}
+                                    <p name="jue_block1" id="jue_block1">
+                                        {% if horarios.jue_block1.asignatura and horarios.jue_block1.docente %}
+                                        {{ horarios.jue_block1.asignatura }} - {{ horarios.jue_block1.docente }}
+                                        {% else %}
+                                        
+                                        {% endif %}
+                                    </p>
+                                    {% else %}
+                                    <p name="jue_block1" id="jue_block1">
+                                        No hay asignatura asignada
+                                    </p>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if horarios.vie_block1 %}
+                                    <p name="vie_block1" id="vie_block1">
+                                        {% if horarios.vie_block1.asignatura and horarios.vie_block1.docente %}
+                                        {{ horarios.vie_block1.asignatura }} - {{ horarios.vie_block1.docente }}
+                                        {% else %}
+                                        
+                                        {% endif %}
+                                    </p>
+                                    {% else %}
+                                    <p name="vie_block1" id="vie_block1">
+                                        No hay asignatura asignada
+                                    </p>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>08:45 - 09:30</td>
+                                <td>
+                                    {% if horarios.lun_block2 %}
+                                    <p name="lun_block2" id="lun_block2">
+                                        {% if horarios.lun_block2.asignatura and horarios.lun_block2.docente %}
+                                        {{ horarios.lun_block2.asignatura }} - {{ horarios.lun_block2.docente }}
+                                        {% else %}
+                                        
+                                        {% endif %}
+                                    </p>
+                                    {% else %}
+                                    <p name="lun_block2" id="lun_block2">
+                                        No hay asignatura asignada
+                                    </p>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if horarios.mar_block2 %}
+                                    <p name="mar_block2" id="mar_block2">
+                                        {% if horarios.mar_block2.asignatura and horarios.mar_block2.docente %}
+                                        {{ horarios.mar_block2.asignatura }} - {{ horarios.mar_block2.docente }}
+                                        {% else %}
+                                        
+                                        {% endif %}
+                                    </p>
+                                    {% else %}
+                                    <p name="mar_block2" id="mar_block2">
+                                        No hay asignatura asignada
+                                    </p>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if horarios.mie_block2 %}
+                                    <p name="mie_block2" id="mie_block2">
+                                        {% if horarios.mie_block2.asignatura and horarios.mie_block2.docente %}
+                                        {{ horarios.mie_block2.asignatura }} - {{ horarios.mie_block2.docente }}
+                                        {% else %}
+                                        
+                                        {% endif %}
+                                    </p>
+                                    {% else %}
+                                    <p name="mie_block2" id="mie_block2">
+                                        No hay asignatura asignada
+                                    </p>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if horarios.jue_block2 %}
+                                    <p name="jue_block2" id="jue_block2">
+                                        {% if horarios.jue_block2.asignatura and horarios.jue_block2.docente %}
+                                        {{ horarios.jue_block2.asignatura }} - {{ horarios.jue_block2.docente }}
+                                        {% else %}
+                                        
+                                        {% endif %}
+                                    </p>
+                                    {% else %}
+                                    <p name="jue_block2" id="jue_block2">
+                                        No hay asignatura asignada
+                                    </p>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if horarios.vie_block2 %}
+                                    <p name="vie_block2" id="vie_block2">
+                                        {% if horarios.vie_block2.asignatura and horarios.vie_block2.docente %}
+                                        {{ horarios.vie_block2.asignatura }} - {{ horarios.vie_block2.docente }}
+                                        {% else %}
+                                        
+                                        {% endif %}
+                                    </p>
+                                    {% else %}
+                                    <p name="vie_block2" id="vie_block2">
+                                        No hay asignatura asignada
+                                    </p>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>09:45 - 10:30</td>
+                                <td>
+                                    {% if horarios.lun_block3 %}
+                                    <p name="lun_block3" id="lun_block3">
+                                        {% if horarios.lun_block3.asignatura and horarios.lun_block3.docente %}
+                                        {{ horarios.lun_block3.asignatura }} - {{ horarios.lun_block3.docente }}
+                                        {% else %}
+                                        
+                                        {% endif %}
+                                    </p>
+                                    {% else %}
+                                    <p name="lun_block3" id="lun_block3">
+                                        No hay asignatura asignada
+                                    </p>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if horarios.mar_block3 %}
+                                    <p name="mar_block3" id="mar_block3">
+                                        {% if horarios.mar_block3.asignatura and horarios.mar_block3.docente %}
+                                        {{ horarios.mar_block3.asignatura }} - {{ horarios.mar_block3.docente }}
+                                        {% else %}
+                                        
+                                        {% endif %}
+                                    </p>
+                                    {% else %}
+                                    <p name="mar_block3" id="mar_block3">
+                                        No hay asignatura asignada
+                                    </p>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if horarios.mie_block3 %}
+                                    <p name="mie_block3" id="mie_block3">
+                                        {% if horarios.mie_block3.asignatura and horarios.mie_block3.docente %}
+                                        {{ horarios.mie_block3.asignatura }} - {{ horarios.mie_block3.docente }}
+                                        {% else %}
+                                        
+                                        {% endif %}
+                                    </p>
+                                    {% else %}
+                                    <p name="mie_block3" id="mie_block3">
+                                        No hay asignatura asignada
+                                    </p>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if horarios.jue_block3 %}
+                                    <p name="jue_block3" id="jue_block3">
+                                        {% if horarios.jue_block3.asignatura and horarios.jue_block3.docente %}
+                                        {{ horarios.jue_block3.asignatura }} - {{ horarios.jue_block3.docente }}
+                                        {% else %}
+                                        
+                                        {% endif %}
+                                    </p>
+                                    {% else %}
+                                    <p name="jue_block3" id="jue_block3">
+                                        No hay asignatura asignada
+                                    </p>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if horarios.vie_block3 %}
+                                    <p name="vie_block3" id="vie_block3">
+                                        {% if horarios.vie_block3.asignatura and horarios.vie_block3.docente %}
+                                        {{ horarios.vie_block3.asignatura }} - {{ horarios.vie_block3.docente }}
+                                        {% else %}
+                                        
+                                        {% endif %}
+                                    </p>
+                                    {% else %}
+                                    <p name="vie_block3" id="vie_block3">
+                                        No hay asignatura asignada
+                                    </p>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>10:30 - 11:15</td>
+                                <td>
+                                    {% if horarios.lun_block4 %}
+                                    <p name="lun_block4" id="lun_block4">
+                                        {% if horarios.lun_block4.asignatura and horarios.lun_block4.docente %}
+                                        {{ horarios.lun_block4.asignatura }} - {{ horarios.lun_block4.docente }}
+                                        {% else %}
+                                        
+                                        {% endif %}
+                                    </p>
+                                    {% else %}
+                                    <p name="lun_block4" id="lun_block4">
+                                        No hay asignatura asignada
+                                    </p>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if horarios.mar_block4 %}
+                                    <p name="mar_block4" id="mar_block4">
+                                        {% if horarios.mar_block4.asignatura and horarios.mar_block4.docente %}
+                                        {{ horarios.mar_block4.asignatura }} - {{ horarios.mar_block4.docente }}
+                                        {% else %}
+                                        
+                                        {% endif %}
+                                    </p>
+                                    {% else %}
+                                    <p name="mar_block4" id="mar_block4">
+                                        No hay asignatura asignada
+                                    </p>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if horarios.mie_block4 %}
+                                    <p name="mie_block4" id="mie_block4">
+                                        {% if horarios.mie_block4.asignatura and horarios.mie_block4.docente %}
+                                        {{ horarios.mie_block4.asignatura }} - {{ horarios.mie_block4.docente }}
+                                        {% else %}
+                                        
+                                        {% endif %}
+                                    </p>
+                                    {% else %}
+                                    <p name="mie_block4" id="mie_block4">
+                                        No hay asignatura asignada
+                                    </p>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if horarios.jue_block4 %}
+                                    <p name="jue_block4" id="jue_block4">
+                                        {% if horarios.jue_block4.asignatura and horarios.jue_block4.docente %}
+                                        {{ horarios.jue_block4.asignatura }} - {{ horarios.jue_block4.docente }}
+                                        {% else %}
+                                        
+                                        {% endif %}
+                                    </p>
+                                    {% else %}
+                                    <p name="jue_block4" id="jue_block4">
+                                        No hay asignatura asignada
+                                    </p>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if horarios.vie_block4 %}
+                                    <p name="vie_block4" id="vie_block4">
+                                        {% if horarios.vie_block4.asignatura and horarios.vie_block4.docente %}
+                                        {{ horarios.vie_block4.asignatura }} - {{ horarios.vie_block4.docente }}
+                                        {% else %}
+                                        
+                                        {% endif %}
+                                    </p>
+                                    {% else %}
+                                    <p name="vie_block4" id="vie_block4">
+                                        No hay asignatura asignada
+                                    </p>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>11:30 - 12:15</td>
+                                <td>
+                                    {% if horarios.lun_block5 %}
+                                    <p name="lun_block5" id="lun_block5">
+                                        {% if horarios.lun_block5.asignatura and horarios.lun_block5.docente %}
+                                        {{ horarios.lun_block5.asignatura }} - {{ horarios.lun_block5.docente }}
+                                        {% else %}
+                                        
+                                        {% endif %}
+                                    </p>
+                                    {% else %}
+                                    <p name="lun_block5" id="lun_block5">
+                                        No hay asignatura asignada
+                                    </p>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if horarios.mar_block5 %}
+                                    <p name="mar_block5" id="mar_block5">
+                                        {% if horarios.mar_block5.asignatura and horarios.mar_block5.docente %}
+                                        {{ horarios.mar_block5.asignatura }} - {{ horarios.mar_block5.docente }}
+                                        {% else %}
+                                        
+                                        {% endif %}
+                                    </p>
+                                    {% else %}
+                                    <p name="mar_block5" id="mar_block5">
+                                        No hay asignatura asignada
+                                    </p>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if horarios.mie_block5 %}
+                                    <p name="mie_block5" id="mie_block5">
+                                        {% if horarios.mie_block5.asignatura and horarios.mie_block5.docente %}
+                                        {{ horarios.mie_block5.asignatura }} - {{ horarios.mie_block5.docente }}
+                                        {% else %}
+                                        
+                                        {% endif %}
+                                    </p>
+                                    {% else %}
+                                    <p name="mie_block5" id="mie_block5">
+                                        No hay asignatura asignada
+                                    </p>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if horarios.jue_block5 %}
+                                    <p name="jue_block5" id="jue_block5">
+                                        {% if horarios.jue_block5.asignatura and horarios.jue_block5.docente %}
+                                        {{ horarios.jue_block5.asignatura }} - {{ horarios.jue_block5.docente }}
+                                        {% else %}
+                                        
+                                        {% endif %}
+                                    </p>
+                                    {% else %}
+                                    <p name="jue_block5" id="jue_block5">
+                                        No hay asignatura asignada
+                                    </p>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if horarios.vie_block5 %}
+                                    <p name="vie_block5" id="vie_block5">
+                                        {% if horarios.vie_block5.asignatura and horarios.vie_block5.docente %}
+                                        {{ horarios.vie_block5.asignatura }} - {{ horarios.vie_block5.docente }}
+                                        {% else %}
+                                        
+                                        {% endif %}
+                                    </p>
+                                    {% else %}
+                                    <p name="vie_block5" id="vie_block5">
+                                        No hay asignatura asignada
+                                    </p>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>12:15 - 13:00</td>
+                                <td>
+                                    {% if horarios.lun_block6 %}
+                                    <p name="lun_block6" id="lun_block6">
+                                        {% if horarios.lun_block6.asignatura and horarios.lun_block6.docente %}
+                                        {{ horarios.lun_block6.asignatura }} - {{ horarios.lun_block6.docente }}
+                                        {% else %}
+                                        
+                                        {% endif %}
+                                    </p>
+                                    {% else %}
+                                    <p name="lun_block6" id="lun_block6">
+                                        No hay asignatura asignada
+                                    </p>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if horarios.mar_block6 %}
+                                    <p name="mar_block6" id="mar_block6">
+                                        {% if horarios.mar_block6.asignatura and horarios.mar_block6.docente %}
+                                        {{ horarios.mar_block6.asignatura }} - {{ horarios.mar_block6.docente }}
+                                        {% else %}
+                                        
+                                        {% endif %}
+                                    </p>
+                                    {% else %}
+                                    <p name="mar_block6" id="mar_block6">
+                                        No hay asignatura asignada
+                                    </p>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if horarios.mie_block6 %}
+                                    <p name="mie_block6" id="mie_block6">
+                                        {% if horarios.mie_block6.asignatura and horarios.mie_block6.docente %}
+                                        {{ horarios.mie_block6.asignatura }} - {{ horarios.mie_block6.docente }}
+                                        {% else %}
+                                        
+                                        {% endif %}
+                                    </p>
+                                    {% else %}
+                                    <p name="mie_block6" id="mie_block6">
+                                        No hay asignatura asignada
+                                    </p>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if horarios.jue_block6 %}
+                                    <p name="jue_block6" id="jue_block6">
+                                        {% if horarios.jue_block6.asignatura and horarios.jue_block6.docente %}
+                                        {{ horarios.jue_block6.asignatura }} - {{ horarios.jue_block6.docente }}
+                                        {% else %}
+                                        
+                                        {% endif %}
+                                    </p>
+                                    {% else %}
+                                    <p name="jue_block6" id="jue_block6">
+                                        No hay asignatura asignada
+                                    </p>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if horarios.vie_block6 %}
+                                    <p name="vie_block6" id="vie_block6">
+                                        {% if horarios.vie_block6.asignatura and horarios.vie_block6.docente %}
+                                        {{ horarios.vie_block6.asignatura }} - {{ horarios.vie_block6.docente }}
+                                        {% else %}
+                                        
+                                        {% endif %}
+                                    </p>
+                                    {% else %}
+                                    <p name="vie_block6" id="vie_block6">
+                                        No hay asignatura asignada
+                                    </p>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>14:00 - 14:45</td>
+                                <td>
+                                    {% if horarios.lun_block7 %}
+                                    <p name="lun_block7" id="lun_block7">
+                                        {% if horarios.lun_block7.asignatura and horarios.lun_block7.docente %}
+                                        {{ horarios.lun_block7.asignatura }} - {{ horarios.lun_block7.docente }}
+                                        {% else %}
+                                        
+                                        {% endif %}
+                                    </p>
+                                    {% else %}
+                                    <p name="lun_block7" id="lun_block7">
+                                        No hay asignatura asignada
+                                    </p>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if horarios.mar_block7 %}
+                                    <p name="mar_block7" id="mar_block7">
+                                        {% if horarios.mar_block7.asignatura and horarios.mar_block7.docente %}
+                                        {{ horarios.mar_block7.asignatura }} - {{ horarios.mar_block7.docente }}
+                                        {% else %}
+                                        
+                                        {% endif %}
+                                    </p>
+                                    {% else %}
+                                    <p name="mar_block7" id="mar_block7">
+                                        No hay asignatura asignada
+                                    </p>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if horarios.mie_block7 %}
+                                    <p name="mie_block7" id="mie_block7">
+                                        {% if horarios.mie_block7.asignatura and horarios.mie_block7.docente %}
+                                        {{ horarios.mie_block7.asignatura }} - {{ horarios.mie_block7.docente }}
+                                        {% else %}
+                                        
+                                        {% endif %}
+                                    </p>
+                                    {% else %}
+                                    <p name="mie_block7" id="mie_block7">
+                                        No hay asignatura asignada
+                                    </p>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if horarios.jue_block7 %}
+                                    <p name="jue_block7" id="jue_block7">
+                                        {% if horarios.jue_block7.asignatura and horarios.jue_block7.docente %}
+                                        {{ horarios.jue_block7.asignatura }} - {{ horarios.jue_block7.docente }}
+                                        {% else %}
+                                        
+                                        {% endif %}
+                                    </p>
+                                    {% else %}
+                                    <p name="jue_block7" id="jue_block7">
+                                        No hay asignatura asignada
+                                    </p>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if horarios.vie_block7 %}
+                                    <p name="vie_block7" id="vie_block7">
+                                        {% if horarios.vie_block7.asignatura and horarios.vie_block7.docente %}
+                                        {{ horarios.vie_block7.asignatura }} - {{ horarios.vie_block7.docente }}
+                                        {% else %}
+                                        
+                                        {% endif %}
+                                    </p>
+                                    {% else %}
+                                    <p name="vie_block7" id="vie_block7">
+                                        No hay asignatura asignada
+                                    </p>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>14:45 - 15:30</td>
+                                <td>
+                                    {% if horarios.lun_block8 %}
+                                    <p name="lun_block8" id="lun_block8">
+                                        {% if horarios.lun_block8.asignatura and horarios.lun_block8.docente %}
+                                        {{ horarios.lun_block8.asignatura }} - {{ horarios.lun_block8.docente }}
+                                        {% else %}
+                                        
+                                        {% endif %}
+                                    </p>
+                                    {% else %}
+                                    <p name="lun_block8" id="lun_block8">
+                                        No hay asignatura asignada
+                                    </p>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if horarios.mar_block8 %}
+                                    <p name="mar_block8" id="mar_block8">
+                                        {% if horarios.mar_block8.asignatura and horarios.mar_block8.docente %}
+                                        {{ horarios.mar_block8.asignatura }} - {{ horarios.mar_block8.docente }}
+                                        {% else %}
+                                        
+                                        {% endif %}
+                                    </p>
+                                    {% else %}
+                                    <p name="mar_block8" id="mar_block8">
+                                        No hay asignatura asignada
+                                    </p>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if horarios.mie_block8 %}
+                                    <p name="mie_block8" id="mie_block8">
+                                        {% if horarios.mie_block8.asignatura and horarios.mie_block8.docente %}
+                                        {{ horarios.mie_block8.asignatura }} - {{ horarios.mie_block8.docente }}
+                                        {% else %}
+                                        
+                                        {% endif %}
+                                    </p>
+                                    {% else %}
+                                    <p name="mie_block8" id="mie_block8">
+                                        No hay asignatura asignada
+                                    </p>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if horarios.jue_block8 %}
+                                    <p name="jue_block8" id="jue_block8">
+                                        {% if horarios.jue_block8.asignatura and horarios.jue_block8.docente %}
+                                        {{ horarios.jue_block8.asignatura }} - {{ horarios.jue_block8.docente }}
+                                        {% else %}
+                                        
+                                        {% endif %}
+                                    </p>
+                                    {% else %}
+                                    <p name="jue_block8" id="jue_block8">
+                                        No hay asignatura asignada
+                                    </p>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if horarios.vie_block8 %}
+                                    <p name="vie_block8" id="vie_block8">
+                                        {% if horarios.vie_block8.asignatura and horarios.vie_block8.docente %}
+                                        {{ horarios.vie_block8.asignatura }} - {{ horarios.vie_block8.docente }}
+                                        {% else %}
+                                        
+                                        {% endif %}
+                                    </p>
+                                    {% else %}
+                                    <p name="vie_block8" id="vie_block8">
+                                        No hay asignatura asignada
+                                    </p>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>15:40 - 16:25</td>
+                                <td>
+                                    {% if horarios.lun_block9 %}
+                                    <p name="lun_block9" id="lun_block9">
+                                        {% if horarios.lun_block9.asignatura and horarios.lun_block9.docente %}
+                                        {{ horarios.lun_block9.asignatura }} - {{ horarios.lun_block9.docente }}
+                                        {% else %}
+                                        
+                                        {% endif %}
+                                    </p>
+                                    {% else %}
+                                    <p name="lun_block9" id="lun_block9">
+                                        No tiene asignatura
+                                    </p>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if horarios.mar_block9 %}
+                                    <p name="mar_block9" id="mar_block9">
+                                        {% if horarios.mar_block9.asignatura and horarios.mar_block9.docente %}
+                                        {{ horarios.mar_block9.asignatura }} - {{ horarios.mar_block9.docente }}
+                                        {% else %}
+                                        
+                                        {% endif %}
+                                    </p>
+                                    {% else %}
+                                    <p name="mar_block9" id="mar_block9">
+                                        No tiene asignatura
+                                    </p>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if horarios.mie_block9 %}
+                                    <p name="mie_block9" id="mie_block9">
+                                        {% if horarios.mie_block9.asignatura and horarios.mie_block9.docente %}
+                                        {{ horarios.mie_block9.asignatura }} - {{ horarios.mie_block9.docente }}
+                                        {% else %}
+                                        
+                                        {% endif %}
+                                    </p>
+                                    {% else %}
+                                    <p name="mie_block9" id="mie_block9">
+                                        No tiene asignatura
+                                    </p>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if horarios.jue_block9 %}
+                                    <p name="jue_block9" id="jue_block9">
+                                        {% if horarios.jue_block9.asignatura and horarios.jue_block9.docente %}
+                                        {{ horarios.jue_block9.asignatura }} - {{ horarios.jue_block9.docente }}
+                                        {% else %}
+                                        
+                                        {% endif %}
+                                    </p>
+                                    {% else %}
+                                    <p name="jue_block9" id="jue_block9">
+                                        No hay asignatura asignada
+                                    </p>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if horarios.vie_block9 %}
+                                    <p name="vie_block9" id="vie_block9">
+                                        {% if horarios.vie_block9.asignatura and horarios.vie_block9.docente %}
+                                        {{ horarios.vie_block9.asignatura }} - {{ horarios.vie_block9.docente }}
+                                        {% else %}
+                                        
+                                        {% endif %}
+                                    </p>
+                                    {% else %}
+                                    <p name="vie_block9" id="vie_block9">
+                                        No hay asignatura asignada
+                                    </p>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        </table>
+                        {% else %}
+                        <p>No tiene horario asignado.</p>
+                        {% endif %}
+                    </div>
+                </div>
             </div>
         </div>
-    </section>
+    </div>
 
 </body>
 
