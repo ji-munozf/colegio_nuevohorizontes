@@ -20,21 +20,71 @@
 
 <body>
 
+    <style>
+        th {
+            text-align: center;
+            vertical-align: middle;
+            font-size: 16.5px;
+        }
+
+        td {
+            text-align: center;
+            vertical-align: middle;
+            font-size: 16.5px;
+        }
+    </style>
+
     {% include "nuevoshorizontes/portal_apoderado/navbar.html" %}
 
     <h1 class="heading" style="padding-top: 120px;">
         <img class="title-img mx-2" src="{% static 'nuevoshorizontes/img/horario_blanco.png' %}" alt="agregar"
-            height="60">Horarios
+            height="60">Horarios hijos
     </h1>
 
-
-    <section class="parrafo" id="parrafo">
-        <div class="row">
-            <div class="content">
-                <p style="text-align: center; font-size: 40px; color: #fff;">No hay información disponible</p>
+    <div class="container-fluid" style="margin-bottom: 20px;">
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    {% if alumnos %}
+                    <table class="table table-striped"
+                        style="background-color: white; border: 1px solid rgb(21, 20, 55); text-align: center;">
+                        <thead>
+                            <tr>
+                                <th>Rut</th>
+                                <th>Nombres</th>
+                                <th>Apellidos</th>
+                                <th>Correo electrónico</th>
+                                <th>Sede asignado</th>
+                                <th>Apoderado asignado</th>
+                                <th>Curso asignado</th>
+                                <th>Horario</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for alumno in alumnos %}
+                            <tr>
+                                <td>{{ alumno.rut_alumno }}</td>
+                                <td>{{ alumno.nombre_alumno }}</td>
+                                <td>{{ alumno.appaterno_alumno }} {{ alumno.apmaterno_alumno }}</td>
+                                <td>{{ alumno.correo_alumno }}</td>
+                                <td>{{ alumno.sede_alumno }}</td>
+                                <td>{{ alumno.apoderado_alumno }}</td>
+                                <td>{{ alumno.curso_alumno }}</td>
+                                <td><a type="button" class="btn btn-success btn-block"
+                                        href="{% url 'ver_horario_hijo' alumno.rut_alumno %}"
+                                        style="background-color: green; color: #fff;">Ver horario</a></td>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% else %}
+                    <p>No hay alumnos asignados.</p>
+                    {% endif %}
+                </div>
             </div>
         </div>
-    </section>
+    </div>
 
 </body>
 

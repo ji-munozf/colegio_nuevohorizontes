@@ -5,7 +5,7 @@ from .models import *
 from .forms import *
 from datetime import date, datetime
 from django.utils import timezone
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseBadRequest
 from django.db.models import Count, Case, When
 
 
@@ -326,6 +326,7 @@ def agregar_alumnos(request):
                 alumno.password = make_password(formulario.cleaned_data["password"])
                 alumno.save()
                 messages.success(request, "Alumno agregado correctamente")
+                return redirect("agregar_alumnos")
             else:
                 data["form"] = formulario
 
@@ -941,6 +942,169 @@ def listar_pago_colegio(request):
         return redirect("login_administrativo")
 
 
+def listar_horarios_cursos(request):
+    correo_admin = request.session.get("correo_admin", None)
+    if correo_admin:
+        admin = Administrador.objects.get(correo_admin=correo_admin)
+
+        cursos_con_bloques = Curso.objects.filter(bloque__isnull=False).distinct()
+        # Obtener los cursos que tienen al menos un bloque asociado
+
+        return render(
+            request,
+            "nuevoshorizontes/portal_admin/listados/listar_horarios_curso.html",
+            {"admin": admin, "cursos_con_bloques": cursos_con_bloques},
+        )
+    else:
+        return redirect("login_administrativo")
+
+
+def listar_horarios(request, id_curso):
+    correo_admin = request.session.get("correo_admin", None)
+    if correo_admin:
+        admin = Administrador.objects.get(correo_admin=correo_admin)
+        curso = Curso.objects.get(id_curso=id_curso)
+
+        # Obtener los bloques del alumno
+        bloques = Bloque.objects.filter(curso_bloque=curso.id_curso)
+
+        # Crear un diccionario para mapear los nombres de bloque del HTML con los nombres de la base de datos
+        nombres_bloque_html = [
+            "lun_block1",
+            "mar_block1",
+            "mie_block1",
+            "jue_block1",
+            "vie_block1",
+            "lun_block2",
+            "mar_block2",
+            "mie_block2",
+            "jue_block2",
+            "vie_block2",
+            "lun_block3",
+            "mar_block3",
+            "mie_block3",
+            "jue_block3",
+            "vie_block3",
+            "lun_block4",
+            "mar_block4",
+            "mie_block4",
+            "jue_block4",
+            "vie_block4",
+            "lun_block5",
+            "mar_block5",
+            "mie_block5",
+            "jue_block5",
+            "vie_block5",
+            "lun_block6",
+            "mar_block6",
+            "mie_block6",
+            "jue_block6",
+            "vie_block6",
+            "lun_block7",
+            "mar_block7",
+            "mie_block7",
+            "jue_block7",
+            "vie_block7",
+            "lun_block8",
+            "mar_block8",
+            "mie_block8",
+            "jue_block8",
+            "vie_block8",
+            "lun_block9",
+            "mar_block9",
+            "mie_block9",
+            "jue_block9",
+            "vie_block9",
+        ]
+
+        nombres_bloques = [
+            "L01",
+            "M01",
+            "X01",
+            "J01",
+            "V01",
+            "L02",
+            "M02",
+            "X02",
+            "J02",
+            "V02",
+            "L03",
+            "M03",
+            "X03",
+            "J03",
+            "V03",
+            "L04",
+            "M04",
+            "X04",
+            "J04",
+            "V04",
+            "L05",
+            "M05",
+            "X05",
+            "J05",
+            "V05",
+            "L06",
+            "M06",
+            "X06",
+            "J06",
+            "V06",
+            "L07",
+            "M07",
+            "X07",
+            "J07",
+            "V07",
+            "L08",
+            "M08",
+            "X08",
+            "J08",
+            "V08",
+            "L09",
+            "M09",
+            "X09",
+            "J09",
+            "V09",
+        ]
+
+        # Obtener los nombres de asignatura y docente para cada bloque
+        horarios = []
+        for i, bloque in enumerate(bloques):
+            nombre_bloque_html = nombres_bloque_html[i]
+            nombre_bloque_db = nombres_bloques[i]
+            asignatura = (
+                bloque.asignatura_bloque.nombre_asignatura
+                if bloque.asignatura_bloque
+                else None
+            )
+            docente = (
+                bloque.docente_bloque.nombre_completo()
+                if bloque.docente_bloque
+                else None
+            )
+            horarios.append((nombre_bloque_html, nombre_bloque_db, asignatura, docente))
+
+        # Crear un diccionario con los horarios para pasar a la plantilla
+        horarios_dict = {}
+        for horario in horarios:
+            horarios_dict[horario[0]] = {
+                "nombre_bloque_db": horario[1],
+                "asignatura": horario[2],
+                "docente": horario[3],
+            }
+
+        return render(
+            request,
+            "nuevoshorizontes/portal_admin/listados/listar_horarios.html",
+            {
+                "admin": admin,
+                "curso": curso,
+                "horarios": horarios_dict,
+                "bloques": bloques,
+            },
+        )
+    else:
+        return redirect("login_administrativo")
+
+
 def modificar_alumnos(request, id):
     correo_admin = request.session.get("correo_admin", None)
     if correo_admin:
@@ -1363,6 +1527,14 @@ def eliminar_pagos(request, id):
     return redirect(to="home_pagos")
 
 
+def eliminar_horario(request, id_curso):
+    curso = get_object_or_404(Curso, id_curso=id_curso)
+    bloques = Bloque.objects.filter(curso_bloque=curso)
+    bloques.delete()
+    messages.success(request, "Horario eliminado correctamente")
+    return redirect("listar_horarios_cursos")
+
+
 def home_alumno(request):
     correo_alumno = request.session.get("correo_alumno", None)
     if correo_alumno:
@@ -1408,10 +1580,10 @@ def horario_alumno(request):
     correo_alumno = request.session.get("correo_alumno", None)
     if correo_alumno:
         alumno = Alumno.objects.get(correo_alumno=correo_alumno)
-        
+
         # Obtener los bloques del alumno
         bloques = Bloque.objects.filter(curso_bloque=alumno.curso_alumno)
-        
+
         # Crear un diccionario para mapear los nombres de bloque del HTML con los nombres de la base de datos
         nombres_bloque_html = [
             "lun_block1",
@@ -1460,7 +1632,7 @@ def horario_alumno(request):
             "jue_block9",
             "vie_block9",
         ]
-        
+
         nombres_bloques = [
             "L01",
             "M01",
@@ -1508,16 +1680,24 @@ def horario_alumno(request):
             "J09",
             "V09",
         ]
-        
+
         # Obtener los nombres de asignatura y docente para cada bloque
         horarios = []
         for i, bloque in enumerate(bloques):
             nombre_bloque_html = nombres_bloque_html[i]
             nombre_bloque_db = nombres_bloques[i]
-            asignatura = bloque.asignatura_bloque.nombre_asignatura if bloque.asignatura_bloque else None
-            docente = bloque.docente_bloque.nombre_completo() if bloque.docente_bloque else None
+            asignatura = (
+                bloque.asignatura_bloque.nombre_asignatura
+                if bloque.asignatura_bloque
+                else None
+            )
+            docente = (
+                bloque.docente_bloque.nombre_completo()
+                if bloque.docente_bloque
+                else None
+            )
             horarios.append((nombre_bloque_html, nombre_bloque_db, asignatura, docente))
-        
+
         # Crear un diccionario con los horarios para pasar a la plantilla
         horarios_dict = {}
         for horario in horarios:
@@ -1526,7 +1706,7 @@ def horario_alumno(request):
                 "asignatura": horario[2],
                 "docente": horario[3],
             }
-        
+
         return render(
             request,
             "nuevoshorizontes/portal_alumno/horario_alumno.html",
@@ -1535,7 +1715,6 @@ def horario_alumno(request):
 
     else:
         return redirect("login_alumno")
-
 
 
 def asistencia_alumno(request):
@@ -1636,10 +1815,158 @@ def horarios_apoderado(request):
     correo_apoderado = request.session.get("correo_apoderado", None)
     if correo_apoderado:
         apoderado = Apoderado.objects.get(correo_apoderado=correo_apoderado)
+        alumnos = Alumno.objects.filter(apoderado_alumno=apoderado)
         return render(
             request,
             "nuevoshorizontes/portal_apoderado/horarios_apoderado.html",
-            {"apoderado": apoderado},
+            {"apoderado": apoderado, "alumnos": alumnos},
+        )
+
+    else:
+        return redirect("login_apoderado")
+
+
+def ver_horario_hijo(request, rut_alumno):
+    correo_apoderado = request.session.get("correo_apoderado", None)
+    if correo_apoderado:
+        apoderado = Apoderado.objects.get(correo_apoderado=correo_apoderado)
+        alumno = Alumno.objects.get(rut_alumno=rut_alumno)
+
+        # Obtener los bloques del alumno
+        bloques = Bloque.objects.filter(curso_bloque=alumno.curso_alumno)
+
+        # Crear un diccionario para mapear los nombres de bloque del HTML con los nombres de la base de datos
+        nombres_bloque_html = [
+            "lun_block1",
+            "mar_block1",
+            "mie_block1",
+            "jue_block1",
+            "vie_block1",
+            "lun_block2",
+            "mar_block2",
+            "mie_block2",
+            "jue_block2",
+            "vie_block2",
+            "lun_block3",
+            "mar_block3",
+            "mie_block3",
+            "jue_block3",
+            "vie_block3",
+            "lun_block4",
+            "mar_block4",
+            "mie_block4",
+            "jue_block4",
+            "vie_block4",
+            "lun_block5",
+            "mar_block5",
+            "mie_block5",
+            "jue_block5",
+            "vie_block5",
+            "lun_block6",
+            "mar_block6",
+            "mie_block6",
+            "jue_block6",
+            "vie_block6",
+            "lun_block7",
+            "mar_block7",
+            "mie_block7",
+            "jue_block7",
+            "vie_block7",
+            "lun_block8",
+            "mar_block8",
+            "mie_block8",
+            "jue_block8",
+            "vie_block8",
+            "lun_block9",
+            "mar_block9",
+            "mie_block9",
+            "jue_block9",
+            "vie_block9",
+        ]
+
+        nombres_bloques = [
+            "L01",
+            "M01",
+            "X01",
+            "J01",
+            "V01",
+            "L02",
+            "M02",
+            "X02",
+            "J02",
+            "V02",
+            "L03",
+            "M03",
+            "X03",
+            "J03",
+            "V03",
+            "L04",
+            "M04",
+            "X04",
+            "J04",
+            "V04",
+            "L05",
+            "M05",
+            "X05",
+            "J05",
+            "V05",
+            "L06",
+            "M06",
+            "X06",
+            "J06",
+            "V06",
+            "L07",
+            "M07",
+            "X07",
+            "J07",
+            "V07",
+            "L08",
+            "M08",
+            "X08",
+            "J08",
+            "V08",
+            "L09",
+            "M09",
+            "X09",
+            "J09",
+            "V09",
+        ]
+
+        # Obtener los nombres de asignatura y docente para cada bloque
+        horarios = []
+        for i, bloque in enumerate(bloques):
+            nombre_bloque_html = nombres_bloque_html[i]
+            nombre_bloque_db = nombres_bloques[i]
+            asignatura = (
+                bloque.asignatura_bloque.nombre_asignatura
+                if bloque.asignatura_bloque
+                else None
+            )
+            docente = (
+                bloque.docente_bloque.nombre_completo()
+                if bloque.docente_bloque
+                else None
+            )
+            horarios.append((nombre_bloque_html, nombre_bloque_db, asignatura, docente))
+
+        # Crear un diccionario con los horarios para pasar a la plantilla
+        horarios_dict = {}
+        for horario in horarios:
+            horarios_dict[horario[0]] = {
+                "nombre_bloque_db": horario[1],
+                "asignatura": horario[2],
+                "docente": horario[3],
+            }
+
+        return render(
+            request,
+            "nuevoshorizontes/portal_apoderado/ver_horario_hijo.html",
+            {
+                "apoderado": apoderado,
+                "alumno": alumno,
+                "horarios": horarios_dict,
+                "bloques": bloques,
+            },
         )
 
     else:
@@ -1670,6 +1997,7 @@ def asistencias_apoderado(request):
             asistencias_alumnos.append(
                 {
                     "alumno": alumno,
+                    "total_asistencias": total_asistencias,
                     "presentes": presentes,
                     "ausentes": ausentes,
                     "justificados": justificados,
@@ -1704,13 +2032,7 @@ def pagos_apoderado(request):
     correo_apoderado = request.session.get("correo_apoderado", None)
     if correo_apoderado:
         apoderado = Apoderado.objects.get(correo_apoderado=correo_apoderado)
-        pagos = Pagos_colegio.objects.all()
         alumnos = Alumno.objects.filter(apoderado_alumno=apoderado)
-
-        # Obtener los ID de los pagos realizados por el apoderado
-        pagos_realizados = Pagos.objects.filter(apoderado=apoderado).values_list(
-            "nombre_pago_colegio__id_pago_colegio", flat=True
-        )
 
         return render(
             request,
@@ -1718,6 +2040,26 @@ def pagos_apoderado(request):
             {
                 "apoderado": apoderado,
                 "alumnos": alumnos,
+            },
+        )
+    else:
+        return redirect("login_apoderado")
+
+
+def listar_pagos_apoderado(request, rut_alumno):
+    correo_apoderado = request.session.get("correo_apoderado", None)
+    if correo_apoderado:
+        apoderado = Apoderado.objects.get(correo_apoderado=correo_apoderado)
+        alumno = Alumno.objects.get(rut_alumno=rut_alumno)
+        pagos = Pagos_colegio.objects.all()
+        pagos_realizados = Pagos.objects.filter(apoderado=apoderado, alumno=alumno).values_list('nombre_pago_colegio_id', flat=True)
+
+        return render(
+            request,
+            "nuevoshorizontes/portal_apoderado/listar_pagos_apoderado.html",
+            {
+                "apoderado": apoderado,
+                "alumno": alumno,
                 "pagos": pagos,
                 "pagos_realizados": pagos_realizados,
             },
@@ -1726,34 +2068,42 @@ def pagos_apoderado(request):
         return redirect("login_apoderado")
 
 
-def realizar_pago(request, id_pago):
-    pago = Pagos_colegio.objects.get(id_pago_colegio=id_pago)
-    apoderado = Apoderado.objects.get(
-        correo_apoderado=request.session.get("correo_apoderado")
-    )
-    alumno = Alumno.objects.get(apoderado_alumno=apoderado)
 
-    # Obtener la fecha actual
-    fecha_pago = timezone.now().date()
+def realizar_pago(request):
+    if request.method == "POST":
+        correo_apoderado = request.session.get("correo_apoderado", None)
+        if correo_apoderado:
+            apoderado = Apoderado.objects.get(correo_apoderado=correo_apoderado)
+            alumno_rut = request.POST.get("rut_alumno")
+            alumno = get_object_or_404(Alumno, rut_alumno=alumno_rut)
+            id_pago_colegio = request.POST.get("id_pago_colegio")
+            pago_colegio = get_object_or_404(
+                Pagos_colegio, id_pago_colegio=id_pago_colegio
+            )
+            fecha_pago = date.today()
+            monto_pago = pago_colegio.monto
 
-    # Crear una instancia de Pagos con los datos del pago
-    pago_realizado = Pagos(
-        fecha_pago=fecha_pago,
-        monto_pago=pago.monto,
-        apoderado=apoderado,
-        alumno=alumno,
-        nombre_pago_colegio=pago,
-    )
-    pago_realizado.save()
+            pago = Pagos(
+                fecha_pago=fecha_pago,
+                monto_pago=monto_pago,
+                apoderado=apoderado,
+                alumno=alumno,
+                nombre_pago_colegio=pago_colegio,
+            )
+            pago.save()
 
-    # Agregar el ID del pago a la lista de pagos realizados por el apoderado
-    pago_realizado_ids = request.session.get("pago_realizado_ids", [])
-    pago_realizado_ids.append(id_pago)
-    request.session["pago_realizado_ids"] = pago_realizado_ids
+            # Marcar el pago correspondiente como pagado
+            pago_colegio.pagado = True
+            pago_colegio.save()
 
-    messages.success(request, "El pago se realizó correctamente")
+            # Agregar mensaje de éxito
+            messages.success(request, "El pago se ha realizado correctamente")
 
-    return redirect("pagos_apoderado")
+            return redirect("pagos_apoderado")
+        else:
+            return redirect("login_apoderado")
+    else:
+        return HttpResponseBadRequest("Bad Request")
 
 
 def home_docente(request):

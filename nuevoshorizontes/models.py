@@ -43,7 +43,7 @@ class Sala(models.Model):
         return self.nombre_sala
 
 class Docente(models.Model):
-    rut_docente = models.CharField(primary_key=True, max_length=12, verbose_name="Rut del docente")
+    rut_docente = models.CharField(primary_key=True, max_length=14, verbose_name="Rut del docente")
     nombre_docente = models.CharField(max_length=50, verbose_name="Nombres del docente")
     appaterno_docente = models.CharField(max_length=50, verbose_name="Apellido paterno del docente")
     apmaterno_docente = models.CharField(max_length=50, verbose_name="Apellido materno del docente")
@@ -86,7 +86,7 @@ class Bloque(models.Model):
         return "Curso: " + self.curso_bloque.nombre_curso + " Bloque: " + self.nombre_bloque 
 
 class Apoderado(models.Model):
-    rut_apoderado = models.CharField(primary_key=True, max_length=12, verbose_name="Rut")
+    rut_apoderado = models.CharField(primary_key=True, max_length=14, verbose_name="Rut")
     nombre_apoderado = models.CharField(max_length=50, verbose_name="Nombres")
     appaterno_apoderado = models.CharField(max_length=50, verbose_name="Apellido paterno")
     apmaterno_apoderado = models.CharField(max_length=50, verbose_name="Apellido materno")
@@ -99,7 +99,7 @@ class Apoderado(models.Model):
         return "RUT: " + self.rut_apoderado + " " + "Nombre completo: " + self.nombre_apoderado + " " + self.appaterno_apoderado
 
 class Alumno(models.Model):
-    rut_alumno = models.CharField(primary_key=True, max_length=12, verbose_name="Rut")
+    rut_alumno = models.CharField(primary_key=True, max_length=14, verbose_name="Rut")
     nombre_alumno = models.CharField(max_length=50, verbose_name="Nombres")
     appaterno_alumno = models.CharField(max_length=50, verbose_name="Apellido paterno")
     apmaterno_alumno = models.CharField(max_length=50, verbose_name="Apellido materno")
@@ -141,6 +141,7 @@ class Pagos_colegio(models.Model):
     monto = models.IntegerField(verbose_name="Monto del valor")
     fecha_vencimiento = models.DateField(verbose_name="Fecha de vencimiento")
     tipo_pago_colegio = models.ForeignKey(Tipo_pago_colegio, on_delete=models.CASCADE, verbose_name="Tipo pago colegio")
+    pagado = models.BooleanField(default=False, verbose_name="Pagado")
 
     def __str__(self):
         return self.nombre_pago_colegio

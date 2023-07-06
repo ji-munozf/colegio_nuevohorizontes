@@ -46,6 +46,8 @@ urlpatterns = [
     path('portal_admin/listados/listar_salas', listar_salas, name="listar_salas"),
     path('portal_admin/listados/listar_postulaciones', listar_postulaciones, name="listar_postulaciones"),
     path('portal_admin/listados/listar_pago_colegio', listar_pago_colegio, name="listar_pago_colegio"),
+    path('portal_admin/listados/listar_horarios_cursos', listar_horarios_cursos, name="listar_horarios_cursos"),
+    path('portal_admin/listados/listar_horarios_cursos/listar_horario/<str:id_curso>/', listar_horarios, name="listar_horarios"),
 
     #Cambiar contraseñas
     path('portal_admin/listados/listar_docentes/cambiar_pass_docente/<id>/', cambiar_pass_docente, name="cambiar_pass_docente"),
@@ -78,6 +80,7 @@ urlpatterns = [
     path('eliminar_postulacion/<id>/', eliminar_postulacion, name="eliminar_postulacion"),
     path('eliminar_pago/<id>/', eliminar_pagos, name="eliminar_pagos"),
     path('eliminar_pagos_colegio/<id>/', eliminar_pagos_colegio, name="eliminar_pagos_colegio"),
+    path('eliminar_horario/<str:id_curso>/', eliminar_horario, name="eliminar_horario"),
     
     #Home alumno
     path('portal_alumno/home_alumno', home_alumno, name="home_alumno"),
@@ -91,10 +94,12 @@ urlpatterns = [
     path('portal_apoderado/mi_perfil', miperfil_apoderado, name="miperfil_apoderado"),
     path('portal_apoderado/lista_hijos', lista_hijos, name="lista_hijos"),
     path('portal_apoderado/horarios', horarios_apoderado, name="horarios_apoderado"),
+    path('portal_apoderado/horarios/ver_horario_hijo/<str:rut_alumno>/', ver_horario_hijo, name="ver_horario_hijo"),
     path('portal_apoderado/asistencias', asistencias_apoderado, name="asistencias_apoderado"),
     path('portal_apoderado/notas_apoderado', notas_apoderado, name="notas_apoderado"),
     path('portal_apoderado/pagos_apoderado', pagos_apoderado, name="pagos_apoderado"),
-    path('realizar_pago/<int:id_pago>/', realizar_pago, name='realizar_pago'),
+    path('portal_apoderado/pagos_apoderado/listar_pagos_apoderado/<str:rut_alumno>/', listar_pagos_apoderado, name="listar_pagos_apoderado"),
+    path("realizar_pago/", realizar_pago, name="realizar_pago"),
 
     #Home docente
     path('portal_docente/home_docente', home_docente, name="home_docente"),

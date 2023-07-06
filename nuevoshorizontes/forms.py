@@ -2,14 +2,21 @@ from django import forms
 from .models import *
 from datetime import date
 from django.core.exceptions import ValidationError
+from django.core.validators import RegexValidator
 
 
 class AlumnoForm(forms.ModelForm):
     rut_alumno = forms.CharField(
-        widget=forms.TextInput(attrs={"class": "form-control", "required": "required"}),
-        max_length=10,
+        widget=forms.TextInput(attrs={"class": "form-control", "required": "required", "placeholder": "Ej: 12.345.678-9"}),
+        validators=[
+            RegexValidator(
+                regex=r'^\d{1,2}(?:\.\d{3})*(?:\-\d|K|k)$',
+                message="El RUT ingresado es inválido. Debe tener el formato 12.345.678-K."
+            )
+        ],
+        max_length=14,
         error_messages={
-            "unique": "El rut del alumno ya existe.",
+            "unique": "El RUT del alumno ya existe.",
         },
     )
     nombre_alumno = forms.CharField(
@@ -48,18 +55,28 @@ class AlumnoForm(forms.ModelForm):
         widget=forms.Select(attrs={"class": "form-control", "required": "required"}),
     )
 
-    def clean_correo_alumno(self):
-        correo_alumno = self.cleaned_data.get("correo_alumno")
-        instance = self.instance
+    def clean_rut_alumno(self):
+        rut_alumno = self.cleaned_data.get("rut_alumno")
 
-        if instance is None:  # Agregar nuevo apoderado
-            if Alumno.objects.filter(correo_alumno=correo_alumno).exists():
-                raise ValidationError("El correo del alumno ya existe.")
-        else:  # Modificar apoderado existente
-            if Alumno.objects.filter(correo_alumno=correo_alumno).exclude(rut_alumno=instance.rut_alumno).exists():
-                raise ValidationError("El correo del alumno ya existe para otro alumno.")
-        
-        return correo_alumno
+        # Validar el RUT sin separadores ni guion
+        if not self.validar_rut_chileno(rut_alumno):
+            raise forms.ValidationError("El RUT ingresado es inválido.")
+
+        return rut_alumno
+
+    def validar_rut_chileno(self, rut):
+    # Validar el RUT utilizando el algoritmo del dígito verificador
+        rut = rut.upper().replace(".", "").replace("-", "")
+        if rut.isdigit() and len(rut) >= 2:
+            rut_sin_dv = rut[:-1]
+            dig_verif = rut[-1]
+            serie = [2, 3, 4, 5, 6, 7, 2, 3, 4]
+            total = sum([int(a) * b for a, b in zip(rut_sin_dv[::-1], serie)])
+            resto = total % 11
+            dig_calculado = str(11 - resto) if resto != 1 else "K"
+            return dig_calculado == dig_verif
+
+        return False
 
     class Meta:
         model = Alumno
@@ -68,8 +85,14 @@ class AlumnoForm(forms.ModelForm):
 
 class DocenteForm(forms.ModelForm):
     rut_docente = forms.CharField(
-        widget=forms.TextInput(attrs={"class": "form-control", "required": "required"}),
-        max_length=10,
+        widget=forms.TextInput(attrs={"class": "form-control", "required": "required", "placeholder": "Ej: 12.345.678-9"}),
+        validators=[
+            RegexValidator(
+                regex=r'^\d{1,2}(?:\.\d{3})*(?:\-\d|K|k)$',
+                message="El RUT ingresado es inválido. Debe tener el formato 12.345.678-K."
+            )
+        ],
+        max_length=14,
         error_messages={
             "unique": "El rut del docente ya existe.",
         },
@@ -120,6 +143,29 @@ class DocenteForm(forms.ModelForm):
                 raise ValidationError("El correo del docente ya existe para otro docente.")
         
         return correo_docente
+    
+    def clean_rut_docente(self):
+        rut_docente = self.cleaned_data.get("rut_docente")
+
+        # Validar el RUT sin separadores ni guion
+        if not self.validar_rut_chileno(rut_docente):
+            raise forms.ValidationError("El RUT ingresado es inválido.")
+
+        return rut_docente
+
+    def validar_rut_chileno(self, rut):
+    # Validar el RUT utilizando el algoritmo del dígito verificador
+        rut = rut.upper().replace(".", "").replace("-", "")
+        if rut.isdigit() and len(rut) >= 2:
+            rut_sin_dv = rut[:-1]
+            dig_verif = rut[-1]
+            serie = [2, 3, 4, 5, 6, 7, 2, 3, 4]
+            total = sum([int(a) * b for a, b in zip(rut_sin_dv[::-1], serie)])
+            resto = total % 11
+            dig_calculado = str(11 - resto) if resto != 1 else "K"
+            return dig_calculado == dig_verif
+
+        return False
 
     class Meta:
         model = Docente
@@ -128,8 +174,14 @@ class DocenteForm(forms.ModelForm):
 
 class ApoderadoForm(forms.ModelForm):
     rut_apoderado = forms.CharField(
-        widget=forms.TextInput(attrs={"class": "form-control", "required": "required"}),
-        max_length=10,
+        widget=forms.TextInput(attrs={"class": "form-control", "required": "required", "placeholder": "Ej: 12.345.678-9"}),
+        validators=[
+            RegexValidator(
+                regex=r'^\d{1,2}(?:\.\d{3})*(?:\-\d|K|k)$',
+                message="El RUT ingresado es inválido. Debe tener el formato 12.345.678-K."
+            )
+        ],
+        max_length=14,
         error_messages={
             "unique": "El rut del apoderado ya existe.",
         },
@@ -175,6 +227,29 @@ class ApoderadoForm(forms.ModelForm):
                 raise ValidationError("El correo del apoderado ya existe para otro apoderado.")
         
         return correo_apoderado
+    
+    def clean_rut_apoderado(self):
+        rut_apoderado = self.cleaned_data.get("rut_apoderado")
+
+        # Validar el RUT sin separadores ni guion
+        if not self.validar_rut_chileno(rut_apoderado):
+            raise forms.ValidationError("El RUT ingresado es inválido.")
+
+        return rut_apoderado
+
+    def validar_rut_chileno(self, rut):
+    # Validar el RUT utilizando el algoritmo del dígito verificador
+        rut = rut.upper().replace(".", "").replace("-", "")
+        if rut.isdigit() and len(rut) >= 2:
+            rut_sin_dv = rut[:-1]
+            dig_verif = rut[-1]
+            serie = [2, 3, 4, 5, 6, 7, 2, 3, 4]
+            total = sum([int(a) * b for a, b in zip(rut_sin_dv[::-1], serie)])
+            resto = total % 11
+            dig_calculado = str(11 - resto) if resto != 1 else "K"
+            return dig_calculado == dig_verif
+
+        return False
 
     class Meta:
         model = Apoderado

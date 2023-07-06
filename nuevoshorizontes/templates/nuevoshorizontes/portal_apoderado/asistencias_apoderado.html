@@ -20,6 +20,20 @@
 
 <body>
 
+    <style>
+        th {
+            text-align: center;
+            vertical-align: middle;
+            font-size: 16.5px;
+        }
+
+        td {
+            text-align: center;
+            vertical-align: middle;
+            font-size: 16.5px;
+        }
+    </style>
+
     {% include "nuevoshorizontes/portal_apoderado/navbar.html" %}
 
     <h1 class="heading" style="padding-top: 120px;">
@@ -27,7 +41,7 @@
             height="60">Asistencias hijos
     </h1>
 
-    <div class="container">
+    <div class="container-fluid">
         <div class="card">
             <div class="card-body">
                 <div class="table-responsive">
@@ -37,6 +51,7 @@
                         <thead>
                             <tr>
                                 <th>Nombre completo</th>
+                                <th>Total de clases</th>
                                 <th>Presentes</th>
                                 <th>Ausentes</th>
                                 <th>Justificados</th>
@@ -45,13 +60,20 @@
                         </thead>
                         <tbody>
                             {% for asistencia_alumno in asistencias_alumnos %}
+                            {% if asistencia_alumno.presentes == 0 and asistencia_alumno.ausentes == 0 and asistencia_alumno.justificados == 0 and asistencia_alumno.porcentaje_asistencia == 0 %}
+                            <tr>
+                                <td colspan="6">El alumno {{ asistencia_alumno.alumno.nombre_alumno }} {{ asistencia_alumno.alumno.appaterno_alumno }} {{ asistencia_alumno.alumno.apmaterno_alumno }} no tiene asistencias registradas.</td>
+                            </tr>
+                            {% else %}
                             <tr>
                                 <td>{{ asistencia_alumno.alumno.nombre_alumno }} {{ asistencia_alumno.alumno.appaterno_alumno }} {{ asistencia_alumno.alumno.apmaterno_alumno }}</td>
+                                <td>{{ asistencia_alumno.total_asistencias }}</td>
                                 <td>{{ asistencia_alumno.presentes }}</td>
                                 <td>{{ asistencia_alumno.ausentes }}</td>
                                 <td>{{ asistencia_alumno.justificados }}</td>
                                 <td>{{ asistencia_alumno.porcentaje_asistencia | floatformat:0 }}%</td>
                             </tr>
+                            {% endif %} 
                             {% endfor %}
                         </tbody>
                     </table>
@@ -61,8 +83,8 @@
                 </div>
             </div>
         </div>
-    </div>
-    
+    </div
+
 
 </body>
 

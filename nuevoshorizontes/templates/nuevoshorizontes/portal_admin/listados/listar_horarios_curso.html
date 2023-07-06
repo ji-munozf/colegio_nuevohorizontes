@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="icon" href="{% static 'nuevoshorizontes/img/logo_blanco.png' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listado - Administrador</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{% static 'nuevoshorizontes/css/navbar.css' %}">
+    <link rel="stylesheet" href="{% static 'nuevoshorizontes/css/home_admin.css' %}">
+    <link rel="stylesheet" href="{% static 'nuevoshorizontes/css/listar_page.css' %}">
+</head>
+
+<body>
+
+    {% include "nuevoshorizontes/portal_admin/navbar.html" %}
+    {% include "nuevoshorizontes/portal_admin/mensajes.html" %}
+
+    <h1 class="heading" style="padding-top: 120px;">
+        <img class="title-img mx-2" src="{% static 'nuevoshorizontes/img/horario_blanco.png' %}" alt="agregar"
+          height="60">Listar horario
+      </h1>
+
+      <div class="container">
+        <div class="row">
+            <p class="text" style="color: #fff; font-size: 25px;">Seleccione un curso para ver su horario:</p>
+        </div>
+    </div>
+
+      <div class="container">
+        <div class="row">
+            {% for curso in cursos_con_bloques %}
+            <div class="col-md-12">
+                <div class="card">
+                    <img src="{% static 'nuevoshorizontes/img/icons_listar/graduados.png' %}" class="card-img-top" alt="Imagen 2">
+                    <div class="card-body">
+                        <h3 class="card-title">Curso: {{ curso.nombre_curso }}</h3>
+                        <a href="{% url 'listar_horarios' curso.id_curso %}" class="btn btn-primary align-self-center">Mostrar horario</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+
+    <div class="container botones" style="text-align: center; align-items: center;">
+        <a type="button" class="btn btn-lg btn-block" href="{% url 'home_listado' %}">Volver a las listas</a>
+    </div>
+
+</body>
+
+</html>

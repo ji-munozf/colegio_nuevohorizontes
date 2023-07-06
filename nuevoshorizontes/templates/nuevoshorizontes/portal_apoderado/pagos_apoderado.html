@@ -33,59 +33,53 @@
 
     <h1 class="heading" style="padding-top: 120px;">
         <img class="title-img mx-2" src="{% static 'nuevoshorizontes/img/ingresos_blanco.png' %}" alt="agregar"
-            height="60">Información de pagos
+            height="60">Visualizar pagos
     </h1>
 
-    {% load humanize %}
-
-    <div class="container" style="margin-bottom: 20px;">
+    <div class="container-fluid" style="margin-bottom: 20px;">
         <div class="card">
             <div class="card-body">
-                <form id="pago-form" method="POST" action="">
-                    {% csrf_token %}
-                    <div class="table-responsive">
-                        {% if alumnos %}
-                        {% for alumno in alumnos %}
-                        <p>Nombre del alumno: {{ alumno.nombre_alumno }} {{ alumno.appaterno_alumno }} {{ alumno.apmaterno_alumno }}</p>
-                        {% if pagos %}
-                        <table class="table table-striped" style="background-color: white; border: 1px solid rgb(21, 20, 55); text-align: center;">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Nombre</th>
-                                    <th>Monto a pagar</th>
-                                    <th>Fecha de vencimiento</th>
-                                    <th>Tipo</th>
-                                    <th>Acción</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for pago in pagos %}
-                                {% if pago.id_pago_colegio not in pagos_realizados %}
-                                <tr>
-                                    <td>{{ pago.id_pago_colegio }}</td>
-                                    <td>{{ pago.nombre_pago_colegio }}</td>
-                                    <td>${{ pago.monto | intcomma }}</td>
-                                    <td>{{ pago.fecha_vencimiento }}</td>
-                                    <td>{{ pago.tipo_pago_colegio }}</td>
-                                    <td><a type="button" class="btn btn-success btn-block" href="{% url 'realizar_pago' pago.id_pago_colegio %}" style="background-color: green; color: #fff;">Pagar</a></td>
-                                </tr>
-                                {% endif %}
-                                {% endfor %}
-                            </tbody>
-                        </table>                        
-                        {% else %}
-                        <p>No hay pagos de colegio registrados.</p>
-                        {% endif %}
-                        {% endfor %}
-                        {% else %}
-                        <p>No tiene alumnos asignados.</p>
-                        {% endif %}
-                    </div>
-                </form>
+                <div class="table-responsive">
+                    {% if alumnos %}
+                    <table class="table table-striped"
+                        style="background-color: white; border: 1px solid rgb(21, 20, 55); text-align: center;">
+                        <thead>
+                            <tr>
+                                <th>Rut</th>
+                                <th>Nombres</th>
+                                <th>Apellidos</th>
+                                <th>Correo electrónico</th>
+                                <th>Sede asignado</th>
+                                <th>Curso asignado</th>
+                                <th>Horario</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for alumno in alumnos %}
+                            <tr>
+                                <td>{{ alumno.rut_alumno }}</td>
+                                <td>{{ alumno.nombre_alumno }}</td>
+                                <td>{{ alumno.appaterno_alumno }} {{ alumno.apmaterno_alumno }}</td>
+                                <td>{{ alumno.correo_alumno }}</td>
+                                <td>{{ alumno.sede_alumno }}</td>
+                                <td>{{ alumno.curso_alumno }}</td>
+                                <td><a type="button" class="btn btn-success btn-block"
+                                        href="{% url 'listar_pagos_apoderado' alumno.rut_alumno %}"
+                                        style="background-color: green; color: #fff;">Ver pagos</a></td>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% else %}
+                    <p>No hay alumnos asignados.</p>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </div>
+    
+    
 
 </body>
 
