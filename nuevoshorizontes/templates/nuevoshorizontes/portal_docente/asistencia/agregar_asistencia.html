@@ -22,6 +22,7 @@
 <body>
 
     {% include "nuevoshorizontes/portal_docente/navbar.html" %}
+    {% include "nuevoshorizontes/portal_admin/mensajes.html" %}
 
     <h1 class="heading" style="padding-top: 120px;">
         <img class="title-img mx-2" src="{% static 'nuevoshorizontes/img/icons_admin/boton-mas-blanco.png' %}"
@@ -41,7 +42,7 @@
                                 <div class="row">
                                     <div class="content">
                                         <label class="form-label" style="color: #000; font-size: 20px;">Seleccione una fecha</label>
-                                        <input type="date" class="form-control"
+                                        <input type="date" id="date" class="form-control"
                                             style="width: 30%; margin-bottom: 20px; border-color: #000;" name="fecha"
                                             required>
                                     </div>
@@ -64,7 +65,7 @@
                                     <td>{{ alumno.appaterno_alumno }} {{ alumno.apmaterno_alumno }}</td>
                                     <td>{{ alumno.curso_alumno.nombre_curso }}</td>
                                     <td>
-                                        <select name="{{ alumno.rut_alumno }}" class="form-control" style="border-color: #000; text-align: center;" required>
+                                        <select name="{{ alumno.rut_alumno }}" id="tipo_asistencia" class="form-control" style="border-color: #000; text-align: center;" required>
                                             <option value="">Seleccione un estado de asistencia</option>
                                             {% for estado_asistencia in estados_asistencia %}
                                                 {% if estado_asistencia.id_tipo_asistencia != 3 %}
@@ -104,23 +105,42 @@
 
 
     <div class="container botones" style="text-align: center; align-items: center; margin-top: 30px;">
-        <a type="button" class="btn btn-lg btn-block" href="{% url 'asistencia_docente' %}"
-            style="font-weight: 500;">Volver al menú asistencia</a>
+        <a type="button" class="btn btn-lg btn-block" onclick="confirmarVolver()" style="font-weight: 500;">Volver al menú asistencia</a>
     </div>
 
-    {% if messages %}
-        {% for message in messages %}
-            {% if message.tags == 'error' %}
-                <script>
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: '{{ message }}'
-                    });
-                </script>
-            {% endif %}
-        {% endfor %}
-    {% endif %}
+    <script>
+        function confirmarVolver() {
+            // Obtener los valores de los campos de entrada
+            var tipoAsistencia = document.getElementById("tipo_asistencia").value;
+            var dateAsistencia = document.getElementById("date").value;
+
+            // Verificar si se ingresaron datos en al menos un campo
+            if (
+                tipoAsistencia.trim() !== "" ||
+                dateAsistencia.trim() !== ""
+            ) {
+                // Mostrar el mensaje de confirmación
+                Swal.fire({
+                    title: "¿Estás seguro?",
+                    text: "Si vuelves al menú agregar, se perderán los datos ingresados.",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "green",
+                    cancelButtonColor: "#dc3545",
+                    confirmButtonText: "Sí, volver",
+                    cancelButtonText: "Cancelar",
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Redireccionar al menú agregar
+                        window.location.href = "{% url 'asistencia_docente' %}";
+                    }
+                });
+            } else {
+                // No se ingresaron datos, redireccionar directamente
+                window.location.href = "{% url 'asistencia_docente' %}";
+            }
+        }
+    </script>
 
 </body>
 

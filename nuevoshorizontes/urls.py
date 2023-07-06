@@ -45,6 +45,7 @@ urlpatterns = [
     path('portal_admin/listados/listar_sedes', listar_sedes_admin, name="listar_sedes"),
     path('portal_admin/listados/listar_salas', listar_salas, name="listar_salas"),
     path('portal_admin/listados/listar_postulaciones', listar_postulaciones, name="listar_postulaciones"),
+    path('portal_admin/listados/listar_asistencias', listar_asistencias, name="listar_asistencias"),
     path('portal_admin/listados/listar_pago_colegio', listar_pago_colegio, name="listar_pago_colegio"),
     path('portal_admin/listados/listar_horarios_cursos', listar_horarios_cursos, name="listar_horarios_cursos"),
     path('portal_admin/listados/listar_horarios_cursos/listar_horario/<str:id_curso>/', listar_horarios, name="listar_horarios"),
@@ -81,6 +82,7 @@ urlpatterns = [
     path('eliminar_pago/<id>/', eliminar_pagos, name="eliminar_pagos"),
     path('eliminar_pagos_colegio/<id>/', eliminar_pagos_colegio, name="eliminar_pagos_colegio"),
     path('eliminar_horario/<str:id_curso>/', eliminar_horario, name="eliminar_horario"),
+    path('eliminar-asistencias/', eliminar_asistencias, name='eliminar_asistencias'),
     
     #Home alumno
     path('portal_alumno/home_alumno', home_alumno, name="home_alumno"),

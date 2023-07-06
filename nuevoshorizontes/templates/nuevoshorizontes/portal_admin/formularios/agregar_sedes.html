@@ -30,8 +30,8 @@
             height="60">Agregar sedes
     </h1>
 
-    <div class="row" style="padding-bottom: 80px;">
-        <div class="col-12 col-md-6 offset-md-3">
+    <div class="container" style="padding-bottom: 80px;">
+        <div class="row">
 
             <div class="card">
                 <div class="card-body">
@@ -80,47 +80,55 @@
             </div>
 
             <div class="container botones" style="text-align: center; align-items: center; margin-top: 20px;">
-                <a type="button" class="btn btn-lg btn-block" href="{% url 'home_agregar' %}">Volver al menú agregar</a>
+                <a type="button" class="btn btn-lg btn-block" onclick="confirmarVolver()">Volver al menú agregar</a>
             </div>
+
         </div>
     </div>
 
+    <script src="{% static 'nuevoshorizontes/js/select_anidados_comuna_region.js' %}"></script>
+
     <script>
-        $(document).ready(function () {
-            const regionSelect = $('#region-select');
-            const comunaSelect = $('#comuna-select');
+        function confirmarVolver() {
+            // Obtener los valores de los campos de entrada
+            var nombreSede = document.getElementById("id_nombre_sede").value;
+            var direccionSede = document.getElementById("id_direccion_sede").value;
+            var telefonoSede = document.getElementById("id_telefono_sede").value;
+            var imagenSede = document.getElementById("id_fotoSede").value;
+            var regionSede = document.getElementById("region-select").value;
+            var comunaSede = document.getElementById("comuna-select").value;
 
-            regionSelect.on('change', function () {
-                const regionId = $(this).val();
+            // Verificar si se ingresaron datos en al menos un campo
+            if (
+                nombreSede.trim() !== "" ||
+                direccionSede.trim() !== "" ||
+                telefonoSede.trim() !== "" ||
+                imagenSede.trim() !== "" ||
+                regionSede.trim() !== "" ||
+                comunaSede !== ""
+            ) {
+                // Mostrar el mensaje de confirmación
+                Swal.fire({
+                    title: "¿Estás seguro?",
+                    text: "Si vuelves al menú agregar, se perderán los datos ingresados.",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "green",
+                    cancelButtonColor: "#dc3545",
+                    confirmButtonText: "Sí, volver",
+                    cancelButtonText: "Cancelar",
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Redireccionar al menú agregar
+                        window.location.href = "{% url 'home_agregar' %}";
+                    }
+                });
+            } else {
+                // No se ingresaron datos, redireccionar directamente
+                window.location.href = "{% url 'home_agregar' %}";
+            }
+        }
 
-                if (regionId === '') {
-                    comunaSelect.empty().append($('<option>').text('Seleccione una comuna').attr('value', ''));
-                    comunaSelect.prop('disabled', true);
-                    return;
-                }
-
-                axios.get(`/api/comunas/?region=${regionId}`)
-                    .then(response => {
-                        const comunas = response.data;
-
-                        comunaSelect.empty().append($('<option>').text('Seleccione una comuna').attr('value', ''));
-                        $.each(comunas, function (index, comuna) {
-                            comunaSelect.append($('<option>').text(comuna.nombre_comuna).attr('value', comuna.id_comuna));
-                        });
-
-                        comunaSelect.prop('disabled', comunas.length === 0);
-                    })
-                    .catch(error => {
-                        console.error(error);
-                    });
-            });
-
-            $('input[type="reset"]').click(function () {
-                comunaSelect.prop('disabled', true);
-            });
-
-            comunaSelect.prop('disabled', true);
-        });
     </script>
 
 </body>

@@ -103,7 +103,7 @@
             </div>
 
             <div class="container botones" style="text-align: center; align-items: center; margin-top: 20px;">
-                <a type="button" class="btn btn-lg btn-block" href="{% url 'home_agregar' %}">Volver al menú agregar</a>
+                <a type="button" class="btn btn-lg btn-block" onclick="confirmarVolver()">Volver al menú agregar</a>
             </div>
 
         </div>
@@ -118,6 +118,54 @@
         });
     </script>
     {% endif %}
+
+    <script>
+        function confirmarVolver() {
+            // Obtener los valores de los campos de entrada
+            var rutDocente = document.getElementById("id_rut_docente").value;
+            var nombreDocente = document.getElementById("id_nombre_docente").value;
+            var appaternoDocente = document.getElementById("id_appaterno_docente").value;
+            var apmaternoDocente = document.getElementById("id_apmaterno_docente").value;
+            var direccionDocente = document.getElementById("id_direccion_docente").value;
+            var telefonoDocente = document.getElementById("id_telefono_docente").value;
+            var correoDocente = document.getElementById("id_correo_docente").value;
+            var passwordAdmin = document.getElementById("id_password").value;
+            var repetirPassword = document.getElementById("id_repetir_contraseña").value;
+
+            // Verificar si se ingresaron datos en al menos un campo
+            if (
+                rutDocente.trim() !== "" ||
+                nombreDocente.trim() !== "" ||
+                appaternoDocente.trim() !== "" ||
+                apmaternoDocente.trim() !== "" ||
+                direccionDocente.trim() !== "" ||
+                telefonoDocente.trim() !== "" ||
+                correoDocente.trim() !== "" ||
+                passwordAdmin.trim() !== "" ||
+                repetirPassword.trim() !== ""
+            ) {
+                // Mostrar el mensaje de confirmación
+                Swal.fire({
+                    title: "¿Estás seguro?",
+                    text: "Si vuelves al menú agregar, se perderán los datos ingresados.",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "green",
+                    cancelButtonColor: "#dc3545",
+                    confirmButtonText: "Sí, volver",
+                    cancelButtonText: "Cancelar",
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Redireccionar al menú agregar
+                        window.location.href = "{% url 'home_agregar' %}";
+                    }
+                });
+            } else {
+                // No se ingresaron datos, redireccionar directamente
+                window.location.href = "{% url 'home_agregar' %}";
+            }
+        }
+    </script>
 
 </body>
 

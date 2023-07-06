@@ -29,9 +29,8 @@
             height="60">Agregar asignaturas
     </h1>
 
-
-    <div class="row" style="padding-bottom: 80px;">
-        <div class="col-12 col-md-6 offset-md-3">
+    <div class="container" style="padding-bottom: 80px;">
+        <div class="row">
 
             <div class="card">
                 <div class="card-body">
@@ -67,12 +66,10 @@
             </div>
 
             <div class="container botones" style="text-align: center; align-items: center; margin-top: 20px;">
-                <button type="button" class="btn btn-lg btn-block"><a href="{% url 'home_agregar' %}">Volver al menú
-                        agregar</a></button>
+                <a type="button" class="btn btn-lg btn-block" onclick="confirmarVolver()">Volver al menú agregar</a>
             </div>
 
         </div>
-
     </div>
 
     {% if form.errors %}
@@ -84,6 +81,42 @@
         });
     </script>
     {% endif %}
+
+    <script>
+        function confirmarVolver() {
+            // Obtener los valores de los campos de entrada
+            var idAsignatura = document.getElementById("id_id_asignatura").value;
+            var nombreAsignatura = document.getElementById("id_nombre_asignatura").value;
+            var docenteAsignatura = document.getElementById("id_profesor_asignatura").value;
+
+            // Verificar si se ingresaron datos en al menos un campo
+            if (
+                idAsignatura.trim() !== "" ||
+                nombreAsignatura.trim() !== "" ||
+                docenteAsignatura.trim() !== ""
+            ) {
+                // Mostrar el mensaje de confirmación
+                Swal.fire({
+                    title: "¿Estás seguro?",
+                    text: "Si vuelves al menú agregar, se perderán los datos ingresados.",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "green",
+                    cancelButtonColor: "#dc3545",
+                    confirmButtonText: "Sí, volver",
+                    cancelButtonText: "Cancelar",
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Redireccionar al menú agregar
+                        window.location.href = "{% url 'home_agregar' %}";
+                    }
+                });
+            } else {
+                // No se ingresaron datos, redireccionar directamente
+                window.location.href = "{% url 'home_agregar' %}";
+            }
+        }
+    </script>
 
 </body>
 

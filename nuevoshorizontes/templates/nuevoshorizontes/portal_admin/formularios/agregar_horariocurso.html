@@ -3,7 +3,7 @@
 
 <head>
 
-  <title>Horario escolar  - Administrador</title>
+  <title>Horario escolar - Administrador</title>
 
   {% load static %}
 
@@ -568,13 +568,31 @@
 
 
       <div class="container botones" style="text-align: center; align-items: center; margin-top: 20px;">
-        <a type="button" class="btn btn-lg btn-block" href="{% url 'home_agregar' %}">Volver al menú agregar</a>
+        <a type="button" class="btn btn-lg btn-block" onclick="confirmarVolver()">Volver al menú agregar</a>
       </div>
 
     </div>
   </div>
 
-
+  <script>
+    function confirmarVolver() {
+      Swal.fire({
+        "title": "¿Estas seguro?",
+        "text": "Si vuelves al menú agregar, se perderán los datos ingresados.",
+        "icon": "warning",
+        "showCancelButton": true,
+        "cancelButtonText": "Cancelar",
+        "confirmButtonText": "Sí, volver",
+        "confirmButtonColor": "green",
+        "cancelButtonColor": "#dc3545"
+      })
+        .then(function (result) {
+          if (result.isConfirmed) {
+            window.location.href = "{% url 'home_agregar' %}";
+          }
+        })
+    }
+  </script>
 
 </body>
 

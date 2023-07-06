@@ -1105,6 +1105,20 @@ def listar_horarios(request, id_curso):
         return redirect("login_administrativo")
 
 
+def listar_asistencias(request):
+    correo_admin = request.session.get("correo_admin", None)
+    if correo_admin:
+        admin = Administrador.objects.get(correo_admin=correo_admin)
+        asistencias = Asistencia.objects.all()
+        return render(
+            request,
+            "nuevoshorizontes/portal_admin/listados/listar_asistencias.html",
+            {"admin": admin, "asistencias": asistencias},
+        )
+    else:
+        return redirect("login_administrativo")
+
+
 def modificar_alumnos(request, id):
     correo_admin = request.session.get("correo_admin", None)
     if correo_admin:
@@ -1533,6 +1547,12 @@ def eliminar_horario(request, id_curso):
     bloques.delete()
     messages.success(request, "Horario eliminado correctamente")
     return redirect("listar_horarios_cursos")
+
+
+def eliminar_asistencias(request):
+    Asistencia.objects.all().delete()
+    messages.success(request, "Todas las asistencias se eliminaron correctamente")
+    return redirect("listar_asistencias")
 
 
 def home_alumno(request):
@@ -2052,7 +2072,9 @@ def listar_pagos_apoderado(request, rut_alumno):
         apoderado = Apoderado.objects.get(correo_apoderado=correo_apoderado)
         alumno = Alumno.objects.get(rut_alumno=rut_alumno)
         pagos = Pagos_colegio.objects.all()
-        pagos_realizados = Pagos.objects.filter(apoderado=apoderado, alumno=alumno).values_list('nombre_pago_colegio_id', flat=True)
+        pagos_realizados = Pagos.objects.filter(
+            apoderado=apoderado, alumno=alumno
+        ).values_list("nombre_pago_colegio_id", flat=True)
 
         return render(
             request,
@@ -2066,7 +2088,6 @@ def listar_pagos_apoderado(request, rut_alumno):
         )
     else:
         return redirect("login_apoderado")
-
 
 
 def realizar_pago(request):
