@@ -2504,3 +2504,72 @@ def agregar_horariocurso(request):
     else:
         # El usuario no ha iniciado sesión, redirigir a la página de inicio de sesión
         return redirect("login_administrativo")
+
+def curso_de_un_ramo(profesor, asignatura):
+
+    bloques = Bloque.objects.filter(asignatura_bloque=asignatura, docente_bloque=profesor)
+    if bloques.exists():
+        bloque = bloques.first()
+        curso = bloque.curso_bloque
+        return curso
+    else:
+
+        return None
+
+def ingresar_notas_docente(request):
+
+    correo_docente = request.session.get("correo_docente", None)
+    if correo_docente:
+        docente = Docente.objects.get(correo_docente=correo_docente)
+        asignaturas = Asignatura.objects.filter(profesor_asignatura=docente)
+        alumnos = None
+        curso = None
+        cant_asig = None
+        if asignaturas.exists():
+            cant_asig = len(asignaturas)    
+            if request.method == 'POST':
+                if 'mostrar_alumnos_boton' in request.POST:
+                    asignatura_id = request.POST.get("ramos")
+                    asignatura = Asignatura.objects.get(id_asignatura=asignatura_id)
+                    curso = curso_de_un_ramo(docente, asignatura)
+                    alumnos = Alumno.objects.filter(curso_alumno=curso.id_curso)
+                    
+                    data = {
+                        'cantidad_asignaturas': cant_asig,
+                        'curso': curso,
+                        'alumnos': alumnos,
+                        'asignaturas': asignaturas,
+                        }
+                    
+                    return render(request, 'nuevoshorizontes/portal_docente/ingresar_notas_docente.html', data)
+                
+                
+                elif 'guardar_notas_boton' in request.POST:
+                    asignatura_id = request.POST.get("ramos")
+                    asignatura = Asignatura.objects.get(id_asignatura=asignatura_id)
+                    curso = curso_de_un_ramo(docente, asignatura)
+                    alumnos = Alumno.objects.filter(curso_alumno=curso.id_curso)
+
+                    for alumno in alumnos:
+                        nota = request.POST.get(str(alumno.rut_alumno))
+
+                        Calificacion.objects.create(
+                            valor=nota,
+                            alumno=alumno,
+                            asignatura=asignatura,
+                        )
+
+                    return render(request, 'nuevoshorizontes/portal_docente/ingresar_notas_docente.html')
+
+    else:
+        return redirect("login_docente")
+
+    data_vacio = {
+        'cantidad_asignaturas': cant_asig,
+        'curso': curso,
+        'alumnos': alumnos,
+        'asignaturas': asignaturas,
+    }
+
+    return render(request, "nuevoshorizontes/portal_docente/ingresar_notas_docente.html", data_vacio)
+

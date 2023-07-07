@@ -189,3 +189,8 @@ class Postulaciones(models.Model):
     telefono = models.IntegerField(verbose_name="Teléfono")
     sede = models.CharField(max_length=50, verbose_name="sede")
     mensaje = models.TextField(verbose_name="mensaje")
+
+class Calificacion(models.Model):
+    valor = models.FloatField(verbose_name="Nota")
+    alumno = models.ForeignKey(Alumno, on_delete=models.CASCADE, verbose_name="Nombre el alumno")
+    asignatura = models.ForeignKey(Asignatura, on_delete=models.CASCADE, verbose_name="Asignatura de la nota")

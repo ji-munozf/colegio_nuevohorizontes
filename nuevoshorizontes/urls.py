@@ -112,6 +112,7 @@ urlpatterns = [
     path('portal_docente/asistencia_docente/agregar_asistencia', agregar_asistencia, name="agregar_asistencia"),
     path('portal_docente/asistencia_docente/buscar_asistencia', buscar_asistencia, name="buscar_asistencia"),
     path('portal_docente/asistencia_docente/modificar_asistencia/<str:rut_alumno>/', modificar_asistencia, name="modificar_asistencia"),
+    path('portal_docente/ingresar_notas_docente', ingresar_notas_docente, name="ingresar_notas_docente"),
 
     #Inicio de sesión
     path('portales/login_alumno', login_alumno, name="login_alumno"),
