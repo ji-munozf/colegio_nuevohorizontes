@@ -22,6 +22,11 @@
 <body>
 
     <style>
+        th {
+            text-align: center;
+            vertical-align: middle;
+        }
+
         td {
             text-align: center;
             vertical-align: middle;
@@ -33,7 +38,7 @@
 
     <h1 class="heading" style="padding-top: 120px;">
         <img class="title-img mx-2" src="{% static 'nuevoshorizontes/img/ingresos_blanco.png' %}" alt="agregar"
-            height="60">Pagar a {{ alumno.nombre_alumno }} {{ alumno.appaterno_alumno }} {{ alumno.apmaterno_alumno }}
+            height="60">Pagos de {{ alumno.nombre_alumno }} {{ alumno.appaterno_alumno }} {{ alumno.apmaterno_alumno }}
     </h1>
 
     {% load humanize %}
@@ -43,10 +48,11 @@
             <div class="card-body">
                 <div class="table-responsive">
                     {% if pagos %}
-                    <form method="post" action="{% url 'realizar_pago' %}">
+                    <form method="post" action="">
                         {% csrf_token %}
                         <input type="hidden" name="rut_alumno" value="{{ alumno.rut_alumno }}">
-                        <table class="table table-striped" style="background-color: white; border: 1px solid rgb(21, 20, 55); text-align: center;">
+                        <table class="table table-striped"
+                            style="background-color: white; border: 1px solid rgb(21, 20, 55); text-align: center;">
                             <thead>
                                 <tr>
                                     <th>ID</th>
@@ -54,7 +60,6 @@
                                     <th>Monto a pagar</th>
                                     <th>Fecha de vencimiento</th>
                                     <th>Tipo pago colegio</th>
-                                    <th>Pagar</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -65,23 +70,11 @@
                                     <td>${{ pago.monto | intcomma }}</td>
                                     <td>{{ pago.fecha_vencimiento }}</td>
                                     <td>{{ pago.tipo_pago_colegio }}</td>
-                                    <td>
-                                        {% if pago.id_pago_colegio in pagos_realizados %}
-                                            Pagado
-                                        {% else %}
-                                            <form method="post" action="{% url 'realizar_pago' %}">
-                                                {% csrf_token %}
-                                                <input type="hidden" name="rut_alumno" value="{{ alumno.rut_alumno }}">
-                                                <input type="hidden" name="id_pago_colegio" value="{{ pago.id_pago_colegio }}">
-                                                <button type="submit" class="btn btn-success btn-block" style="background-color: green; color: #fff;">Pagar</button>
-                                            </form>
-                                        {% endif %}
-                                    </td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
                         </table>
-                        
+
                     </form>
                     {% else %}
                     <p>No pagos de colegio asignados.</p>
@@ -90,7 +83,7 @@
             </div>
         </div>
     </div>
-    
+
 
     <div class="container botones" style="text-align: center; align-items: center;">
         <a type="button" class="btn btn-lg btn-block" href="{% url 'pagos_apoderado' %}">Volver a pagos del

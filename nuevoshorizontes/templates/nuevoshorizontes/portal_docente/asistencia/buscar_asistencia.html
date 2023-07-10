@@ -41,38 +41,46 @@
     </form>
     {% endif %}
 
+    
+
     <div class="container">
         {% if asistencias %}
-        <h2 style="color: #fff;">Asistencias encontradas:</h2>
-        <table class="table table-striped"
-            style="background-color: white; border: 1px solid rgb(21, 20, 55); text-align: center;">
-            <thead>
-                <tr>
-                    <th>Nombre del alumno</th>
-                    <th>Fecha</th>
-                    <th>Tipo de asistencia</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for asistencia in asistencias %}
-                <tr>
-                    <td>{{ asistencia.alumno.nombre_alumno }}</td>
-                    <td>{{ asistencia.fecha_asistencia }}</td>
-                    <td>{{ asistencia.tipo_asistencia.tipo_asistencia }}</td>
-                    <td>
-                        {% if asistencia.alumno.rut_alumno %}
-                        <a type="submit" class="btn btn-primary"
-                            href="{% url 'modificar_asistencia' asistencia.alumno.rut_alumno %}"
-                            style="background-color: green; color: #fff;">Modificar</a>
-                        {% endif %}
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        {% elif no_asistencias %}
-        <p style="color: #fff; font-size: 25px;">No se encontraron asistencias para la fecha seleccionada.</p>
+        <div class="card">
+            <div class="card-body">
+                <h2 style="color: #fff; margin-bottom: 10px;">Asistencias encontradas:</h2>
+                <div class="table-responsive">
+                    <table class="table table-striped"
+                        style="background-color: white; border: 1px solid rgb(21, 20, 55); text-align: center;">
+                        <thead>
+                            <tr>
+                                <th>Nombre del alumno</th>
+                                <th>Fecha</th>
+                                <th>Tipo de asistencia</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for asistencia in asistencias %}
+                            <tr>
+                                <td>{{ asistencia.alumno.nombre_alumno }}</td>
+                                <td>{{ asistencia.fecha_asistencia }}</td>
+                                <td>{{ asistencia.tipo_asistencia.tipo_asistencia }}</td>
+                                <td>
+                                    {% if asistencia.alumno.rut_alumno %}
+                                    <a type="submit" class="btn btn-primary"
+                                        href="{% url 'modificar_asistencia' asistencia.alumno.rut_alumno %}"
+                                        style="background-color: green; color: #fff;">Modificar</a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% elif no_asistencias %}
+                    <p style="color: #fff; font-size: 25px;">No se encontraron asistencias para la fecha seleccionada.</p>
+                </div>
+            </div>
+        </div>
         {% endif %}
     </div>
 

@@ -7,6 +7,7 @@ from datetime import date, datetime
 from django.utils import timezone
 from django.http import JsonResponse, HttpResponseBadRequest
 from django.db.models import Count, Case, When
+from django.db import IntegrityError
 
 
 def home(request):
@@ -273,20 +274,6 @@ def home_listado(request):
         return redirect("login_administrativo")
 
 
-def home_pagos(request):
-    correo_admin = request.session.get("correo_admin", None)
-    if correo_admin:
-        admin = Administrador.objects.get(correo_admin=correo_admin)
-        pagos = Pagos.objects.all()
-        return render(
-            request,
-            "nuevoshorizontes/portal_admin/pagos.html",
-            {"admin": admin, "pagos": pagos},
-        )
-    else:
-        return redirect("login_administrativo")
-
-
 def agregar_admins(request):
     correo_admin = request.session.get("correo_admin", None)
     if correo_admin:
@@ -548,6 +535,160 @@ def agregar_sedes(request):
             data,
         )
     else:
+        return redirect("login_administrativo")
+
+
+def agregar_horariocurso(request):
+    correo_admin = request.session.get("correo_admin", None)
+    if correo_admin:
+        admin = Administrador.objects.get(correo_admin=correo_admin)
+        # Puedes pasar el objeto 'admin' al contexto de renderizado
+        nombres_bloque_html = [
+            "lun_block1",
+            "mar_block1",
+            "mie_block1",
+            "jue_block1",
+            "vie_block1",
+            "lun_block2",
+            "mar_block2",
+            "mie_block2",
+            "jue_block2",
+            "vie_block2",
+            "lun_block3",
+            "mar_block3",
+            "mie_block3",
+            "jue_block3",
+            "vie_block3",
+            "lun_block4",
+            "mar_block4",
+            "mie_block4",
+            "jue_block4",
+            "vie_block4",
+            "lun_block5",
+            "mar_block5",
+            "mie_block5",
+            "jue_block5",
+            "vie_block5",
+            "lun_block6",
+            "mar_block6",
+            "mie_block6",
+            "jue_block6",
+            "vie_block6",
+            "lun_block7",
+            "mar_block7",
+            "mie_block7",
+            "jue_block7",
+            "vie_block7",
+            "lun_block8",
+            "mar_block8",
+            "mie_block8",
+            "jue_block8",
+            "vie_block8",
+            "lun_block9",
+            "mar_block9",
+            "mie_block9",
+            "jue_block9",
+            "vie_block9",
+        ]
+
+        nombres_bloques = [
+            "L01",
+            "M01",
+            "X01",
+            "J01",
+            "V01",
+            "L02",
+            "M02",
+            "X02",
+            "J02",
+            "V02",
+            "L03",
+            "M03",
+            "X03",
+            "J03",
+            "V03",
+            "L04",
+            "M04",
+            "X04",
+            "J04",
+            "V04",
+            "L05",
+            "M05",
+            "X05",
+            "J05",
+            "V05",
+            "L06",
+            "M06",
+            "X06",
+            "J06",
+            "V06",
+            "L07",
+            "M07",
+            "X07",
+            "J07",
+            "V07",
+            "L08",
+            "M08",
+            "X08",
+            "J08",
+            "V08",
+            "L09",
+            "M09",
+            "X09",
+            "J09",
+            "V09",
+        ]
+
+        if request.method == "POST":
+            curso_id = request.POST.get("curso")
+
+            if not curso_id:
+                messages.error(request, "Debes seleccionar un curso.")
+                return redirect("agregar_horariocurso")
+
+            if Bloque.objects.filter(curso_bloque=curso_id).exists():
+                messages.error(request, "Ya existe un horario creado para este curso")
+                return redirect("agregar_horariocurso")
+
+            curso = Curso.objects.get(id_curso=curso_id)
+
+            for i in range(len(nombres_bloque_html)):
+                asignatura_id = request.POST.get(nombres_bloque_html[i])
+                if asignatura_id:
+                    asignatura = Asignatura.objects.get(id_asignatura=asignatura_id)
+                    docente = asignatura.profesor_asignatura
+
+                    Bloque.objects.create(
+                        nombre_bloque=nombres_bloques[i],
+                        curso_bloque=curso,
+                        asignatura_bloque=asignatura,
+                        docente_bloque=docente,
+                    )
+                else:
+                    Bloque.objects.create(
+                        nombre_bloque=nombres_bloques[i],
+                        curso_bloque=curso,
+                        asignatura_bloque=None,
+                        docente_bloque=None,
+                    )
+
+            messages.success(request, "Horario guardado exitosamente.")
+
+        data = {
+            "cursos": Curso.objects.order_by("nombre_curso"),
+            "salas": Sala.objects.order_by("nombre_sala"),
+            "asignaturas": Asignatura.objects.order_by("nombre_asignatura"),
+            "profesores": Docente.objects.all(),
+            "admin": admin,
+        }
+
+        return render(
+            request,
+            "nuevoshorizontes/portal_admin/formularios/agregar_horariocurso.html",
+            data,
+        )
+    else:
+        # El usuario no ha iniciado sesión, redirigir a la página de inicio de sesión
         return redirect("login_administrativo")
 
 
@@ -1534,13 +1675,6 @@ def eliminar_pagos_colegio(request, id):
     return redirect(to="listar_pago_colegio")
 
 
-def eliminar_pagos(request, id):
-    pagos = get_object_or_404(Pagos, id_pago=id)
-    pagos.delete()
-    messages.success(request, "Pago eliminado correctamente")
-    return redirect(to="home_pagos")
-
-
 def eliminar_horario(request, id_curso):
     curso = get_object_or_404(Curso, id_curso=id_curso)
     bloques = Bloque.objects.filter(curso_bloque=curso)
@@ -2072,9 +2206,6 @@ def listar_pagos_apoderado(request, rut_alumno):
         apoderado = Apoderado.objects.get(correo_apoderado=correo_apoderado)
         alumno = Alumno.objects.get(rut_alumno=rut_alumno)
         pagos = Pagos_colegio.objects.all()
-        pagos_realizados = Pagos.objects.filter(
-            apoderado=apoderado, alumno=alumno
-        ).values_list("nombre_pago_colegio_id", flat=True)
 
         return render(
             request,
@@ -2083,48 +2214,10 @@ def listar_pagos_apoderado(request, rut_alumno):
                 "apoderado": apoderado,
                 "alumno": alumno,
                 "pagos": pagos,
-                "pagos_realizados": pagos_realizados,
             },
         )
     else:
         return redirect("login_apoderado")
-
-
-def realizar_pago(request):
-    if request.method == "POST":
-        correo_apoderado = request.session.get("correo_apoderado", None)
-        if correo_apoderado:
-            apoderado = Apoderado.objects.get(correo_apoderado=correo_apoderado)
-            alumno_rut = request.POST.get("rut_alumno")
-            alumno = get_object_or_404(Alumno, rut_alumno=alumno_rut)
-            id_pago_colegio = request.POST.get("id_pago_colegio")
-            pago_colegio = get_object_or_404(
-                Pagos_colegio, id_pago_colegio=id_pago_colegio
-            )
-            fecha_pago = date.today()
-            monto_pago = pago_colegio.monto
-
-            pago = Pagos(
-                fecha_pago=fecha_pago,
-                monto_pago=monto_pago,
-                apoderado=apoderado,
-                alumno=alumno,
-                nombre_pago_colegio=pago_colegio,
-            )
-            pago.save()
-
-            # Marcar el pago correspondiente como pagado
-            pago_colegio.pagado = True
-            pago_colegio.save()
-
-            # Agregar mensaje de éxito
-            messages.success(request, "El pago se ha realizado correctamente")
-
-            return redirect("pagos_apoderado")
-        else:
-            return redirect("login_apoderado")
-    else:
-        return HttpResponseBadRequest("Bad Request")
 
 
 def home_docente(request):
@@ -2333,7 +2426,7 @@ def modificar_asistencia(request, rut_alumno):
             else:
                 messages.error(request, "No se encontró la asistencia del alumno.")
 
-            return redirect("asistencia_docente")
+            return redirect("buscar_asistencia")
 
         alumno = Alumno.objects.get(rut_alumno=rut_alumno)
         estados_asistencia = Tipo_asis.objects.all()
@@ -2352,172 +2445,34 @@ def modificar_asistencia(request, rut_alumno):
         return redirect("login_docente")
 
 
-def agregar_horariocurso(request):
-    correo_admin = request.session.get("correo_admin", None)
-    if correo_admin:
-        admin = Administrador.objects.get(correo_admin=correo_admin)
-        # Puedes pasar el objeto 'admin' al contexto de renderizado
-        nombres_bloque_html = [
-            "lun_block1",
-            "mar_block1",
-            "mie_block1",
-            "jue_block1",
-            "vie_block1",
-            "lun_block2",
-            "mar_block2",
-            "mie_block2",
-            "jue_block2",
-            "vie_block2",
-            "lun_block3",
-            "mar_block3",
-            "mie_block3",
-            "jue_block3",
-            "vie_block3",
-            "lun_block4",
-            "mar_block4",
-            "mie_block4",
-            "jue_block4",
-            "vie_block4",
-            "lun_block5",
-            "mar_block5",
-            "mie_block5",
-            "jue_block5",
-            "vie_block5",
-            "lun_block6",
-            "mar_block6",
-            "mie_block6",
-            "jue_block6",
-            "vie_block6",
-            "lun_block7",
-            "mar_block7",
-            "mie_block7",
-            "jue_block7",
-            "vie_block7",
-            "lun_block8",
-            "mar_block8",
-            "mie_block8",
-            "jue_block8",
-            "vie_block8",
-            "lun_block9",
-            "mar_block9",
-            "mie_block9",
-            "jue_block9",
-            "vie_block9",
-        ]
-
-        nombres_bloques = [
-            "L01",
-            "M01",
-            "X01",
-            "J01",
-            "V01",
-            "L02",
-            "M02",
-            "X02",
-            "J02",
-            "V02",
-            "L03",
-            "M03",
-            "X03",
-            "J03",
-            "V03",
-            "L04",
-            "M04",
-            "X04",
-            "J04",
-            "V04",
-            "L05",
-            "M05",
-            "X05",
-            "J05",
-            "V05",
-            "L06",
-            "M06",
-            "X06",
-            "J06",
-            "V06",
-            "L07",
-            "M07",
-            "X07",
-            "J07",
-            "V07",
-            "L08",
-            "M08",
-            "X08",
-            "J08",
-            "V08",
-            "L09",
-            "M09",
-            "X09",
-            "J09",
-            "V09",
-        ]
-
-        if request.method == "POST":
-            curso_id = request.POST.get("curso")
-
-            if not curso_id:
-                messages.error(request, "Debes seleccionar un curso.")
-                return redirect("agregar_horariocurso")
-
-            if Bloque.objects.filter(curso_bloque=curso_id).exists():
-                messages.error(request, "Ya existe un horario creado para este curso")
-                return redirect("agregar_horariocurso")
-
-            curso = Curso.objects.get(id_curso=curso_id)
-
-            for i in range(len(nombres_bloque_html)):
-                asignatura_id = request.POST.get(nombres_bloque_html[i])
-                if asignatura_id:
-                    asignatura = Asignatura.objects.get(id_asignatura=asignatura_id)
-                    docente = asignatura.profesor_asignatura
-
-                    Bloque.objects.create(
-                        nombre_bloque=nombres_bloques[i],
-                        curso_bloque=curso,
-                        asignatura_bloque=asignatura,
-                        docente_bloque=docente,
-                    )
-                else:
-                    Bloque.objects.create(
-                        nombre_bloque=nombres_bloques[i],
-                        curso_bloque=curso,
-                        asignatura_bloque=None,
-                        docente_bloque=None,
-                    )
-
-            messages.success(request, "Horario guardado exitosamente.")
-
-        data = {
-            "cursos": Curso.objects.order_by("nombre_curso"),
-            "salas": Sala.objects.order_by("nombre_sala"),
-            "asignaturas": Asignatura.objects.order_by("nombre_asignatura"),
-            "profesores": Docente.objects.all(),
-            "admin": admin,
-        }
-
+def notas_docente(request):
+    correo_docente = request.session.get("correo_docente", None)
+    if correo_docente:
+        docente = Docente.objects.get(correo_docente=correo_docente)
+        # Puedes pasar el objeto 'apoderado' al contexto de renderizado
         return render(
             request,
-            "nuevoshorizontes/portal_admin/formularios/agregar_horariocurso.html",
-            data,
+            "nuevoshorizontes/portal_docente/notas_docente.html",
+            {"docente": docente},
         )
     else:
         # El usuario no ha iniciado sesión, redirigir a la página de inicio de sesión
-        return redirect("login_administrativo")
+        return redirect("login_docente")
+
 
 def curso_de_un_ramo(profesor, asignatura):
-
-    bloques = Bloque.objects.filter(asignatura_bloque=asignatura, docente_bloque=profesor)
+    bloques = Bloque.objects.filter(
+        asignatura_bloque=asignatura, docente_bloque=profesor
+    )
     if bloques.exists():
         bloque = bloques.first()
         curso = bloque.curso_bloque
         return curso
     else:
-
         return None
 
-def ingresar_notas_docente(request):
 
+def agregar_notas(request):
     correo_docente = request.session.get("correo_docente", None)
     if correo_docente:
         docente = Docente.objects.get(correo_docente=correo_docente)
@@ -2525,6 +2480,9 @@ def ingresar_notas_docente(request):
         alumnos = None
         curso = None
         cant_asig = None
+        mostrar_tabla = False 
+        mostrar_formulario = True
+        
         if asignaturas.exists():
             cant_asig = len(asignaturas)    
             if request.method == 'POST':
@@ -2533,15 +2491,19 @@ def ingresar_notas_docente(request):
                     asignatura = Asignatura.objects.get(id_asignatura=asignatura_id)
                     curso = curso_de_un_ramo(docente, asignatura)
                     alumnos = Alumno.objects.filter(curso_alumno=curso.id_curso)
+                    mostrar_tabla = True
                     
                     data = {
                         'cantidad_asignaturas': cant_asig,
                         'curso': curso,
                         'alumnos': alumnos,
                         'asignaturas': asignaturas,
-                        }
+                        "mostrar_tabla": mostrar_tabla,
+                        "mostrar_nueva_busqueda": True,
+                        "mostrar_formulario": False,
+                    }
                     
-                    return render(request, 'nuevoshorizontes/portal_docente/ingresar_notas_docente.html', data)
+                    return render(request, 'nuevoshorizontes/portal_docente/notas/agregar_notas.html', data)
                 
                 
                 elif 'guardar_notas_boton' in request.POST:
@@ -2550,16 +2512,21 @@ def ingresar_notas_docente(request):
                     curso = curso_de_un_ramo(docente, asignatura)
                     alumnos = Alumno.objects.filter(curso_alumno=curso.id_curso)
 
+                    fecha_actual = datetime.now().date()  # Obtener fecha actual
+
                     for alumno in alumnos:
                         nota = request.POST.get(str(alumno.rut_alumno))
 
                         Calificacion.objects.create(
                             valor=nota,
+                            fecha_nota=fecha_actual,
                             alumno=alumno,
                             asignatura=asignatura,
                         )
 
-                    return render(request, 'nuevoshorizontes/portal_docente/ingresar_notas_docente.html')
+                    messages.success(request, "Se han agregado las notas correctamente")
+
+                    return render(request, 'nuevoshorizontes/portal_docente/notas_docente.html')
 
     else:
         return redirect("login_docente")
@@ -2569,7 +2536,86 @@ def ingresar_notas_docente(request):
         'curso': curso,
         'alumnos': alumnos,
         'asignaturas': asignaturas,
+        'mostrar_formulario': mostrar_formulario, 
     }
 
-    return render(request, "nuevoshorizontes/portal_docente/ingresar_notas_docente.html", data_vacio)
+    return render(request, "nuevoshorizontes/portal_docente/notas/agregar_notas.html", data_vacio)
 
+
+
+def buscar_notas(request):
+    correo_docente = request.session.get("correo_docente", None)
+    if correo_docente:
+        docente = Docente.objects.get(correo_docente=correo_docente)
+        asignaturas = Asignatura.objects.filter(profesor_asignatura=docente)
+
+        if request.method == "POST":
+            asignatura_id = request.POST.get("ramos")
+
+            asignatura = Asignatura.objects.get(id_asignatura=asignatura_id)
+            curso = curso_de_un_ramo(docente, asignatura)
+
+            if curso:
+                alumnos = Alumno.objects.filter(curso_alumno=curso)
+                calificaciones = Calificacion.objects.filter(
+                    asignatura=asignatura, alumno__in=alumnos
+                )
+
+                if calificaciones:
+                    # Se encontraron calificaciones
+                    return render(
+                        request,
+                        "nuevoshorizontes/portal_docente/notas/buscar_notas.html",
+                        {
+                            "docente": docente,
+                            "asignaturas": asignaturas,
+                            "alumnos": alumnos,
+                            "calificaciones": calificaciones,
+                        },
+                    )
+                else:
+                    # No se encontraron calificaciones
+                    mensaje = (
+                        "No se encontraron notas para la asignatura seleccionadas."
+                    )
+                    return render(
+                        request,
+                        "nuevoshorizontes/portal_docente/notas/buscar_notas.html",
+                        {
+                            "docente": docente,
+                            "asignaturas": asignaturas,
+                            "mensaje": mensaje,
+                        },
+                    )
+
+        return render(
+            request,
+            "nuevoshorizontes/portal_docente/notas/buscar_notas.html",
+            {"docente": docente, "asignaturas": asignaturas},
+        )
+    else:
+        # El usuario no ha iniciado sesión, redirigir a la página de inicio de sesión
+        return redirect("login_docente")
+
+
+def modificar_notas(request, rut_alumno):
+    correo_docente = request.session.get("correo_docente", None)
+    if correo_docente:
+        docente = Docente.objects.get(correo_docente=correo_docente)
+        alumno = Alumno.objects.get(rut_alumno=rut_alumno)
+        calificacion = Calificacion.objects.filter(alumno=alumno).first()
+
+        if request.method == "POST":
+            valor_nota = request.POST.get("nota")
+            calificacion.valor = float(valor_nota)
+            calificacion.save()
+            messages.success(request, "La nota se ha modificado correctamente.")
+            return redirect("notas_docente")
+
+        return render(
+            request,
+            "nuevoshorizontes/portal_docente/notas/modificar_notas.html",
+            {"docente": docente, "alumno": alumno, "calificacion": calificacion},
+        )
+    else:
+        return redirect("login_docente")

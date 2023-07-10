@@ -117,9 +117,10 @@ class Tipo_asis(models.Model):
     tipo_asistencia = models.CharField(max_length=20, verbose_name="Tipo asistencia") #Presente, ausente y justificado
 
     def __str__(self):
-        return self.nombre_estado_asistencia
+        return self.tipo_asistencia
     
 class Asistencia(models.Model):
+    id_asistencia = models.AutoField(primary_key=True, verbose_name="ID asistencia")
     tipo_asistencia = models.ForeignKey(Tipo_asis, on_delete=models.CASCADE, verbose_name="Tipo asistencia")
     fecha_asistencia = models.DateField(verbose_name="Fecha asistencia")
     alumno = models.ForeignKey(Alumno, on_delete=models.CASCADE, verbose_name="Alumno")
@@ -127,7 +128,7 @@ class Asistencia(models.Model):
     docente = models.ForeignKey(Docente, on_delete=models.CASCADE, verbose_name="Docente")
 
     def __str__(self):
-        return self.tipo_asistencia
+        return str(self.id_asistencia)
     
 class Tipo_pago_colegio(models.Model):
     nombre_tipo_pago_colegio = models.CharField(max_length=20, verbose_name="tipo de valor")
@@ -145,24 +146,6 @@ class Pagos_colegio(models.Model):
 
     def __str__(self):
         return self.nombre_pago_colegio
-    
-class Pagos(models.Model):
-    id_pago = models.AutoField(primary_key=True, verbose_name="ID del pago")
-    fecha_pago = models.DateField(verbose_name="Fecha")
-    monto_pago = models.IntegerField(verbose_name="Monto")
-    apoderado = models.ForeignKey(Apoderado, on_delete=models.CASCADE, verbose_name="Apoderado que pagó")
-    alumno = models.ForeignKey(Alumno, on_delete=models.CASCADE, verbose_name="Alumno")
-    nombre_pago_colegio = models.ForeignKey(Pagos_colegio, on_delete=models.CASCADE, verbose_name="Nombre pago colegio")
-
-    def __str__(self):
-        return str(self.id_pago)
-    
-class Boletas(models.Model):
-    id_boleta = models.AutoField(primary_key=True, verbose_name="ID de la boleta")
-    pago = models.ForeignKey(Pagos, on_delete=models.CASCADE, verbose_name="Pago realizado")
-
-    def __str__(self):
-        return str(self.id_boleta)
     
 class Noticias(models.Model):
     titulo = models.CharField(max_length=20, verbose_name="Título")
@@ -192,5 +175,6 @@ class Postulaciones(models.Model):
 
 class Calificacion(models.Model):
     valor = models.FloatField(verbose_name="Nota")
+    fecha_nota = models.DateField(verbose_name="Fecha nota")
     alumno = models.ForeignKey(Alumno, on_delete=models.CASCADE, verbose_name="Nombre el alumno")
     asignatura = models.ForeignKey(Asignatura, on_delete=models.CASCADE, verbose_name="Asignatura de la nota")

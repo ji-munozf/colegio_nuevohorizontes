@@ -13,7 +13,6 @@ urlpatterns = [
     path('portal_admin/home_admin', home_admin, name="home_admin"),
     path('portal_admin/home_agregar', home_agregar, name="home_agregar"),
     path('portal_admin/home_listado', home_listado, name="home_listado"),
-    path('portal_admin/home_pagos', home_pagos, name="home_pagos"),
 
     #Registro contacto de postulación
     path('registro_contacto', registrar_contacto, name="registro_contacto"),
@@ -79,7 +78,6 @@ urlpatterns = [
     path('eliminar_sede/<id>/', eliminar_sedes, name="eliminar_sedes"),
     path('eliminar_sala/<id>/', eliminar_salas, name="eliminar_salas"),
     path('eliminar_postulacion/<id>/', eliminar_postulacion, name="eliminar_postulacion"),
-    path('eliminar_pago/<id>/', eliminar_pagos, name="eliminar_pagos"),
     path('eliminar_pagos_colegio/<id>/', eliminar_pagos_colegio, name="eliminar_pagos_colegio"),
     path('eliminar_horario/<str:id_curso>/', eliminar_horario, name="eliminar_horario"),
     path('eliminar-asistencias/', eliminar_asistencias, name='eliminar_asistencias'),
@@ -101,7 +99,6 @@ urlpatterns = [
     path('portal_apoderado/notas_apoderado', notas_apoderado, name="notas_apoderado"),
     path('portal_apoderado/pagos_apoderado', pagos_apoderado, name="pagos_apoderado"),
     path('portal_apoderado/pagos_apoderado/listar_pagos_apoderado/<str:rut_alumno>/', listar_pagos_apoderado, name="listar_pagos_apoderado"),
-    path("realizar_pago/", realizar_pago, name="realizar_pago"),
 
     #Home docente
     path('portal_docente/home_docente', home_docente, name="home_docente"),
@@ -112,7 +109,10 @@ urlpatterns = [
     path('portal_docente/asistencia_docente/agregar_asistencia', agregar_asistencia, name="agregar_asistencia"),
     path('portal_docente/asistencia_docente/buscar_asistencia', buscar_asistencia, name="buscar_asistencia"),
     path('portal_docente/asistencia_docente/modificar_asistencia/<str:rut_alumno>/', modificar_asistencia, name="modificar_asistencia"),
-    path('portal_docente/ingresar_notas_docente', ingresar_notas_docente, name="ingresar_notas_docente"),
+    path('portal_docente/notas_docente', notas_docente, name="notas_docente"),
+    path('portal_docente/notas_docente/agregar_notas', agregar_notas, name="agregar_notas"),
+    path('portal_docente/notas_docente/buscar_notas', buscar_notas, name="buscar_notas"),
+    path('portal_docente/notas_docente/modificar_notas/<str:rut_alumno>/', modificar_notas, name="modificar_notas"),
 
     #Inicio de sesión
     path('portales/login_alumno', login_alumno, name="login_alumno"),
