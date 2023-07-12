@@ -28,6 +28,7 @@
             vertical-align: middle;
             font-size: 20px;
         }
+
         th {
             text-align: center;
             vertical-align: middle;
@@ -45,7 +46,8 @@
     {% include "nuevoshorizontes/portal_admin/mensajes.html" %}
 
     <h1 class="heading" style="padding-top: 120px;">
-        <img class="title-img mx-2" src="{% static 'nuevoshorizontes/img/icons_admin/periodico_blanco.png' %}" alt="nosotros" height="60">
+        <img class="title-img mx-2" src="{% static 'nuevoshorizontes/img/icons_admin/periodico_blanco.png' %}"
+            alt="nosotros" height="60">
         Lista de apoderados
     </h1>
 
@@ -53,8 +55,9 @@
         <div class="card">
             <div class="card-body">
                 <div class="table-responsive">
-                    {% if apoderados %}
-                    <table class="table table-striped" style="background-color: white; border: 1px solid rgb(21, 20, 55); text-align: center;">
+                    {% if page_obj %}
+                    <table class="table table-striped"
+                        style="background-color: white; border: 1px solid rgb(21, 20, 55); text-align: center;">
                         <thead>
                             <tr>
                                 <th>Rut</th>
@@ -69,7 +72,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for apoderado in apoderados %}
+                            {% for apoderado in page_obj %}
                             <tr>
                                 <td>{{ apoderado.rut_apoderado }}</td>
                                 <td>{{ apoderado.nombre_apoderado }}</td>
@@ -79,16 +82,44 @@
                                 <td>{{ apoderado.telefono_apoderado }}</td>
                                 <td>{{ apoderado.correo_apoderado }}</td>
                                 <td>
-                                    <a type="button" class="btn btn-success btn-block" href="{% url 'modificar_apoderado' apoderado.rut_apoderado %}" style="background-color: green; color: #fff;">Modificar</a>
-                                    <a type="button" class="btn btn-danger btn-block" onclick="eliminarApoderado('{{ apoderado.rut_apoderado }}')" style="background-color: #dc3545; color: #fff;">Eliminar</a>
+                                    <a type="button" class="btn btn-success btn-block"
+                                        href="{% url 'modificar_apoderado' apoderado.rut_apoderado %}"
+                                        style="background-color: green; color: #fff;">Modificar</a>
+                                    <a type="button" class="btn btn-danger btn-block"
+                                        onclick="eliminarApoderado('{{ apoderado.rut_apoderado }}')"
+                                        style="background-color: #dc3545; color: #fff;">Eliminar</a>
                                 </td>
                                 <td>
-                                    <a type="button" class="btn btn-primary" onclick="cambiarPassword('{{ apoderado.rut_apoderado }}')" style="background-color: #0d6efd; color: #fff;">Cambiar contraseña</a>
+                                    <a type="button" class="btn btn-primary"
+                                        onclick="cambiarPassword('{{ apoderado.rut_apoderado }}')"
+                                        style="background-color: #0d6efd; color: #fff;">Cambiar contraseña</a>
                                 </td>
                             </tr>
                             {% endfor %}
                         </tbody>
                     </table>
+                    <!-- Sección de paginación -->
+                    <div class="pagination justify-content-center">
+                        <span class="step-links">
+                            {% if page_obj.has_previous %}
+                            <a style="font-size: large; color: #333186; font-weight: 600;" href="?page=1">&laquo;
+                                Primera</a>
+                            <a style="font-size: large; color: #333186; font-weight: 600;"
+                                href="?page={{ page_obj.previous_page_number }}">Anterior</a>
+                            {% endif %}
+
+                            <span class="current-page" style="font-size: large;">
+                                Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}.
+                            </span>
+
+                            {% if page_obj.has_next %}
+                            <a style="font-size: large; color: #333186; font-weight: 600;"
+                                href="?page={{ page_obj.next_page_number }}">Siguiente</a>
+                            <a style="font-size: large; color: #333186; font-weight: 600;"
+                                href="?page={{ page_obj.paginator.num_pages }}">Última &raquo;</a>
+                            {% endif %}
+                        </span>
+                    </div>
                     {% else %}
                     <p>No hay apoderados registrados.</p>
                     {% endif %}
@@ -113,11 +144,11 @@
                 "confirmButtonColor": "green",
                 "cancelButtonColor": "#dc3545"
             })
-            .then(function(result) {
-                if(result.isConfirmed) {
-                    window.location.href = "/eliminar_apoderado/" + id + "/";
-                }
-            })
+                .then(function (result) {
+                    if (result.isConfirmed) {
+                        window.location.href = "/eliminar_apoderado/" + id + "/";
+                    }
+                })
         }
     </script>
 
@@ -133,11 +164,11 @@
                 "confirmButtonColor": "green",
                 "cancelButtonColor": "#dc3545"
             })
-            .then(function(result) {
-                if(result.isConfirmed) {
-                    window.location.href = "/portal_admin/listados/listar_apoderado/cambiar_pass_apoderado/" + id + "/";
-                }
-            })
+                .then(function (result) {
+                    if (result.isConfirmed) {
+                        window.location.href = "/portal_admin/listados/listar_apoderado/cambiar_pass_apoderado/" + id + "/";
+                    }
+                })
         }
     </script>
 

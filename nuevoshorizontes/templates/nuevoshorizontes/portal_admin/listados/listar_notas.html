@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link rel="icon" href="{% static 'nuevoshorizontes/img/logo_blanco.png' %}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de pagos colegio - Administrador</title>
+    <title>Lista de notas - Administrador</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
@@ -28,6 +28,7 @@
             vertical-align: middle;
             font-size: 20px;
         }
+
         th {
             text-align: center;
             vertical-align: middle;
@@ -45,82 +46,62 @@
     {% include "nuevoshorizontes/portal_admin/mensajes.html" %}
 
     <h1 class="heading" style="padding-top: 120px;">
-        <img class="title-img mx-2" src="{% static 'nuevoshorizontes/img/ingresos_blanco.png' %}"
+        <img class="title-img mx-2" src="{% static 'nuevoshorizontes/img/icons_admin/periodico_blanco.png' %}"
             alt="nosotros" height="60">
-        Lista de pagos colegio
+        Lista de notas
     </h1>
-
-    {% load humanize %}
 
     <div class="container-fluid" style="margin-bottom: 20px;">
         <div class="card">
             <div class="card-body">
                 <div class="table-responsive">
-                    {% if page_obj %}
+                    {% if notas %}
                     <table class="table table-striped"
                         style="background-color: white; border: 1px solid rgb(21, 20, 55); text-align: center;">
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Nombre</th>
-                                <th>Monto</th>
-                                <th>Fecha vencimiento</th>
-                                <th>Tipo pago colegio</th>
-                                <th>Acciones</th>
+                                <th>Fecha asistencia</th>
+                                <th>Curso</th>
+                                <th>Apoderado</th>
+                                <th>Tipo asistencias</th>
+                                <th>Alumno</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {% for pagocolegio in page_obj %}
+                            {% for nota in notas %}
                             <tr>
-                                <td>{{ pagocolegio.id_pago_colegio }}</td>
-                                <td>{{ pagocolegio.nombre_pago_colegio }}</td>
-                                <td>${{ pagocolegio.monto | intcomma }}</td>
-                                <td>{{ pagocolegio.fecha_vencimiento }}</td>
-                                <td>{{ pagocolegio.tipo_pago_colegio }}</td>
-                                <td>
-                                    <a type="button" class="btn btn-success btn-block"
-                                        href="{% url 'modificar_pago_colegio' pagocolegio.id_pago_colegio %}"
-                                        style="background-color: green; color: #fff;">Modificar</a>
-                                    <a type="button" class="btn btn-danger btn-block"
-                                        onclick="eliminarPagoColegio('{{ pagocolegio.id_pago_colegio }}')"
-                                        style="background-color: #dc3545; color: #fff;">Eliminar</a>
-                                </td>
+                                <td>{{ nota.id }}</td>
+                                <td>{{ nota.nombre_nota }}</td>
+                                <td>{{ nota.valor }}</td>
+                                <td>{{ nota.fecha_nota }}</td>
+                                <td>{{ nota.alumno }}</td>
+                                <td>{{ nota.asignatura }}</td>
                             </tr>
                             {% endfor %}
                         </tbody>
                     </table>
-                    <!-- Sección de paginación -->
-                    <div class="pagination justify-content-center">
-                        <span class="step-links">
-                            {% if page_obj.has_previous %}
-                                <a style="font-size: large; color: #333186; font-weight: 600;" href="?page=1">&laquo; Primera</a>
-                                <a style="font-size: large; color: #333186; font-weight: 600;" href="?page={{ page_obj.previous_page_number }}">Anterior</a>
-                            {% endif %}
-
-                            <span class="current-page" style="font-size: large;">
-                                Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}.
-                            </span>
-
-                            {% if page_obj.has_next %}
-                                <a style="font-size: large; color: #333186; font-weight: 600;" href="?page={{ page_obj.next_page_number }}">Siguiente</a>
-                                <a style="font-size: large; color: #333186; font-weight: 600;" href="?page={{ page_obj.paginator.num_pages }}">Última &raquo;</a>
-                            {% endif %}
-                        </span>
-                    </div>
                     {% else %}
-                    <p>No hay salas registradas.</p>
+                    <p>No hay notas registradas.</p>
                     {% endif %}
                 </div>
             </div>
         </div>
     </div>
 
+    {% if notas %}
+    <div class="container botones" style="text-align: center; align-items: center;">
+        <a type="button" class="btn btn-lg btn-block" onclick="eliminarNotas()"
+            style="background-color: #dc3545; border-color: #dc3545; color: #fff;">Eliminar notas</a>
+    </div>
+    {% endif %}
+
     <div class="container botones" style="text-align: center; align-items: center;">
         <a type="button" class="btn btn-lg btn-block" href="{% url 'home_listado' %}">Volver a las listas</a>
     </div>
 
     <script>
-        function eliminarPagoColegio(id) {
+        function eliminarNotas() {
             Swal.fire({
                 "title": "¿Estas seguro?",
                 "text": "Esta acción no se puede deshacer",
@@ -133,7 +114,7 @@
             })
                 .then(function (result) {
                     if (result.isConfirmed) {
-                        window.location.href = "/eliminar_pagos_colegio/" + id + "/";
+                        window.location.href = "/eliminar_notas/";
                     }
                 })
         }

@@ -54,7 +54,7 @@
         <div class="card">
             <div class="card-body">
                 <div class="table-responsive">
-                    {% if salas %}
+                    {% if page_obj %}
                     <table class="table table-striped"
                         style="background-color: white; border: 1px solid rgb(21, 20, 55); text-align: center;">
                         <thead>
@@ -67,7 +67,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for sala in salas %}
+                            {% for sala in page_obj %}
                             <tr>
                                 <td>{{ sala.id_sala }}</td>
                                 <td>{{ sala.nombre_sala }}</td>
@@ -85,6 +85,24 @@
                             {% endfor %}
                         </tbody>
                     </table>
+                    <!-- Sección de paginación -->
+                    <div class="pagination justify-content-center">
+                        <span class="step-links">
+                            {% if page_obj.has_previous %}
+                                <a style="font-size: large; color: #333186; font-weight: 600;" href="?page=1">&laquo; Primera</a>
+                                <a style="font-size: large; color: #333186; font-weight: 600;" href="?page={{ page_obj.previous_page_number }}">Anterior</a>
+                            {% endif %}
+
+                            <span class="current-page" style="font-size: large;">
+                                Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}.
+                            </span>
+
+                            {% if page_obj.has_next %}
+                                <a style="font-size: large; color: #333186; font-weight: 600;" href="?page={{ page_obj.next_page_number }}">Siguiente</a>
+                                <a style="font-size: large; color: #333186; font-weight: 600;" href="?page={{ page_obj.paginator.num_pages }}">Última &raquo;</a>
+                            {% endif %}
+                        </span>
+                    </div>
                     {% else %}
                     <p>No hay salas registradas.</p>
                     {% endif %}

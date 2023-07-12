@@ -61,14 +61,16 @@ class AlumnoForm(forms.ModelForm):
 
     def clean_correo_alumno(self):
         correo_alumno = self.cleaned_data.get("correo_alumno")
+        if not correo_alumno.endswith("@alumnonh.cl"):
+            raise ValidationError("El correo del alumno debe terminar en @alumnonh.cl.")
         instance = self.instance
 
-        if instance is None:  # Agregar nuevo apoderado
+        if instance is None:  # Agregar nuevo alumno
             if Alumno.objects.filter(correo_alumno=correo_alumno).exists():
-                raise ValidationError("El correo del docente ya existe.")
-        else:  # Modificar apoderado existente
-            if Alumno.objects.filter(correo_alumno=correo_alumno).exclude(rut_docente=instance.rut_docente).exists():
-                raise ValidationError("El correo del docente ya existe para otro docente.")
+                raise ValidationError("El correo del alumno ya existe.")
+        else:  # Modificar alumno existente
+            if Alumno.objects.filter(correo_alumno=correo_alumno).exclude(rut_alumno=instance.rut_alumno).exists():
+                raise ValidationError("El correo del alumno ya existe para otro alumno.")
         
         return correo_alumno
 
@@ -130,16 +132,27 @@ class DocenteForm(forms.ModelForm):
 
     def clean_correo_docente(self):
         correo_docente = self.cleaned_data.get("correo_docente")
+        if not correo_docente.endswith("@docentenh.cl"):
+            raise ValidationError("El correo del docente debe terminar en @docentenh.cl.")
         instance = self.instance
 
-        if instance is None:  # Agregar nuevo apoderado
+        if instance is None:  # Agregar nuevo docente
             if Docente.objects.filter(correo_docente=correo_docente).exists():
                 raise ValidationError("El correo del docente ya existe.")
-        else:  # Modificar apoderado existente
+        else:  # Modificar docente existente
             if Docente.objects.filter(correo_docente=correo_docente).exclude(rut_docente=instance.rut_docente).exists():
                 raise ValidationError("El correo del docente ya existe para otro docente.")
-        
+
         return correo_docente
+
+    
+    def clean_telefono_docente(self):
+        telefono_docente = self.cleaned_data.get("telefono_docente")
+
+        if telefono_docente <= 0:
+            raise ValidationError("El teléfono del docente debe ser un número positivo mayor que 0.")
+
+        return telefono_docente
 
     class Meta:
         model = Docente
@@ -194,6 +207,8 @@ class ApoderadoForm(forms.ModelForm):
 
     def clean_correo_apoderado(self):
         correo_apoderado = self.cleaned_data.get("correo_apoderado")
+        if not correo_apoderado.endswith("@apoderadonh.cl"):
+            raise ValidationError("El correo del apoderado debe terminar en @apoderadonh.cl.")
         instance = self.instance
 
         if instance is None:  # Agregar nuevo apoderado
@@ -204,6 +219,14 @@ class ApoderadoForm(forms.ModelForm):
                 raise ValidationError("El correo del apoderado ya existe para otro apoderado.")
         
         return correo_apoderado
+
+    def clean_telefono_apoderado(self):
+        telefono_apoderado = self.cleaned_data.get("telefono_apoderado")
+
+        if telefono_apoderado <= 0:
+            raise ValidationError("El teléfono del apoderado debe ser un número positivo mayor que 0.")
+
+        return telefono_apoderado
 
     class Meta:
         model = Apoderado
@@ -234,6 +257,8 @@ class AdminForm(forms.ModelForm):
 
     def clean_correo_admin(self):
         correo_admin = self.cleaned_data.get("correo_admin")
+        if not correo_admin.endswith("@docentenh.cl"):
+            raise ValidationError("El correo del admin debe terminar en @docentenh.cl.")
         instance = self.instance
 
         if instance is None:  # Agregar nuevo administrador
@@ -255,6 +280,14 @@ class SedeForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields["region_sede"].empty_label = "Seleccione una región"
         self.fields["comuna_sede"].empty_label = "Seleccione una comuna"
+
+    def clean_telefono_sede(self):
+        telefono_sede = self.cleaned_data.get("telefono_sede")
+
+        if telefono_sede <= 0:
+            raise ValidationError("El teléfono de la sede debe ser un número positivo mayor que 0.")
+
+        return telefono_sede
 
     class Meta:
         model = Sede

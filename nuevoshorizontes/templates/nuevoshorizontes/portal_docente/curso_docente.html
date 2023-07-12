@@ -49,7 +49,6 @@
                                 <th>Nombres</th>
                                 <th>Apellido paterno</th>
                                 <th>Apellido materno</th>
-                                <th>Teléfono</th>
                                 <th>Correo electrónico</th>
                                 <th>Sede asignado</th>
                                 <th>Apoderado asignado</th>
@@ -62,7 +61,6 @@
                                 <td>{{ alumno.nombre_alumno }}</td>
                                 <td>{{ alumno.appaterno_alumno }}</td>
                                 <td>{{ alumno.apmaterno_alumno }}</td>
-                                <td>{% if alumno.telefono_alumno %}{{ alumno.telefono_alumno }}{% else %}No posee{% endif %}</td>
                                 <td>{{ alumno.correo_alumno }}</td>
                                 <td>{{ alumno.sede_alumno }}</td>
                                 <td>{{ alumno.apoderado_alumno }}</td>
@@ -71,7 +69,7 @@
                         </tbody>
                     </table>
                     {% else %}
-                    <p>No hay alumnos asignados en el curso.</p>
+                    <p>No tiene un curso asignado en estos momentos</p>
                     {% endif %}
                 </div>
             </div>

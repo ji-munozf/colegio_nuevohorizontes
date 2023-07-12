@@ -48,6 +48,7 @@ urlpatterns = [
     path('portal_admin/listados/listar_pago_colegio', listar_pago_colegio, name="listar_pago_colegio"),
     path('portal_admin/listados/listar_horarios_cursos', listar_horarios_cursos, name="listar_horarios_cursos"),
     path('portal_admin/listados/listar_horarios_cursos/listar_horario/<str:id_curso>/', listar_horarios, name="listar_horarios"),
+    path('portal_admin/listados/listar_notas', listar_notas, name="listar_notas"),
 
     #Cambiar contraseñas
     path('portal_admin/listados/listar_docentes/cambiar_pass_docente/<id>/', cambiar_pass_docente, name="cambiar_pass_docente"),
@@ -80,12 +81,14 @@ urlpatterns = [
     path('eliminar_postulacion/<id>/', eliminar_postulacion, name="eliminar_postulacion"),
     path('eliminar_pagos_colegio/<id>/', eliminar_pagos_colegio, name="eliminar_pagos_colegio"),
     path('eliminar_horario/<str:id_curso>/', eliminar_horario, name="eliminar_horario"),
-    path('eliminar-asistencias/', eliminar_asistencias, name='eliminar_asistencias'),
+    path('eliminar_asistencias/', eliminar_asistencias, name='eliminar_asistencias'),
+    path('eliminar_notas/', eliminar_notas, name="eliminar_notas"),
     
     #Home alumno
     path('portal_alumno/home_alumno', home_alumno, name="home_alumno"),
     path('portal_alumno/mi_perfil', miperfil_alumno, name="miperfil_alumno"),
     path('portal_alumno/notas_alumno', notas_alumno, name="notas_alumno"),
+    path('portal_alumno/notas_alumno/notas_por_asignatura/<str:asignatura_id>/', notas_por_asignatura, name="notas_por_asignatura"),
     path('portal_alumno/horario_alumno', horario_alumno, name="horario_alumno"),
     path('portal_alumno/asistencia_alumno', asistencia_alumno, name="asistencia_alumno"),
 
@@ -97,6 +100,8 @@ urlpatterns = [
     path('portal_apoderado/horarios/ver_horario_hijo/<str:rut_alumno>/', ver_horario_hijo, name="ver_horario_hijo"),
     path('portal_apoderado/asistencias', asistencias_apoderado, name="asistencias_apoderado"),
     path('portal_apoderado/notas_apoderado', notas_apoderado, name="notas_apoderado"),
+    path('portal_apoderado/notas_apoderado/lista_asignaturas_hijos/<str:rut_alumno>/', listar_asignatura_hijos, name="listar_asignatura_hijos"),
+    path('portal_apoderado/notas_apoderado/lista_asignaturas_hijos/notas_hijo/<str:rut_alumno>/<str:id_asignatura>/', notas_por_asignatura_apoderado, name='notas_asignatura_apoderado'),
     path('portal_apoderado/pagos_apoderado', pagos_apoderado, name="pagos_apoderado"),
     path('portal_apoderado/pagos_apoderado/listar_pagos_apoderado/<str:rut_alumno>/', listar_pagos_apoderado, name="listar_pagos_apoderado"),
 
@@ -112,7 +117,7 @@ urlpatterns = [
     path('portal_docente/notas_docente', notas_docente, name="notas_docente"),
     path('portal_docente/notas_docente/agregar_notas', agregar_notas, name="agregar_notas"),
     path('portal_docente/notas_docente/buscar_notas', buscar_notas, name="buscar_notas"),
-    path('portal_docente/notas_docente/modificar_notas/<str:rut_alumno>/', modificar_notas, name="modificar_notas"),
+    path('portal_docente/notas_docente/modificar_notas/<str:rut_alumno>/<int:calificacion_id>/', modificar_notas, name="modificar_notas"),
 
     #Inicio de sesión
     path('portales/login_alumno', login_alumno, name="login_alumno"),

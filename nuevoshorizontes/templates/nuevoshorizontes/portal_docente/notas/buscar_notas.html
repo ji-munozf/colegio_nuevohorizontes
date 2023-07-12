@@ -48,6 +48,7 @@
             height="60">Buscar notas
     </h1>
 
+    {% if asignaturas %}
     <form method="POST" action="{% url 'buscar_notas' %}" {% if calificaciones or mensaje %}hidden{% endif %}>
         {% csrf_token %}
         <div class="container">
@@ -71,7 +72,7 @@
     <div class="container">
         <h4 style="color: #fff;">{{ mensaje }}</h4>
     </div>
-{% elif calificaciones %}
+    {% elif calificaciones %}
     <div class="container" style="margin-top: 30px;">
         <h2 style="color: #fff; margin-bottom: 10px;">Notas encontradas:</h2>
         <div class="card">
@@ -79,32 +80,33 @@
                 <div class="table-responsive">
                     <table class="table table-striped"
                         style="background-color: white; border: 1px solid rgb(21, 20, 55); text-align: center;">
-                        <thead>
+                        <tbody>
                             <tr>
                                 <th>Rut</th>
                                 <th>Nombre completo alumno</th>
                                 <th>Asignatura</th>
                                 <th>Fecha</th>
                                 <th>Curso</th>
+                                <th>Nombre de la nota</th>
                                 <th>Nota</th>
                                 <th>Acciones</th>
                             </tr>
-                        </thead>
-                        <tbody>
                             {% for calificacion in calificaciones %}
-                                <tr>
-                                    <td>{{ calificacion.alumno.rut_alumno }}</td>
-                                    <td>{{ calificacion.alumno.nombre_alumno }} {{ calificacion.alumno.appaterno_alumno }}
-                                        {{ calificacion.alumno.apmaterno_alumno }}</td>
-                                    <td>{{ calificacion.asignatura.nombre_asignatura }}</td>
-                                    <td>{{ calificacion.fecha_nota }}</td>
-                                    <td>{{ calificacion.alumno.curso_alumno.nombre_curso }}</td>
-                                    <td>{{ calificacion.valor }}</td>
-                                    <td>
-                                        <a href="{% url 'modificar_notas' calificacion.alumno.rut_alumno %}" class="btn btn-primary"
-                                            style="background-color: green; color: #fff;">Modificar</a>
-                                    </td>                                
-                                </tr>
+                            <tr>
+                                <td>{{ calificacion.alumno.rut_alumno }}</td>
+                                <td>{{ calificacion.alumno.nombre_alumno }} {{ calificacion.alumno.appaterno_alumno }}
+                                    {{ calificacion.alumno.apmaterno_alumno }}</td>
+                                <td>{{ calificacion.asignatura.nombre_asignatura }}</td>
+                                <td>{{ calificacion.fecha_nota }}</td>
+                                <td>{{ calificacion.alumno.curso_alumno.nombre_curso }}</td>
+                                <td>{{ calificacion.nombre_nota }}</td>
+                                <td>{{ calificacion.valor }}</td>
+                                <td>
+                                    <a  href="{% url 'modificar_notas' calificacion.alumno.rut_alumno calificacion.id %}"
+                                        class="btn btn-primary"
+                                        style="background-color: green; color: #fff;">Modificar</a>
+                                </td>
+                            </tr>
                             {% endfor %}
                         </tbody>
                     </table>
@@ -112,7 +114,15 @@
             </div>
         </div>
     </div>
-{% endif %}
+    {% endif %}
+
+    {% else %}
+    <div class="container">
+        <div class="row">
+            <p style="text-align: center; color: #fff; font-size: 30px;">No tiene asignaturas asignadas</p>
+        </div>
+    </div>
+    {% endif %}
 
 
     <div class="container botones" style="text-align: center; align-items: center; margin-top: 30px;">

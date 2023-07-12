@@ -41,10 +41,8 @@
     </form>
     {% endif %}
 
-    
-
-    <div class="container">
-        {% if asistencias %}
+    {% if asistencias %}
+    <div class="container" style="margin-bottom: 30px;">
         <div class="card">
             <div class="card-body">
                 <h2 style="color: #fff; margin-bottom: 10px;">Asistencias encontradas:</h2>
@@ -81,18 +79,17 @@
                 </div>
             </div>
         </div>
-        {% endif %}
     </div>
+    {% endif %}
 
     <div class="container botones" style="text-align: center; align-items: center; margin-top: 30px;">
         <a type="button" class="btn btn-lg btn-block" href="{% url 'asistencia_docente' %}"
-            style="font-weight: 500;">Volver al menú asistencia</a>
+            style="font-weight: 500; background: #333186; color: #fff;">Volver al menú asistencia</a>
         {% if asistencias or no_asistencias %}
         <a type="button" class="btn btn-lg btn-block" href="{% url 'buscar_asistencia' %}"
-            style="font-weight: 500; margin-left: 15px;">Nueva búsqueda</a>
+            style="font-weight: 500; margin-left: 15px; background: #333186; color: #fff;">Nueva búsqueda</a>
         {% endif %}
     </div>
-
 
 </body>
 

@@ -174,6 +174,7 @@ class Postulaciones(models.Model):
     mensaje = models.TextField(verbose_name="mensaje")
 
 class Calificacion(models.Model):
+    nombre_nota = models.CharField(max_length=40, verbose_name="Nombre de la nota")
     valor = models.FloatField(verbose_name="Nota")
     fecha_nota = models.DateField(verbose_name="Fecha nota")
     alumno = models.ForeignKey(Alumno, on_delete=models.CASCADE, verbose_name="Nombre el alumno")

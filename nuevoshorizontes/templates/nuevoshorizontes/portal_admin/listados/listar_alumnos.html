@@ -28,6 +28,7 @@
             vertical-align: middle;
             font-size: 20px;
         }
+
         th {
             text-align: center;
             vertical-align: middle;
@@ -45,7 +46,8 @@
     {% include "nuevoshorizontes/portal_admin/mensajes.html" %}
 
     <h1 class="heading" style="padding-top: 120px;">
-        <img class="title-img mx-2" src="{% static 'nuevoshorizontes/img/icons_admin/boton-mas-blanco.png' %}" alt="nosotros" height="60">
+        <img class="title-img mx-2" src="{% static 'nuevoshorizontes/img/icons_admin/boton-mas-blanco.png' %}"
+            alt="nosotros" height="60">
         Lista de alumnos
     </h1>
 
@@ -53,8 +55,9 @@
         <div class="card">
             <div class="card-body">
                 <div class="table-responsive">
-                    {% if alumnos %}
-                    <table class="table table-striped" style="background-color: white; border: 1px solid rgb(21, 20, 55); text-align: center;">
+                    {% if page_obj %}
+                    <table class="table table-striped"
+                        style="background-color: white; border: 1px solid rgb(21, 20, 55); text-align: center;">
                         <thead>
                             <tr>
                                 <th>Rut</th>
@@ -70,7 +73,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for alumno in alumnos %}
+                            {% for alumno in page_obj %}
                             <tr>
                                 <td>{{ alumno.rut_alumno }}</td>
                                 <td>{{ alumno.nombre_alumno }}</td>
@@ -81,16 +84,45 @@
                                 <td>{{ alumno.apoderado_alumno }}</td>
                                 <td>{{ alumno.curso_alumno }}</td>
                                 <td>
-                                    <a type="button" class="btn btn-success btn-block" href="{% url 'modificar_alumno' alumno.rut_alumno %}" style="background-color: green; color: #fff;">Modificar</a>
-                                    <a type="button" class="btn btn-danger btn-block" onclick="eliminarAlumno('{{ alumno.rut_alumno }}')" style="background-color: #dc3545; color: #fff;">Eliminar</a>
+                                    <a type="button" class="btn btn-success btn-block"
+                                        href="{% url 'modificar_alumno' alumno.rut_alumno %}"
+                                        style="background-color: green; color: #fff;">Modificar</a>
+                                    <a type="button" class="btn btn-danger btn-block"
+                                        onclick="eliminarAlumno('{{ alumno.rut_alumno }}')"
+                                        style="background-color: #dc3545; color: #fff;">Eliminar</a>
                                 </td>
                                 <td>
-                                    <a type="button" class="btn btn-primary" onclick="cambiarPassword('{{ alumno.rut_alumno }}')" style="background-color: #0d6efd; color: #fff;">Cambiar contraseña</a>
+                                    <a type="button" class="btn btn-primary"
+                                        onclick="cambiarPassword('{{ alumno.rut_alumno }}')"
+                                        style="background-color: #0d6efd; color: #fff;">Cambiar contraseña</a>
                                 </td>
                             </tr>
                             {% endfor %}
                         </tbody>
                     </table>
+
+                    <!-- Sección de paginación -->
+                    <div class="pagination justify-content-center">
+                        <span class="step-links">
+                            {% if page_obj.has_previous %}
+                            <a style="font-size: large; color: #333186; font-weight: 600;" href="?page=1">&laquo;
+                                Primera</a>
+                            <a style="font-size: large; color: #333186; font-weight: 600;"
+                                href="?page={{ page_obj.previous_page_number }}">Anterior</a>
+                            {% endif %}
+
+                            <span class="current-page" style="font-size: large;">
+                                Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}.
+                            </span>
+
+                            {% if page_obj.has_next %}
+                            <a style="font-size: large; color: #333186; font-weight: 600;"
+                                href="?page={{ page_obj.next_page_number }}">Siguiente</a>
+                            <a style="font-size: large; color: #333186; font-weight: 600;"
+                                href="?page={{ page_obj.paginator.num_pages }}">Última &raquo;</a>
+                            {% endif %}
+                        </span>
+                    </div>
                     {% else %}
                     <p>No hay alumnos registrados.</p>
                     {% endif %}
@@ -98,6 +130,7 @@
             </div>
         </div>
     </div>
+
 
     <div class="container botones" style="text-align: center; align-items: center;">
         <a type="button" class="btn btn-lg btn-block" href="{% url 'home_listado' %}">Volver a las listas</a>
@@ -115,11 +148,11 @@
                 "confirmButtonColor": "green",
                 "cancelButtonColor": "#dc3545"
             })
-            .then(function(result) {
-                if(result.isConfirmed) {
-                    window.location.href = "/eliminar_alumno/" + id + "/";
-                }
-            })
+                .then(function (result) {
+                    if (result.isConfirmed) {
+                        window.location.href = "/eliminar_alumno/" + id + "/";
+                    }
+                })
         }
     </script>
 
@@ -135,11 +168,11 @@
                 "confirmButtonColor": "green",
                 "cancelButtonColor": "#dc3545"
             })
-            .then(function(result) {
-                if(result.isConfirmed) {
-                    window.location.href = "/portal_admin/listados/listar_alumnos/cambiar_pass_alumno/" + id + "/";
-                }
-            })
+                .then(function (result) {
+                    if (result.isConfirmed) {
+                        window.location.href = "/portal_admin/listados/listar_alumnos/cambiar_pass_alumno/" + id + "/";
+                    }
+                })
         }
     </script>
 

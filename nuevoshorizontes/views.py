@@ -4,10 +4,11 @@ from django.contrib.auth.hashers import make_password, check_password
 from .models import *
 from .forms import *
 from datetime import date, datetime
-from django.utils import timezone
-from django.http import JsonResponse, HttpResponseBadRequest
+from django.http import JsonResponse
 from django.db.models import Count, Case, When
-from django.db import IntegrityError
+from django.core.paginator import Paginator
+from django.db.models import Sum
+from django.db.models import Q
 
 
 def home(request):
@@ -652,6 +653,10 @@ def agregar_horariocurso(request):
 
             curso = Curso.objects.get(id_curso=curso_id)
 
+            if not request.POST.get("lun_block1"):
+                messages.error(request, "No puedes dejar todos los bloques vacíos.")
+                return redirect("agregar_horariocurso")
+
             for i in range(len(nombres_bloque_html)):
                 asignatura_id = request.POST.get(nombres_bloque_html[i])
                 if asignatura_id:
@@ -714,10 +719,23 @@ def listar_admins(request):
             admins = Administrador.objects.exclude(id=1)
         else:
             admins = Administrador.objects.all()
+        
+        # Cantidad de elementos por página
+        items_por_pagina = 10
+
+        # Inicializar el objeto Paginator
+        paginator = Paginator(admins, items_por_pagina)
+
+        # Obtener el número de página de la URL
+        page_number = request.GET.get("page")
+
+        # Obtener la página actual del paginador
+        page_obj = paginator.get_page(page_number)
+        
         return render(
             request,
             "nuevoshorizontes/portal_admin/listados/listar_admins.html",
-            {"admins": admins, "admin_actual": admin_actual},
+            {"page_obj": page_obj, "admin_actual": admin_actual},
         )
     else:
         return redirect("login_administrativo")
@@ -781,10 +799,23 @@ def listar_alumnos(request):
     if correo_admin:
         admin = Administrador.objects.get(correo_admin=correo_admin)
         alumnos = Alumno.objects.all()
+
+        # Cantidad de elementos por página
+        items_por_pagina = 10
+
+        # Inicializar el objeto Paginator
+        paginator = Paginator(alumnos, items_por_pagina)
+
+        # Obtener el número de página de la URL
+        page_number = request.GET.get("page")
+
+        # Obtener la página actual del paginador
+        page_obj = paginator.get_page(page_number)
+
         return render(
             request,
             "nuevoshorizontes/portal_admin/listados/listar_alumnos.html",
-            {"alumnos": alumnos, "admin": admin},
+            {"page_obj": page_obj, "admin": admin},
         )
     else:
         return redirect("login_administrativo")
@@ -848,10 +879,23 @@ def listar_docentes(request):
     if correo_admin:
         admin = Administrador.objects.get(correo_admin=correo_admin)
         docentes = Docente.objects.all()
+
+        # Cantidad de elementos por página
+        items_por_pagina = 10
+
+        # Inicializar el objeto Paginator
+        paginator = Paginator(docentes, items_por_pagina)
+
+        # Obtener el número de página de la URL
+        page_number = request.GET.get("page")
+
+        # Obtener la página actual del paginador
+        page_obj = paginator.get_page(page_number)
+
         return render(
             request,
             "nuevoshorizontes/portal_admin/listados/listar_docentes.html",
-            {"docentes": docentes, "admin": admin},
+            {"page_obj": page_obj, "admin": admin},
         )
     else:
         return redirect("login_administrativo")
@@ -920,10 +964,23 @@ def listar_apoderados(request):
     if correo_admin:
         admin = Administrador.objects.get(correo_admin=correo_admin)
         apoderados = Apoderado.objects.all()
+        
+        # Cantidad de elementos por página
+        items_por_pagina = 10
+
+        # Inicializar el objeto Paginator
+        paginator = Paginator(apoderados, items_por_pagina)
+
+        # Obtener el número de página de la URL
+        page_number = request.GET.get("page")
+
+        # Obtener la página actual del paginador
+        page_obj = paginator.get_page(page_number)
+        
         return render(
             request,
             "nuevoshorizontes/portal_admin/listados/listar_apoderados.html",
-            {"apoderados": apoderados, "admin": admin},
+            {"page_obj": page_obj, "admin": admin},
         )
     else:
         return redirect("login_administrativo")
@@ -1004,10 +1061,23 @@ def listar_asignaturas(request):
     if correo_admin:
         admin = Administrador.objects.get(correo_admin=correo_admin)
         asignaturas = Asignatura.objects.all()
+        
+        # Cantidad de elementos por página
+        items_por_pagina = 10
+
+        # Inicializar el objeto Paginator
+        paginator = Paginator(asignaturas, items_por_pagina)
+
+        # Obtener el número de página de la URL
+        page_number = request.GET.get("page")
+
+        # Obtener la página actual del paginador
+        page_obj = paginator.get_page(page_number)
+        
         return render(
             request,
             "nuevoshorizontes/portal_admin/listados/listar_asignaturas.html",
-            {"asignaturas": asignaturas, "admin": admin},
+            {"page_obj": page_obj, "admin": admin},
         )
     else:
         return redirect("login_administrativo")
@@ -1018,10 +1088,23 @@ def listar_cursos(request):
     if correo_admin:
         admin = Administrador.objects.get(correo_admin=correo_admin)
         cursos = Curso.objects.all()
+        
+        # Cantidad de elementos por página
+        items_por_pagina = 10
+
+        # Inicializar el objeto Paginator
+        paginator = Paginator(cursos, items_por_pagina)
+
+        # Obtener el número de página de la URL
+        page_number = request.GET.get("page")
+
+        # Obtener la página actual del paginador
+        page_obj = paginator.get_page(page_number)
+        
         return render(
             request,
             "nuevoshorizontes/portal_admin/listados/listar_cursos.html",
-            {"cursos": cursos, "admin": admin},
+            {"page_obj": page_obj, "admin": admin},
         )
     else:
         return redirect("login_administrativo")
@@ -1046,10 +1129,23 @@ def listar_salas(request):
     if correo_admin:
         admin = Administrador.objects.get(correo_admin=correo_admin)
         salas = Sala.objects.all()
+        
+        # Cantidad de elementos por página
+        items_por_pagina = 10
+
+        # Inicializar el objeto Paginator
+        paginator = Paginator(salas, items_por_pagina)
+
+        # Obtener el número de página de la URL
+        page_number = request.GET.get("page")
+
+        # Obtener la página actual del paginador
+        page_obj = paginator.get_page(page_number)
+        
         return render(
             request,
             "nuevoshorizontes/portal_admin/listados/listar_salas.html",
-            {"salas": salas, "admin": admin},
+            {"page_obj": page_obj, "admin": admin},
         )
     else:
         return redirect("login_administrativo")
@@ -1060,10 +1156,23 @@ def listar_postulaciones(request):
     if correo_admin:
         admin = Administrador.objects.get(correo_admin=correo_admin)
         postulaciones = Postulaciones.objects.all()
+        
+        # Cantidad de elementos por página
+        items_por_pagina = 10
+
+        # Inicializar el objeto Paginator
+        paginator = Paginator(postulaciones, items_por_pagina)
+
+        # Obtener el número de página de la URL
+        page_number = request.GET.get("page")
+
+        # Obtener la página actual del paginador
+        page_obj = paginator.get_page(page_number)
+        
         return render(
             request,
             "nuevoshorizontes/portal_admin/listados/listar_postulaciones.html",
-            {"postulaciones": postulaciones, "admin": admin},
+            {"page_obj": page_obj, "admin": admin},
         )
     else:
         return redirect("login_administrativo")
@@ -1074,10 +1183,23 @@ def listar_pago_colegio(request):
     if correo_admin:
         admin = Administrador.objects.get(correo_admin=correo_admin)
         pago_colegio = Pagos_colegio.objects.all()
+
+        # Cantidad de elementos por página
+        items_por_pagina = 10
+
+        # Inicializar el objeto Paginator
+        paginator = Paginator(pago_colegio, items_por_pagina)
+
+        # Obtener el número de página de la URL
+        page_number = request.GET.get("page")
+
+        # Obtener la página actual del paginador
+        page_obj = paginator.get_page(page_number)
+        
         return render(
             request,
             "nuevoshorizontes/portal_admin/listados/listar_pagos_colegio.html",
-            {"pago_colegio": pago_colegio, "admin": admin},
+            {"page_obj": page_obj, "admin": admin},
         )
     else:
         return redirect("login_administrativo")
@@ -1255,6 +1377,20 @@ def listar_asistencias(request):
             request,
             "nuevoshorizontes/portal_admin/listados/listar_asistencias.html",
             {"admin": admin, "asistencias": asistencias},
+        )
+    else:
+        return redirect("login_administrativo")
+
+
+def listar_notas(request):
+    correo_admin = request.session.get("correo_admin", None)
+    if correo_admin:
+        admin = Administrador.objects.get(correo_admin=correo_admin)
+        notas = Calificacion.objects.all()
+        return render(
+            request,
+            "nuevoshorizontes/portal_admin/listados/listar_notas.html",
+            {"admin": admin, "notas": notas},
         )
     else:
         return redirect("login_administrativo")
@@ -1689,6 +1825,12 @@ def eliminar_asistencias(request):
     return redirect("listar_asistencias")
 
 
+def eliminar_notas(request):
+    Calificacion.objects.all().delete()
+    messages.success(request, "Todas las calificaciones se eliminaron correctamente")
+    return redirect("listar_notas")
+
+
 def home_alumno(request):
     correo_alumno = request.session.get("correo_alumno", None)
     if correo_alumno:
@@ -1720,12 +1862,51 @@ def notas_alumno(request):
     correo_alumno = request.session.get("correo_alumno", None)
     if correo_alumno:
         alumno = Alumno.objects.get(correo_alumno=correo_alumno)
+
+        # Obtener el curso asignado al alumno
+        curso_alumno = alumno.curso_alumno
+
+        # Obtener los bloques relacionados con el curso del alumno que no estén en blanco y que tengan asignatura y docente
+        bloques = Bloque.objects.filter(
+            curso_bloque=curso_alumno,
+            nombre_bloque__isnull=False,
+            asignatura_bloque__isnull=False,
+            docente_bloque__isnull=False,
+        )
+
+        # Obtener las asignaturas correspondientes a los bloques sin repetir
+        asignaturas = sorted(
+            set(bloque.asignatura_bloque for bloque in bloques),
+            key=lambda x: x.nombre_asignatura,
+        )
+
         return render(
             request,
             "nuevoshorizontes/portal_alumno/notas_alumno.html",
-            {"alumno": alumno},
+            {"alumno": alumno, "asignaturas": asignaturas},
         )
+    else:
+        return redirect("login_alumno")
 
+
+def notas_por_asignatura(request, asignatura_id):
+    correo_alumno = request.session.get("correo_alumno", None)
+    if correo_alumno:
+        alumno = Alumno.objects.get(correo_alumno=correo_alumno)
+        asignatura = Asignatura.objects.get(id_asignatura=asignatura_id)
+        calificaciones = Calificacion.objects.filter(
+            alumno=alumno, asignatura=asignatura
+        )
+        # Calcular el promedio de las notas
+        total_notas = calificaciones.count()
+        suma_notas = calificaciones.aggregate(Sum("valor")).get("valor__sum")
+        promedio = suma_notas / total_notas if total_notas > 0 else 0
+
+        return render(
+            request,
+            "nuevoshorizontes/portal_alumno/notas_por_asignatura.html",
+            {"alumno": alumno, "calificaciones": calificaciones, "promedio": promedio},
+        )
     else:
         return redirect("login_alumno")
 
@@ -2172,12 +2353,76 @@ def notas_apoderado(request):
     correo_apoderado = request.session.get("correo_apoderado", None)
     if correo_apoderado:
         apoderado = Apoderado.objects.get(correo_apoderado=correo_apoderado)
+        alumnos = Alumno.objects.filter(apoderado_alumno=apoderado)
         return render(
             request,
             "nuevoshorizontes/portal_apoderado/notas_apoderado.html",
-            {"apoderado": apoderado},
+            {"apoderado": apoderado, "alumnos": alumnos},
         )
 
+    else:
+        return redirect("login_apoderado")
+
+
+def listar_asignatura_hijos(request, rut_alumno):
+    correo_apoderado = request.session.get("correo_apoderado", None)
+    if correo_apoderado:
+        apoderado = Apoderado.objects.get(correo_apoderado=correo_apoderado)
+        alumno = Alumno.objects.get(rut_alumno=rut_alumno)
+
+        # Obtener el curso asignado al alumno
+        curso_alumno = alumno.curso_alumno
+
+        # Obtener los bloques relacionados con el curso del alumno que no estén en blanco y que tengan asignatura y docente
+        bloques = Bloque.objects.filter(
+            curso_bloque=curso_alumno,
+            nombre_bloque__isnull=False,
+            asignatura_bloque__isnull=False,
+            docente_bloque__isnull=False,
+        )
+
+        # Obtener las asignaturas correspondientes a los bloques sin repetir
+        asignaturas = sorted(
+            set(bloque.asignatura_bloque for bloque in bloques),
+            key=lambda x: x.nombre_asignatura,
+        )
+
+        return render(
+            request,
+            "nuevoshorizontes/portal_apoderado/lista_asignaturas_hijos.html",
+            {"apoderado": apoderado, "alumno": alumno, "asignaturas": asignaturas},
+        )
+
+    else:
+        return redirect("login_apoderado")
+
+
+def notas_por_asignatura_apoderado(request, rut_alumno, id_asignatura):
+    correo_apoderado = request.session.get("correo_apoderado", None)
+    if correo_apoderado:
+        apoderado = Apoderado.objects.get(correo_apoderado=correo_apoderado)
+        alumno = Alumno.objects.get(rut_alumno=rut_alumno)
+
+        # Obtener las calificaciones del alumno en la asignatura seleccionada
+        calificaciones = Calificacion.objects.filter(
+            alumno=alumno, asignatura_id=id_asignatura
+        )
+
+        # Calcular el promedio de las notas
+        total_notas = calificaciones.count()
+        suma_notas = calificaciones.aggregate(Sum("valor")).get("valor__sum")
+        promedio = suma_notas / total_notas if total_notas > 0 else 0
+
+        return render(
+            request,
+            "nuevoshorizontes/portal_apoderado/notas_por_asignatura_hijos.html",
+            {
+                "apoderado": apoderado,
+                "alumno": alumno,
+                "calificaciones": calificaciones,
+                "promedio": promedio,
+            },
+        )
     else:
         return redirect("login_apoderado")
 
@@ -2460,87 +2705,77 @@ def notas_docente(request):
         return redirect("login_docente")
 
 
-def curso_de_un_ramo(profesor, asignatura):
-    bloques = Bloque.objects.filter(
-        asignatura_bloque=asignatura, docente_bloque=profesor
-    )
-    if bloques.exists():
-        bloque = bloques.first()
-        curso = bloque.curso_bloque
-        return curso
-    else:
-        return None
-
-
 def agregar_notas(request):
     correo_docente = request.session.get("correo_docente", None)
     if correo_docente:
         docente = Docente.objects.get(correo_docente=correo_docente)
         asignaturas = Asignatura.objects.filter(profesor_asignatura=docente)
+
+        asignatura_seleccionada = None
         alumnos = None
-        curso = None
-        cant_asig = None
-        mostrar_tabla = False 
-        mostrar_formulario = True
-        
-        if asignaturas.exists():
-            cant_asig = len(asignaturas)    
-            if request.method == 'POST':
-                if 'mostrar_alumnos_boton' in request.POST:
-                    asignatura_id = request.POST.get("ramos")
-                    asignatura = Asignatura.objects.get(id_asignatura=asignatura_id)
-                    curso = curso_de_un_ramo(docente, asignatura)
-                    alumnos = Alumno.objects.filter(curso_alumno=curso.id_curso)
-                    mostrar_tabla = True
+        mostrar_tabla = False
+
+        if request.method == "POST" and "ramos_hidden" in request.POST:
+            asignatura_id = request.POST["ramos_hidden"]
+            asignatura_seleccionada = Asignatura.objects.get(id_asignatura=asignatura_id)
+            alumnos = Alumno.objects.filter(
+                curso_alumno__bloque__asignatura_bloque=asignatura_seleccionada
+            ).distinct()
+
+            if "guardar" in request.POST:
+                nombre_nota = request.POST["nombre_nota"]
+                nombre_nota_lower = nombre_nota.lower()  # Convertir a minúsculas
+                fecha_nota = date.today()
+
+                # Validar si existe una nota con el mismo nombre (ignorando mayúsculas/minúsculas)
+                if Calificacion.objects.filter(
+                    Q(nombre_nota__iexact=nombre_nota) | Q(nombre_nota__iexact=nombre_nota_lower)
+                ).exists():
+                    messages.error(request, "Ya existe una nota con el mismo nombre.")
+                    mostrar_tabla = True  # Mostrar la tabla con los alumnos
+                    return render(
+                        request,
+                        "nuevoshorizontes/portal_docente/notas/agregar_notas.html",
+                        {
+                            "docente": docente,
+                            "asignaturas": asignaturas,
+                            "asignatura_seleccionada": asignatura_seleccionada,
+                            "alumnos": alumnos,
+                            "mostrar_tabla": mostrar_tabla,
+                        },
+                    )
+
+                for alumno in alumnos:
+                    rut_alumno = alumno.rut_alumno
+                    valor_nota = float(request.POST.get(rut_alumno, 0))
                     
-                    data = {
-                        'cantidad_asignaturas': cant_asig,
-                        'curso': curso,
-                        'alumnos': alumnos,
-                        'asignaturas': asignaturas,
-                        "mostrar_tabla": mostrar_tabla,
-                        "mostrar_nueva_busqueda": True,
-                        "mostrar_formulario": False,
-                    }
-                    
-                    return render(request, 'nuevoshorizontes/portal_docente/notas/agregar_notas.html', data)
-                
-                
-                elif 'guardar_notas_boton' in request.POST:
-                    asignatura_id = request.POST.get("ramos")
-                    asignatura = Asignatura.objects.get(id_asignatura=asignatura_id)
-                    curso = curso_de_un_ramo(docente, asignatura)
-                    alumnos = Alumno.objects.filter(curso_alumno=curso.id_curso)
+                    calificacion = Calificacion(
+                        nombre_nota=nombre_nota,
+                        valor=valor_nota,
+                        fecha_nota=fecha_nota,
+                        alumno=alumno,
+                        asignatura=asignatura_seleccionada
+                    )
+                    calificacion.save()
 
-                    fecha_actual = datetime.now().date()  # Obtener fecha actual
+                messages.success(request, "Las notas se han agregado correctamente.")
+                return redirect("notas_docente")
 
-                    for alumno in alumnos:
-                        nota = request.POST.get(str(alumno.rut_alumno))
+            mostrar_tabla = True
 
-                        Calificacion.objects.create(
-                            valor=nota,
-                            fecha_nota=fecha_actual,
-                            alumno=alumno,
-                            asignatura=asignatura,
-                        )
-
-                    messages.success(request, "Se han agregado las notas correctamente")
-
-                    return render(request, 'nuevoshorizontes/portal_docente/notas_docente.html')
-
+        return render(
+            request,
+            "nuevoshorizontes/portal_docente/notas/agregar_notas.html",
+            {
+                "docente": docente,
+                "asignaturas": asignaturas,
+                "asignatura_seleccionada": asignatura_seleccionada,
+                "alumnos": alumnos,
+                "mostrar_tabla": mostrar_tabla,
+            },
+        )
     else:
         return redirect("login_docente")
-
-    data_vacio = {
-        'cantidad_asignaturas': cant_asig,
-        'curso': curso,
-        'alumnos': alumnos,
-        'asignaturas': asignaturas,
-        'mostrar_formulario': mostrar_formulario, 
-    }
-
-    return render(request, "nuevoshorizontes/portal_docente/notas/agregar_notas.html", data_vacio)
-
 
 
 def buscar_notas(request):
@@ -2548,69 +2783,53 @@ def buscar_notas(request):
     if correo_docente:
         docente = Docente.objects.get(correo_docente=correo_docente)
         asignaturas = Asignatura.objects.filter(profesor_asignatura=docente)
+        calificaciones = None
 
-        if request.method == "POST":
-            asignatura_id = request.POST.get("ramos")
+        if request.method == "POST" and "ramos" in request.POST:
+            asignatura_id = request.POST["ramos"]
+            asignatura_seleccionada = Asignatura.objects.get(
+                id_asignatura=asignatura_id
+            )
 
-            asignatura = Asignatura.objects.get(id_asignatura=asignatura_id)
-            curso = curso_de_un_ramo(docente, asignatura)
-
-            if curso:
-                alumnos = Alumno.objects.filter(curso_alumno=curso)
+            if asignatura_seleccionada:
                 calificaciones = Calificacion.objects.filter(
-                    asignatura=asignatura, alumno__in=alumnos
+                    asignatura=asignatura_seleccionada
                 )
-
-                if calificaciones:
-                    # Se encontraron calificaciones
-                    return render(
-                        request,
-                        "nuevoshorizontes/portal_docente/notas/buscar_notas.html",
-                        {
-                            "docente": docente,
-                            "asignaturas": asignaturas,
-                            "alumnos": alumnos,
-                            "calificaciones": calificaciones,
-                        },
-                    )
-                else:
-                    # No se encontraron calificaciones
-                    mensaje = (
-                        "No se encontraron notas para la asignatura seleccionadas."
-                    )
-                    return render(
-                        request,
-                        "nuevoshorizontes/portal_docente/notas/buscar_notas.html",
-                        {
-                            "docente": docente,
-                            "asignaturas": asignaturas,
-                            "mensaje": mensaje,
-                        },
-                    )
 
         return render(
             request,
             "nuevoshorizontes/portal_docente/notas/buscar_notas.html",
-            {"docente": docente, "asignaturas": asignaturas},
+            {
+                "docente": docente,
+                "asignaturas": asignaturas,
+                "calificaciones": calificaciones,
+            },
         )
     else:
         # El usuario no ha iniciado sesión, redirigir a la página de inicio de sesión
         return redirect("login_docente")
 
 
-def modificar_notas(request, rut_alumno):
+def modificar_notas(request, rut_alumno, calificacion_id):
     correo_docente = request.session.get("correo_docente", None)
     if correo_docente:
         docente = Docente.objects.get(correo_docente=correo_docente)
-        alumno = Alumno.objects.get(rut_alumno=rut_alumno)
-        calificacion = Calificacion.objects.filter(alumno=alumno).first()
+        alumno = get_object_or_404(Alumno, rut_alumno=rut_alumno)
+        calificacion = get_object_or_404(Calificacion, id=calificacion_id)
 
         if request.method == "POST":
-            valor_nota = request.POST.get("nota")
-            calificacion.valor = float(valor_nota)
+            nueva_nota = float(request.POST.get("nota"))
+            
+            if nueva_nota == calificacion.valor:
+                messages.error(request, "No se modifico la nota porque la nueva nota es igual a la nota actual.")
+                return redirect("buscar_notas")
+            
+            calificacion.valor = nueva_nota
             calificacion.save()
-            messages.success(request, "La nota se ha modificado correctamente.")
-            return redirect("notas_docente")
+            messages.success(request, "La nota se ha modificado correctamente.")  # Mensaje de éxito
+            return redirect("notas_docente")  # Redirige a la página de búsqueda de notas
+        else:
+            messages.error(request, "Ha ocurrido un error al modificar la nota.")  # Mensaje de error
 
         return render(
             request,
@@ -2619,3 +2838,4 @@ def modificar_notas(request, rut_alumno):
         )
     else:
         return redirect("login_docente")
+

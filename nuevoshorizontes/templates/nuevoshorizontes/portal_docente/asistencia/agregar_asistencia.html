@@ -103,10 +103,15 @@
     {% endif %}
 
 
-
+    {% if alumnos %}
     <div class="container botones" style="text-align: center; align-items: center; margin-top: 30px;">
         <a type="button" class="btn btn-lg btn-block" onclick="confirmarVolver()" style="font-weight: 500;">Volver al menú asistencia</a>
     </div>
+    {% else %}
+    <div class="container botones" style="text-align: center; align-items: center; margin-top: 30px;">
+        <a type="button" class="btn btn-lg btn-block" href="{% url 'notas_docente' %}" style="font-weight: 500;">Volver al menú asistencia</a>
+    </div>
+    {% endif %}
 
     <script>
         function confirmarVolver() {
