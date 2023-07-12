@@ -2671,7 +2671,7 @@ def modificar_asistencia(request, rut_alumno):
             else:
                 messages.error(request, "No se encontró la asistencia del alumno.")
 
-            return redirect("buscar_asistencia")
+            return redirect("asistencia_docente")
 
         alumno = Alumno.objects.get(rut_alumno=rut_alumno)
         estados_asistencia = Tipo_asis.objects.all()
@@ -2822,7 +2822,7 @@ def modificar_notas(request, rut_alumno, calificacion_id):
             
             if nueva_nota == calificacion.valor:
                 messages.error(request, "No se modifico la nota porque la nueva nota es igual a la nota actual.")
-                return redirect("buscar_notas")
+                return redirect("notas_docente")
             
             calificacion.valor = nueva_nota
             calificacion.save()
