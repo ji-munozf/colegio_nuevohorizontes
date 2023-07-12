@@ -2096,6 +2096,7 @@ def asistencia_alumno(request):
                 "alumno": alumno,  # Objeto Alumno
                 "asistencias": asistencias,  # Asistencias por tipo
                 "porcentaje_asistencia": porcentaje_asistencia,  # Porcentaje de asistencia
+                "total_asistencias": total_asistencias, 
             },
         )
     else:

@@ -37,6 +37,7 @@
                         <thead>
                             <tr>
                                 <th>Nombre completo</th>
+                                <th>Total de clases</th>
                                 <th>Presentes</th>
                                 <th>Ausentes</th>
                                 <th>Justificados</th>
@@ -46,6 +47,7 @@
                         <tbody>
                             <tr>
                                 <td>{{ alumno.nombre_alumno }} {{ alumno.appaterno_alumno }} {{ alumno.apmaterno_alumno }}</td>
+                                <td>{{ total_asistencias }} </td>
                                 <td>
                                     {% for asistencia in asistencias %}
                                     {{ asistencia.presentes }}
