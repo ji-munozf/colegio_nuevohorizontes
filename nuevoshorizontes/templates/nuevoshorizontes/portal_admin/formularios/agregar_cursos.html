@@ -71,7 +71,7 @@
             </div>
 
             <div class="container botones" style="text-align: center; align-items: center; margin-top: 20px;">
-                <a type="button" class="btn btn-lg btn-block" onclick="confirmarVolver()">Volver al menú agregar</a>
+                <a type="button" class="btn btn-lg btn-block" href="{% url 'home_agregar' %}">Volver al menú agregar</a>
             </div>
 
         </div>
@@ -87,43 +87,6 @@
     </script>
     {% endif %}
 
-    <script>
-        function confirmarVolver() {
-            // Obtener los valores de los campos de entrada
-            var idCurso = document.getElementById("id_id_curso").value;
-            var nombreCurso = document.getElementById("id_nombre_curso").value;
-            var docenteCurso = document.getElementById("id_docente_curso").value;
-            var salaCurso = document.getElementById("id_sala_curso").value;
-
-            // Verificar si se ingresaron datos en al menos un campo
-            if (
-                idCurso.trim() !== "" ||
-                nombreCurso.trim() !== "" ||
-                docenteCurso.trim() !== "" ||
-                salaCurso.trim() !== ""
-            ) {
-                // Mostrar el mensaje de confirmación
-                Swal.fire({
-                    title: "¿Estás seguro?",
-                    text: "Si vuelves al menú agregar, se perderán los datos ingresados.",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "green",
-                    cancelButtonColor: "#dc3545",
-                    confirmButtonText: "Sí, volver",
-                    cancelButtonText: "Cancelar",
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        // Redireccionar al menú agregar
-                        window.location.href = "{% url 'home_agregar' %}";
-                    }
-                });
-            } else {
-                // No se ingresaron datos, redireccionar directamente
-                window.location.href = "{% url 'home_agregar' %}";
-            }
-        }
-    </script>
 
 </body>
 

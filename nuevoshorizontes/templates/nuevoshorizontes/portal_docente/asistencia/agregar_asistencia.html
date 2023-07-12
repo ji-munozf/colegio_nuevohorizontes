@@ -105,7 +105,7 @@
 
     {% if alumnos %}
     <div class="container botones" style="text-align: center; align-items: center; margin-top: 30px;">
-        <a type="button" class="btn btn-lg btn-block" onclick="confirmarVolver()" style="font-weight: 500;">Volver al menú asistencia</a>
+        <a type="button" class="btn btn-lg btn-block" href="{% url 'notas_docente' %}" style="font-weight: 500;">Volver al menú asistencia</a>
     </div>
     {% else %}
     <div class="container botones" style="text-align: center; align-items: center; margin-top: 30px;">
@@ -113,39 +113,6 @@
     </div>
     {% endif %}
 
-    <script>
-        function confirmarVolver() {
-            // Obtener los valores de los campos de entrada
-            var tipoAsistencia = document.getElementById("tipo_asistencia").value;
-            var dateAsistencia = document.getElementById("date").value;
-
-            // Verificar si se ingresaron datos en al menos un campo
-            if (
-                tipoAsistencia.trim() !== "" ||
-                dateAsistencia.trim() !== ""
-            ) {
-                // Mostrar el mensaje de confirmación
-                Swal.fire({
-                    title: "¿Estás seguro?",
-                    text: "Si vuelves al menú agregar, se perderán los datos ingresados.",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "green",
-                    cancelButtonColor: "#dc3545",
-                    confirmButtonText: "Sí, volver",
-                    cancelButtonText: "Cancelar",
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        // Redireccionar al menú agregar
-                        window.location.href = "{% url 'asistencia_docente' %}";
-                    }
-                });
-            } else {
-                // No se ingresaron datos, redireccionar directamente
-                window.location.href = "{% url 'asistencia_docente' %}";
-            }
-        }
-    </script>
 
 </body>
 
