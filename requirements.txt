@@ -1,3 +1,5 @@
 django == 4.1
 pillow
 cx_Oracle
+bcrypt
+pytest-django
