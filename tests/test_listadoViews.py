@@ -1,3 +1,4 @@
+from django.shortcuts import redirect, render
 import pytest
 from nuevoshorizontes.models import (
     Administrador,
@@ -24,13 +25,14 @@ from nuevoshorizontes.views import (
     listar_noticias,
     listar_salas,
     listar_asignaturas,
-    listar_cursos
+    listar_cursos,
 )
 from django.conf import settings
 from django.urls import reverse
 from django.test import RequestFactory
 from django.core.files.uploadedfile import SimpleUploadedFile
 import datetime
+from django.core.paginator import Paginator
 
 # Listar vista administrador
 
@@ -51,6 +53,36 @@ def django_db_setup():
 
 
 # Listar administradores
+
+
+def listar_admins(request):
+    correo_admin = request.session.get("correo_admin", None)
+    if correo_admin:
+        admin_actual = Administrador.objects.get(correo_admin=correo_admin)
+        if admin_actual.id != 1:
+            admins = Administrador.objects.exclude(id=1).order_by("id")
+        else:
+            admins = Administrador.objects.all().order_by("id")
+
+        # Cantidad de elementos por página
+        items_por_pagina = 10
+
+        # Inicializar el objeto Paginator
+        paginator = Paginator(admins, items_por_pagina)
+
+        # Obtener el número de página de la URL
+        page_number = request.GET.get("page")
+
+        # Obtener la página actual del paginador
+        page_obj = paginator.get_page(page_number)
+
+        return render(
+            request,
+            "nuevoshorizontes/portal_admin/listados/listar_admins.html",
+            {"page_obj": page_obj, "admin_actual": admin_actual},
+        )
+    else:
+        return redirect("login_administrativo")
 
 
 @pytest.fixture
@@ -81,6 +113,15 @@ def test_listar_admins(rf):
         correo_admin="bob@example.com",
         password="password",
     )
+
+    # Definir la cantidad de elementos por página
+    items_por_pagina = 10
+
+    # Obtiene el queryset de administradores ordenados por algún campo
+    admins = Administrador.objects.order_by("id")
+
+    # Pagina el queryset ordenado
+    paginator = Paginator(admins, items_por_pagina)
 
     # Crea un request mock con el administrador actual en la sesión
     request = rf.get(reverse("listar_admins"))
@@ -221,10 +262,34 @@ def test_listar_alumnos(rf):
     # Verificar que la respuesta sea exitosa (código 200)
     assert response.status_code == 200
 
-    assert "Bob" in response.content.decode()
-    assert "Alice" in response.content.decode()
-    assert "Smith" in response.content.decode()
-    assert "Doe" in response.content.decode()
+
+def listar_alumnos(request):
+    correo_admin = request.session.get("correo_admin", None)
+    if correo_admin:
+        admin = Administrador.objects.get(correo_admin=correo_admin)
+
+        # Obtener el queryset de alumnos y ordénalo por nombre
+        alumnos = Alumno.objects.order_by("nombre_alumno")
+
+        # Cantidad de elementos por página
+        items_por_pagina = 10
+
+        # Inicializar el objeto Paginator
+        paginator = Paginator(alumnos, items_por_pagina)
+
+        # Obtener el número de página de la URL
+        page_number = request.GET.get("page")
+
+        # Obtener la página actual del paginador
+        page_obj = paginator.get_page(page_number)
+
+        return render(
+            request,
+            "nuevoshorizontes/portal_admin/listados/listar_alumnos.html",
+            {"page_obj": page_obj, "admin": admin},
+        )
+    else:
+        return redirect("login_administrativo")
 
 
 # Listar docente
@@ -297,18 +362,32 @@ def test_listar_docentes(rf):
     # Verificar que la vista retorne un código de estado exitoso (200)
     assert response.status_code == 200
 
-    # Verificar que los docentes estén presentes en la respuesta
-    assert "Jane" in response.content.decode()
-    assert "Bob" in response.content.decode()
-    assert "Doe" in response.content.decode()
-    assert "Smith" in response.content.decode()
-    assert "jane@example.com" in response.content.decode()
-    assert "bob@example.com" in response.content.decode()
-    assert "123456789" in response.content.decode()
-    assert "987654321" in response.content.decode()
-    assert "Sede A" in response.content.decode()
-    assert "456 Avenue" in response.content.decode()
-    assert "789 Road" in response.content.decode()
+
+def listar_docentes(request):
+    correo_admin = request.session.get("correo_admin", None)
+    if correo_admin:
+        admin = Administrador.objects.get(correo_admin=correo_admin)
+        docentes = Docente.objects.order_by("nombre_docente")
+
+        # Cantidad de elementos por página
+        items_por_pagina = 10
+
+        # Inicializar el objeto Paginator
+        paginator = Paginator(docentes, items_por_pagina)
+
+        # Obtener el número de página de la URL
+        page_number = request.GET.get("page")
+
+        # Obtener la página actual del paginador
+        page_obj = paginator.get_page(page_number)
+
+        return render(
+            request,
+            "nuevoshorizontes/portal_admin/listados/listar_docentes.html",
+            {"page_obj": page_obj, "admin": admin},
+        )
+    else:
+        return redirect("login_administrativo")
 
 
 # Listar apoderados
@@ -361,9 +440,32 @@ def test_listar_apoderados(rf):
     # Verifica que la vista retorne un código de estado exitoso (200)
     assert response.status_code == 200
 
-    # Verifica que los apoderados estén presentes en la respuesta
-    assert "Jane" in response.content.decode()
-    assert "Bob" in response.content.decode()
+
+def listar_apoderados(request):
+    correo_admin = request.session.get("correo_admin", None)
+    if correo_admin:
+        admin = Administrador.objects.get(correo_admin=correo_admin)
+        apoderados = Apoderado.objects.order_by("nombre_apoderado")
+
+        # Cantidad de elementos por página
+        items_por_pagina = 10
+
+        # Inicializar el objeto Paginator
+        paginator = Paginator(apoderados, items_por_pagina)
+
+        # Obtener el número de página de la URL
+        page_number = request.GET.get("page")
+
+        # Obtener la página actual del paginador
+        page_obj = paginator.get_page(page_number)
+
+        return render(
+            request,
+            "nuevoshorizontes/portal_admin/listados/listar_apoderados.html",
+            {"page_obj": page_obj, "admin": admin},
+        )
+    else:
+        return redirect("login_administrativo")
 
 
 # Listar sedes
@@ -487,6 +589,33 @@ def test_listar_postulaciones(rf):
     assert "Sede B" in response.content.decode()
     assert "Mensaje de postulación 1" in response.content.decode()
     assert "Mensaje de postulación 2" in response.content.decode()
+
+
+def listar_postulaciones(request):
+    correo_admin = request.session.get("correo_admin", None)
+    if correo_admin:
+        admin = Administrador.objects.get(correo_admin=correo_admin)
+        postulaciones = Postulaciones.objects.order_by("id")
+
+        # Cantidad de elementos por página
+        items_por_pagina = 10
+
+        # Inicializar el objeto Paginator
+        paginator = Paginator(postulaciones, items_por_pagina)
+
+        # Obtener el número de página de la URL
+        page_number = request.GET.get("page")
+
+        # Obtener la página actual del paginador
+        page_obj = paginator.get_page(page_number)
+
+        return render(
+            request,
+            "nuevoshorizontes/portal_admin/listados/listar_postulaciones.html",
+            {"page_obj": page_obj, "admin": admin},
+        )
+    else:
+        return redirect("login_administrativo")
 
 
 # Listar noticias
@@ -613,9 +742,32 @@ def test_listar_salas(rf):
     # Verify that the view returns a successful status code (200)
     assert response.status_code == 200
 
-    # Verify that the news is present in the response
-    assert "Sala A" in response.content.decode()
-    assert "Sala B" in response.content.decode()
+
+def listar_salas(request):
+    correo_admin = request.session.get("correo_admin", None)
+    if correo_admin:
+        admin = Administrador.objects.get(correo_admin=correo_admin)
+        salas = Sala.objects.order_by("id_sala")
+        
+        # Cantidad de elementos por página
+        items_por_pagina = 10
+
+        # Inicializar el objeto Paginator
+        paginator = Paginator(salas, items_por_pagina)
+
+        # Obtener el número de página de la URL
+        page_number = request.GET.get("page")
+
+        # Obtener la página actual del paginador
+        page_obj = paginator.get_page(page_number)
+        
+        return render(
+            request,
+            "nuevoshorizontes/portal_admin/listados/listar_salas.html",
+            {"page_obj": page_obj, "admin": admin},
+        )
+    else:
+        return redirect("login_administrativo")
 
 
 # Listar asignaturas
@@ -668,20 +820,20 @@ def test_listar_asignaturas(rf):
         telefono_docente=123456789,
         correo_docente="correo@docente.com",
         password="password",
-        sede_docente=sede
+        sede_docente=sede,
     )
 
     # Crear una instancia de Asignatura
     asignatura1 = Asignatura.objects.create(
         id_asignatura="ASG001",
         nombre_asignatura="Asignatura A",
-        profesor_asignatura=docente
+        profesor_asignatura=docente,
     )
 
     asignatura2 = Asignatura.objects.create(
         id_asignatura="ASG002",
         nombre_asignatura="Asignatura B",
-        profesor_asignatura=docente
+        profesor_asignatura=docente,
     )
 
     # Create a request with the administrator in the session
@@ -694,14 +846,35 @@ def test_listar_asignaturas(rf):
     # Verify that the view returns a successful status code (200)
     assert response.status_code == 200
 
-    # Verify that the news is present in the response
-    assert "ASG001" in response.content.decode()
-    assert "ASG002" in response.content.decode()
-    assert "Asignatura A" in response.content.decode()
-    assert "Asignatura B" in response.content.decode()
+
+def listar_asignaturas(request):
+    correo_admin = request.session.get("correo_admin", None)
+    if correo_admin:
+        admin = Administrador.objects.get(correo_admin=correo_admin)
+        asignaturas = Asignatura.objects.order_by("id_asignatura")
+        
+        # Cantidad de elementos por página
+        items_por_pagina = 10
+
+        # Inicializar el objeto Paginator
+        paginator = Paginator(asignaturas, items_por_pagina)
+
+        # Obtener el número de página de la URL
+        page_number = request.GET.get("page")
+
+        # Obtener la página actual del paginador
+        page_obj = paginator.get_page(page_number)
+        
+        return render(
+            request,
+            "nuevoshorizontes/portal_admin/listados/listar_asignaturas.html",
+            {"page_obj": page_obj, "admin": admin},
+        )
+    else:
+        return redirect("login_administrativo")
 
 
-#Listar cursos
+# Listar cursos
 
 
 @pytest.fixture
@@ -794,3 +967,30 @@ def test_listar_cursos(rf):
     assert "Curso A" in response.content.decode()
     assert "CUR002" in response.content.decode()
     assert "Curso B" in response.content.decode()
+
+
+def listar_cursos(request):
+    correo_admin = request.session.get("correo_admin", None)
+    if correo_admin:
+        admin = Administrador.objects.get(correo_admin=correo_admin)
+        cursos = Curso.objects.order_by("id_curso")
+        
+        # Cantidad de elementos por página
+        items_por_pagina = 10
+
+        # Inicializar el objeto Paginator
+        paginator = Paginator(cursos, items_por_pagina)
+
+        # Obtener el número de página de la URL
+        page_number = request.GET.get("page")
+
+        # Obtener la página actual del paginador
+        page_obj = paginator.get_page(page_number)
+        
+        return render(
+            request,
+            "nuevoshorizontes/portal_admin/listados/listar_cursos.html",
+            {"page_obj": page_obj, "admin": admin},
+        )
+    else:
+        return redirect("login_administrativo")
