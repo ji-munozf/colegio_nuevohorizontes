@@ -719,7 +719,7 @@ def listar_admins(request):
             admins = Administrador.objects.exclude(id=1)
         else:
             admins = Administrador.objects.all()
-        
+
         # Cantidad de elementos por página
         items_por_pagina = 10
 
@@ -731,7 +731,7 @@ def listar_admins(request):
 
         # Obtener la página actual del paginador
         page_obj = paginator.get_page(page_number)
-        
+
         return render(
             request,
             "nuevoshorizontes/portal_admin/listados/listar_admins.html",
@@ -964,7 +964,7 @@ def listar_apoderados(request):
     if correo_admin:
         admin = Administrador.objects.get(correo_admin=correo_admin)
         apoderados = Apoderado.objects.all()
-        
+
         # Cantidad de elementos por página
         items_por_pagina = 10
 
@@ -976,7 +976,7 @@ def listar_apoderados(request):
 
         # Obtener la página actual del paginador
         page_obj = paginator.get_page(page_number)
-        
+
         return render(
             request,
             "nuevoshorizontes/portal_admin/listados/listar_apoderados.html",
@@ -1061,7 +1061,7 @@ def listar_asignaturas(request):
     if correo_admin:
         admin = Administrador.objects.get(correo_admin=correo_admin)
         asignaturas = Asignatura.objects.all()
-        
+
         # Cantidad de elementos por página
         items_por_pagina = 10
 
@@ -1073,7 +1073,7 @@ def listar_asignaturas(request):
 
         # Obtener la página actual del paginador
         page_obj = paginator.get_page(page_number)
-        
+
         return render(
             request,
             "nuevoshorizontes/portal_admin/listados/listar_asignaturas.html",
@@ -1088,7 +1088,7 @@ def listar_cursos(request):
     if correo_admin:
         admin = Administrador.objects.get(correo_admin=correo_admin)
         cursos = Curso.objects.all()
-        
+
         # Cantidad de elementos por página
         items_por_pagina = 10
 
@@ -1100,7 +1100,7 @@ def listar_cursos(request):
 
         # Obtener la página actual del paginador
         page_obj = paginator.get_page(page_number)
-        
+
         return render(
             request,
             "nuevoshorizontes/portal_admin/listados/listar_cursos.html",
@@ -1129,7 +1129,7 @@ def listar_salas(request):
     if correo_admin:
         admin = Administrador.objects.get(correo_admin=correo_admin)
         salas = Sala.objects.all()
-        
+
         # Cantidad de elementos por página
         items_por_pagina = 10
 
@@ -1141,7 +1141,7 @@ def listar_salas(request):
 
         # Obtener la página actual del paginador
         page_obj = paginator.get_page(page_number)
-        
+
         return render(
             request,
             "nuevoshorizontes/portal_admin/listados/listar_salas.html",
@@ -1156,7 +1156,7 @@ def listar_postulaciones(request):
     if correo_admin:
         admin = Administrador.objects.get(correo_admin=correo_admin)
         postulaciones = Postulaciones.objects.all()
-        
+
         # Cantidad de elementos por página
         items_por_pagina = 10
 
@@ -1168,7 +1168,7 @@ def listar_postulaciones(request):
 
         # Obtener la página actual del paginador
         page_obj = paginator.get_page(page_number)
-        
+
         return render(
             request,
             "nuevoshorizontes/portal_admin/listados/listar_postulaciones.html",
@@ -1195,7 +1195,7 @@ def listar_pago_colegio(request):
 
         # Obtener la página actual del paginador
         page_obj = paginator.get_page(page_number)
-        
+
         return render(
             request,
             "nuevoshorizontes/portal_admin/listados/listar_pagos_colegio.html",
@@ -1735,100 +1735,158 @@ def modificar_pago_colegio(request, id):
 
 
 def eliminar_alumno(request, id):
-    alumno = get_object_or_404(Alumno, rut_alumno=id)
-    alumno.delete()
-    messages.success(request, "Alumno eliminado correctamente")
-    return redirect(to="listar_alumnos")
+    correo_admin = request.session.get("correo_admin", None)
+    if correo_admin:
+        alumno = get_object_or_404(Alumno, rut_alumno=id)
+        alumno.delete()
+        messages.success(request, "Alumno eliminado correctamente")
+        return redirect("listar_alumnos")
+    else:
+        return redirect("login_administrativo")
 
 
 def eliminar_docentes(request, id):
-    docente = get_object_or_404(Docente, rut_docente=id)
-    docente.delete()
-    messages.success(request, "Docente eliminado correctamente")
-    return redirect(to="listar_docentes")
+    correo_admin = request.session.get("correo_admin", None)
+    if correo_admin:
+        docente = get_object_or_404(Docente, rut_docente=id)
+        docente.delete()
+        messages.success(request, "Docente eliminado correctamente")
+        return redirect("listar_docentes")
+    else:
+        return redirect("login_administrativo")
 
 
 def eliminar_apoderado(request, id):
-    apoderado = get_object_or_404(Apoderado, rut_apoderado=id)
-    apoderado.delete()
-    messages.success(request, "Apoderado eliminado correctamente")
-    return redirect(to="listar_apoderados")
+    correo_admin = request.session.get("correo_admin", None)
+    if correo_admin:
+        apoderado = get_object_or_404(Apoderado, rut_apoderado=id)
+        apoderado.delete()
+        messages.success(request, "Apoderado eliminado correctamente")
+        return redirect("listar_apoderados")
+    else:
+        return redirect("login_administrativo")
 
 
 def eliminar_noticias(request, id):
-    noticias = get_object_or_404(Noticias, id=id)
-    noticias.delete()
-    messages.success(request, "Noticia eliminada correctamente")
-    return redirect(to="listar_noticias")
+    correo_admin = request.session.get("correo_admin", None)
+    if correo_admin:
+        noticia = get_object_or_404(Noticias, id=id)
+        noticia.delete()
+        messages.success(request, "Noticia eliminada correctamente")
+        return redirect("listar_noticias")
+    else:
+        return redirect("login_administrativo")
 
 
 def eliminar_asignatura(request, id):
-    asignaturas = get_object_or_404(Asignatura, id_asignatura=id)
-    asignaturas.delete()
-    messages.success(request, "Asignatura eliminada correctamente")
-    return redirect(to="listar_asignaturas")
+    correo_admin = request.session.get("correo_admin", None)
+    if correo_admin:
+        asignatura = get_object_or_404(Asignatura, id_asignatura=id)
+        asignatura.delete()
+        messages.success(request, "Asignatura eliminada correctamente")
+        return redirect("listar_asignaturas")
+    else:
+        return redirect("login_administrativo")
 
 
 def eliminar_curso(request, id):
-    cursos = get_object_or_404(Curso, id_curso=id)
-    cursos.delete()
-    messages.success(request, "Curso eliminado correctamente")
-    return redirect(to="listar_cursos")
+    correo_admin = request.session.get("correo_admin", None)
+    if correo_admin:
+        curso = get_object_or_404(Curso, id_curso=id)
+        curso.delete()
+        messages.success(request, "Curso eliminado correctamente")
+        return redirect("listar_cursos")
+    else:
+        return redirect("login_administrativo")
 
 
 def eliminar_sedes(request, id):
-    sedes = get_object_or_404(Sede, id=id)
-    sedes.delete()
-    messages.success(request, "Sede eliminada correctamente")
-    return redirect(to="listar_sedes")
+    correo_admin = request.session.get("correo_admin", None)
+    if correo_admin:
+        sede = get_object_or_404(Sede, id=id)
+        sede.delete()
+        messages.success(request, "Sede eliminada correctamente")
+        return redirect("listar_sedes")
+    else:
+        return redirect("login_administrativo")
 
 
 def eliminar_salas(request, id):
-    salas = get_object_or_404(Sala, id_sala=id)
-    salas.delete()
-    messages.success(request, "Sala eliminada correctamente")
-    return redirect(to="listar_salas")
+    correo_admin = request.session.get("correo_admin", None)
+    if correo_admin:
+        sala = get_object_or_404(Sala, id_sala=id)
+        sala.delete()
+        messages.success(request, "Sala eliminada correctamente")
+        return redirect("listar_salas")
+    else:
+        return redirect("login_administrativo")
 
 
 def eliminar_admin(request, id):
-    admin = get_object_or_404(Administrador, id=id)
-    admin.delete()
-    messages.success(request, "Administrador eliminado correctamente")
-    return redirect(to="listar_admins")
+    correo_admin = request.session.get("correo_admin", None)
+    if correo_admin:
+        admin = get_object_or_404(Administrador, id=id)
+        admin.delete()
+        messages.success(request, "Administrador eliminado correctamente")
+        return redirect("listar_admins")
+    else:
+        return redirect("login_administrativo")
 
 
 def eliminar_postulacion(request, id):
-    postulacion = get_object_or_404(Postulaciones, id=id)
-    postulacion.delete()
-    messages.success(request, "Postulación eliminada correctamente")
-    return redirect(to="listar_postulaciones")
+    correo_admin = request.session.get("correo_admin", None)
+    if correo_admin:
+        postulacion = get_object_or_404(Postulaciones, id=id)
+        postulacion.delete()
+        messages.success(request, "Postulación eliminada correctamente")
+        return redirect("listar_postulaciones")
+    else:
+        return redirect("login_administrativo")
 
 
 def eliminar_pagos_colegio(request, id):
-    pago_colegio = get_object_or_404(Pagos_colegio, id_pago_colegio=id)
-    pago_colegio.delete()
-    messages.success(request, "Pago colegio eliminado correctamente")
-    return redirect(to="listar_pago_colegio")
+    correo_admin = request.session.get("correo_admin", None)
+    if correo_admin:
+        pago_colegio = get_object_or_404(Pagos_colegio, id_pago_colegio=id)
+        pago_colegio.delete()
+        messages.success(request, "Pago colegio eliminado correctamente")
+        return redirect("listar_pago_colegio")
+    else:
+        return redirect("login_administrativo")
 
 
 def eliminar_horario(request, id_curso):
-    curso = get_object_or_404(Curso, id_curso=id_curso)
-    bloques = Bloque.objects.filter(curso_bloque=curso)
-    bloques.delete()
-    messages.success(request, "Horario eliminado correctamente")
-    return redirect("listar_horarios_cursos")
+    correo_admin = request.session.get("correo_admin", None)
+    if correo_admin:
+        curso = get_object_or_404(Curso, id_curso=id_curso)
+        bloques = Bloque.objects.filter(curso_bloque=curso)
+        bloques.delete()
+        messages.success(request, "Horario eliminado correctamente")
+        return redirect("listar_horarios_cursos")
+    else:
+        return redirect("login_administrativo")
 
 
 def eliminar_asistencias(request):
-    Asistencia.objects.all().delete()
-    messages.success(request, "Todas las asistencias se eliminaron correctamente")
-    return redirect("listar_asistencias")
+    correo_admin = request.session.get("correo_admin", None)
+    if correo_admin:
+        Asistencia.objects.all().delete()
+        messages.success(request, "Todas las asistencias se eliminaron correctamente")
+        return redirect("listar_asistencias")
+    else:
+        return redirect("login_administrativo")
 
 
 def eliminar_notas(request):
-    Calificacion.objects.all().delete()
-    messages.success(request, "Todas las calificaciones se eliminaron correctamente")
-    return redirect("listar_notas")
+    correo_admin = request.session.get("correo_admin", None)
+    if correo_admin:
+        Calificacion.objects.all().delete()
+        messages.success(
+            request, "Todas las calificaciones se eliminaron correctamente"
+        )
+        return redirect("listar_notas")
+    else:
+        return redirect("login_administrativo")
 
 
 def home_alumno(request):
@@ -2096,7 +2154,7 @@ def asistencia_alumno(request):
                 "alumno": alumno,  # Objeto Alumno
                 "asistencias": asistencias,  # Asistencias por tipo
                 "porcentaje_asistencia": porcentaje_asistencia,  # Porcentaje de asistencia
-                "total_asistencias": total_asistencias, 
+                "total_asistencias": total_asistencias,
             },
         )
     else:
@@ -2718,7 +2776,9 @@ def agregar_notas(request):
 
         if request.method == "POST" and "ramos_hidden" in request.POST:
             asignatura_id = request.POST["ramos_hidden"]
-            asignatura_seleccionada = Asignatura.objects.get(id_asignatura=asignatura_id)
+            asignatura_seleccionada = Asignatura.objects.get(
+                id_asignatura=asignatura_id
+            )
             alumnos = Alumno.objects.filter(
                 curso_alumno__bloque__asignatura_bloque=asignatura_seleccionada
             ).distinct()
@@ -2730,7 +2790,8 @@ def agregar_notas(request):
 
                 # Validar si existe una nota con el mismo nombre (ignorando mayúsculas/minúsculas)
                 if Calificacion.objects.filter(
-                    Q(nombre_nota__iexact=nombre_nota) | Q(nombre_nota__iexact=nombre_nota_lower)
+                    Q(nombre_nota__iexact=nombre_nota)
+                    | Q(nombre_nota__iexact=nombre_nota_lower)
                 ).exists():
                     messages.error(request, "Ya existe una nota con el mismo nombre.")
                     mostrar_tabla = True  # Mostrar la tabla con los alumnos
@@ -2749,13 +2810,13 @@ def agregar_notas(request):
                 for alumno in alumnos:
                     rut_alumno = alumno.rut_alumno
                     valor_nota = float(request.POST.get(rut_alumno, 0))
-                    
+
                     calificacion = Calificacion(
                         nombre_nota=nombre_nota,
                         valor=valor_nota,
                         fecha_nota=fecha_nota,
                         alumno=alumno,
-                        asignatura=asignatura_seleccionada
+                        asignatura=asignatura_seleccionada,
                     )
                     calificacion.save()
 
@@ -2820,17 +2881,26 @@ def modificar_notas(request, rut_alumno, calificacion_id):
 
         if request.method == "POST":
             nueva_nota = float(request.POST.get("nota"))
-            
+
             if nueva_nota == calificacion.valor:
-                messages.error(request, "No se modifico la nota porque la nueva nota es igual a la nota actual.")
+                messages.error(
+                    request,
+                    "No se modifico la nota porque la nueva nota es igual a la nota actual.",
+                )
                 return redirect("notas_docente")
-            
+
             calificacion.valor = nueva_nota
             calificacion.save()
-            messages.success(request, "La nota se ha modificado correctamente.")  # Mensaje de éxito
-            return redirect("notas_docente")  # Redirige a la página de búsqueda de notas
+            messages.success(
+                request, "La nota se ha modificado correctamente."
+            )  # Mensaje de éxito
+            return redirect(
+                "notas_docente"
+            )  # Redirige a la página de búsqueda de notas
         else:
-            messages.error(request, "Ha ocurrido un error al modificar la nota.")  # Mensaje de error
+            messages.error(
+                request, "Ha ocurrido un error al modificar la nota."
+            )  # Mensaje de error
 
         return render(
             request,
@@ -2839,4 +2909,3 @@ def modificar_notas(request, rut_alumno, calificacion_id):
         )
     else:
         return redirect("login_docente")
-
