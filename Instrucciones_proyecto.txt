@@ -15,4 +15,4 @@ alter user C##NOVO default tablespace users quota unlimited on users;
 ----------------------------------------------------------
 
 -- Solo si sale error al instalar cx_Oracle:
-https://www.youtube.com/watch?v=nM2gJu5YsXU&t=261s
+https://www.youtube.com/watch?v=rRBrKn8vvjc&t=275s
