@@ -762,6 +762,8 @@
     <div class="container">
         <h3 style="color: #fff; text-align: center; margin-bottom: 10px;">Acciones:</h3>
         <div class="button-container">
+            <a type="button" class="btn btn-success btn-block" href="{% url 'modificar_horario_curso' curso.id_curso %}"
+                style="background-color: green; color: #fff; border-color: green;">Modificar</a>
             <a type="button" class="btn btn-danger" onclick="eliminarHorario('{{ curso.id_curso }}')"
                 style="background-color: #dc3545; color: #fff; border-color: #dc3545;">Eliminar</a>
         </div>

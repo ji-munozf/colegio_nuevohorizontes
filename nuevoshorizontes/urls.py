@@ -66,7 +66,8 @@ urlpatterns = [
     path('portal_admin/listados/listar_cursos/modificar_curso/<id>/', modificar_cursos, name="modificar_cursos"),
     path('portal_admin/listados/listar_sedes/modificar_sede/<id>/', modificar_sedes, name="modificar_sedes"),
     path('portal_admin/listados/listar_salas/modificar_salas/<id>/', modificar_salas, name="modificar_salas"),
-    path('portal_admin/listados/listar_salas/modificar_pago_colegio/<id>/', modificar_pago_colegio, name="modificar_pago_colegio"),
+    path('portal_admin/listados/listar_horarios_cursos/modificar_horario_curso/<str:id_curso>/', modificar_horario_curso, name="modificar_horario_curso"),
+    path('portal_admin/listados/listar_pago_colegio/modificar_pago_colegio/<id>/', modificar_pago_colegio, name="modificar_pago_colegio"),
 
     #Eliminar
     path('eliminar_alumno/<id>/', eliminar_alumno, name="eliminar_alumno"),
