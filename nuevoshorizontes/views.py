@@ -1834,18 +1834,6 @@ def modificar_horario_curso(request, id_curso):
                 "docente": horario[3],
             }
 
-        if request.method == 'POST':
-            for nombre_bloque_html, horario_data in request.POST.items():
-                if nombre_bloque_html.startswith('lun') or nombre_bloque_html.startswith('mar') or nombre_bloque_html.startswith('mie'):
-                    nombre_bloque_db = horarios_dict[nombre_bloque_html]['nombre_bloque_db']
-                    asignatura_id = request.POST.get(nombre_bloque_html)
-                    asignatura = Asignatura.objects.get(id_asignatura=asignatura_id) if asignatura_id else None
-
-                    Bloque.objects.filter(nombre_bloque=nombre_bloque_db, curso_bloque=curso).update(asignatura_bloque=asignatura)
-
-            # Redirige a la página después de la modificación
-            return HttpResponseRedirect(reverse('listar_horarios', args=[id_curso]))
-
         return render(
             request,
             "nuevoshorizontes/portal_admin/modificar/modificar_horario_curso.html",
